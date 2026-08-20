@@ -63,7 +63,7 @@ padding:8px 14px;cursor:pointer;font-weight:700;font-size:13px;box-shadow:var(--
 <button class="tt" onclick="tt()">◐ 화면 밝기</button>
 <div class="wrap">
 <div class="head" style="padding-right:4px"><div><h1>Subscrap 개발 진척 대시보드</h1>
- <div class="sub">기준일 2026-08-20 · 공개 v0.21.2 / 운영 Cloud Run 연결 · 이 문서는 개발이 진행될 때마다 갱신됩니다</div></div>
+ <div class="sub">기준일 2026-08-20 · 공개 후보 v0.21.3 / 운영 Cloud Run 연결 · 이 문서는 개발이 진행될 때마다 갱신됩니다</div></div>
  <div style="text-align:right"><div style="font-size:40px;font-weight:800;letter-spacing:-.04em;color:var(--acc)">90.5%</div>
  <div class="sub">1단계(R1) 전체 진행률</div></div></div>
 
@@ -73,20 +73,20 @@ padding:8px 14px;cursor:pointer;font-weight:700;font-size:13px;box-shadow:var(--
  <div class="tile"><div class="k">1단계 목표 완료</div><div class="v" style="font-size:20px">2027-02-04</div><div class="n">약 6개월 계획</div></div>
  <div class="tile"><div class="k">지금 진행률</div><div class="v">90.5%</div><div class="n">계획 대비 <b style="color:var(--ok)">크게 앞섬</b></div></div>
  <div class="tile"><div class="k">완료한 작업</div><div class="v">60건</div><div class="n">전체 66건 중</div></div>
- <div class="tile"><div class="k">자동 검사</div><div class="v" style="color:var(--ok)">334/334</div><div class="n">전부 통과</div></div>
+ <div class="tile"><div class="k">자동 검사</div><div class="v" style="color:var(--ok)">336/336</div><div class="n">전부 통과</div></div>
  <div class="tile"><div class="k">모바일 상용 완성도</div><div class="v">88%</div><div class="n">v0.21 공개·A56 터치 확인 / 홈 설치·iPhone 대기</div></div>
  <div class="tile"><div class="k">PC 상용 완성도</div><div class="v">94%</div><div class="n">v0.21 공개·운영 API·Chrome/Edge 실증 / Firefox·Safari 대기</div></div>
  <div class="tile"><div class="k">유료화 준비도</div><div class="v">68%</div><div class="n">실제 결제는 안전하게 비활성</div></div>
  <div class="tile"><div class="k">가상 사용자 시험</div><div class="v" style="color:var(--ok)">20,000명</div><div class="n">162,430건 · 오류 0</div></div>
 </div>
-<div class="card" style="margin-top:13px"><div class="ok-strip">→ 공개 v0.21.2는 운영 Cloud Run API에 연결됐고, 실제 Gmail 계정 동의·탐색·결과 반영을 확인했습니다. Cloud Run 00010 보안판은 로그인 없는 구독 조회를 차단하고 URL의 타인 사용자 ID를 무시합니다. 전체 334/334을 통과했고, Play 처리와 A56 설치형 실행은 별도 실증이 남아 있습니다.</div></div>
+<div class="card" style="margin-top:13px"><div class="ok-strip">→ 공개 후보 v0.21.3은 운영 Cloud Run API에 연결됐고, 실제 Gmail 계정 동의·탐색·결과 반영을 확인했습니다. Cloud Run 00011은 로그인 없는 후보 무시 요청을 401로 차단합니다. 후보에는 출처·사유·날짜·금액·신뢰도를 표시하고 직접 등록·무시를 제공하며, 전체 336/336을 통과했습니다. Play 처리와 A56 설치형 실행은 별도 실증이 남아 있습니다.</div></div>
 
 <h2>지금 바로 열어볼 주소 · QR</h2>
 <div class="card">
  <div class="linkbox">
   <input class="u" id="url" value="https://hanksleekorea-boop.github.io/subscrap/" aria-label="Subscrap 공개 주소">
   <button class="b" onclick="mk()">QR 만들기</button></div>
- <div class="note">GitHub Pages HTTPS 공개판 v0.21.2: <a href="https://hanksleekorea-boop.github.io/subscrap/" target="_blank" rel="noopener">https://hanksleekorea-boop.github.io/subscrap/</a> · PR #7 병합 · Pages success · QR 주소 유지.</div>
+ <div class="note">GitHub Pages HTTPS 공개 후보 v0.21.3: <a href="https://hanksleekorea-boop.github.io/subscrap/" target="_blank" rel="noopener">https://hanksleekorea-boop.github.io/subscrap/</a> · 별도 PR 검토 뒤 반영 · QR 주소 유지.</div>
  <div id="qr"></div>
 </div>
 
@@ -113,18 +113,18 @@ padding:8px 14px;cursor:pointer;font-weight:700;font-size:13px;box-shadow:var(--
 
 <h2>품질 검증 결과</h2>
 <div class="card">
- <div class="arow"><div class="an">브라우저 자동 검사</div><div class="ab"><div class="bar"><i style="width:100%;background:var(--ok)"></i></div></div><div class="ap">153/153</div><div class="ad">화면·계산·Google 탐지 화면·한계 고지·미설정 요청 차단 전수</div></div>
+ <div class="arow"><div class="an">브라우저 자동 검사</div><div class="ab"><div class="bar"><i style="width:100%;background:var(--ok)"></i></div></div><div class="ap">154/154</div><div class="ad">화면·계산·Google 탐지 근거·직접 등록·무시·한계 고지·미설정 요청 차단 전수</div></div>
  <div class="arow"><div class="an">가상 사용자 20,000명</div><div class="ab"><div class="bar"><i style="width:100%;background:var(--ok)"></i></div></div><div class="ap">0건</div><div class="ad">구독 162,430건, 불변식·런타임 오류 0</div></div>
  <div class="arow"><div class="an">접근성 자동 검사</div><div class="ab"><div class="bar"><i style="width:100%;background:var(--ok)"></i></div></div><div class="ap">0건</div><div class="ad">8개 화면(밝은/어두운) 심각 위반 0</div></div>
  <div class="arow"><div class="an">서버 자동 검사</div><div class="ab"><div class="bar"><i style="width:100%;background:var(--ok)"></i></div></div><div class="ap">50/50</div><div class="ad">메일·로그인·타인 자료 차단·Google 분리 OAuth·알림·결제·백업까지 확인</div></div>
- <div class="arow"><div class="an">Google 전용 검사</div><div class="ab"><div class="bar"><i style="width:100%;background:var(--ok)"></i></div></div><div class="ap">22/22</div><div class="ad">혼합 권한 금지·분리 토큰·다계정·Gmail 페이지·Play·ZIP·사용자 격리</div></div>
+ <div class="arow"><div class="an">Google 전용 검사</div><div class="ab"><div class="bar"><i style="width:100%;background:var(--ok)"></i></div></div><div class="ap">26/26</div><div class="ad">혼합 권한 금지·분리 토큰·다계정·Gmail 페이지·Play·ZIP·사용자 격리·후보 무시</div></div>
  <div class="arow"><div class="an">이메일 파서 시험</div><div class="ab"><div class="bar"><i style="width:100%;background:var(--ok)"></i></div></div><div class="ap">60/60</div><div class="ad">영수증 46통 100% 인식, 비영수증·유사 도메인 14통 방어</div></div>
  <div class="arow"><div class="an">오프라인 동작</div><div class="ab"><div class="bar"><i style="width:100%;background:var(--ok)"></i></div></div><div class="ap">3/3</div><div class="ad">인터넷 끊고 새로고침해도 화면 유지</div></div>
  <div class="arow"><div class="an">상용 후보 화면·성능</div><div class="ab"><div class="bar"><i style="width:100%;background:var(--ok)"></i></div></div><div class="ap">25/25</div><div class="ad">모바일·태블릿·PC, 100건·최대 글자·요금 화면</div></div>
  <div class="arow"><div class="an">느린 기기 성능</div><div class="ab"><div class="bar"><i style="width:100%;background:var(--ok)"></i></div></div><div class="ap">통과</div><div class="ad">4배 느린 기기·구독 40건에서 홈 그리기 29ms</div></div>
  <div class="arow"><div class="an">발견·수정한 버그</div><div class="ab"><div class="bar"><i style="width:100%;background:var(--ok)"></i></div></div><div class="ap">11건</div><div class="ad">제품·검사 경로·도메인 경계·성능·알림 식별자 문제를 수정하고 회귀 검사 추가</div></div>
  <div class="arow"><div class="an">실제 폰 확인</div><div class="ab"><div class="bar"><i style="width:0%;background:var(--bad)"></i></div></div><div class="ap">0%</div><div class="ad">공개 주소 준비 완료 — 실제 Android 사용자 조치 필요</div></div>
- <div class="note">→ 자동 검사는 334건입니다(앱 153 + 서버 50 + Google 25 + 파서 60 + 오프라인 5 + 해지 감시 16 + 상용 후보 25, 별도로 가상 사용자 20,000명·접근성 8화면). 공개 v0.21.2·Cloud Run 00010 보안판과 실제 Gmail 탐색은 확인됐고, 남은 것은 Play 처리, 실제 휴대폰 설치, Firefox/Safari, 실결제입니다.</div>
+<div class="note">→ 자동 검사는 336건입니다(앱 154 + 서버 50 + Google 26 + 파서 60 + 오프라인 5 + 해지 감시 16 + 상용 후보 25, 별도로 가상 사용자 20,000명·접근성 8화면). Cloud Run 00011과 실제 Gmail 탐색은 확인됐고, 후보 근거·직접 등록·무시를 추가했습니다. 남은 것은 Pages 반영 확인, Play 처리, 실제 휴대폰 설치, Firefox/Safari, 실결제입니다.</div>
 </div>
 
 <div class="card" style="margin-top:26px;text-align:center;color:var(--sub);font-size:12.5px">
