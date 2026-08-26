@@ -6,9 +6,9 @@
 <meta name="theme-color" content="#1F3864">
 <meta name="color-scheme" content="light dark">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src https://open.er-api.com https://subscrap-api-bh3ckbhqoq-as.a.run.app; worker-src 'self' blob:; manifest-src data:; object-src 'none'; base-uri 'none'; form-action 'none'">
-<meta name="subscrap-api-base" content="https://subscrap-api-bh3ckbhqoq-as.a.run.app">
-<meta name="subscrap-discovery-center" content="1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src https://open.er-api.com ; worker-src 'self' blob:; manifest-src data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="subscrap-api-base" content="">
+<meta name="subscrap-discovery-center" content="0">
 <meta name="subscrap-unified-review" content="0">
 <style>#discoveryCoverageRows button{min-height:44px}</style>
 <meta name="description" content="Subscrap — 영수증만 연결하면 숨은 구독을 찾아 아껴주는 구독 관리 앱">
@@ -238,7 +238,7 @@ label.lb{display:block;font-size:12.5px;font-weight:700;color:var(--text-sub);ma
    T-207 히스토리 / T-208 애널리틱스 / T-209 온보딩·게스트 / T-210 다크·접근성
    T-211 i18n / T-213 리포트 / T-307 플랜최적화
    ============================================================ */
-const VERSION="0.27.4";
+const VERSION="0.27.5";
 /* S1-003: 순수 상태 집계. 연결하지 않은 자료나 알 수 없는 상태를 성공으로 세지 않는다. */
 function discoverySummary(input={}){
  const kinds=new Set(["gmail","google_play","apple_import","csv_import"]),states=new Set(["not_started","in_progress","completed","partial","failed","reauth","permission_missing"]);
@@ -1480,6 +1480,7 @@ async function runDiscoveryRescan(mode,target){
 }
 function googleApiBase(){return String(document.querySelector('meta[name="subscrap-api-base"]')?.content||"").replace(/\/$/,"")}
 function googleSession(){try{return localStorage.getItem(GOOGLE_SESSION_KEY)||""}catch(e){return""}}
+function accountEntryButton(){return `<button class="btn line sm" onclick="openAccount()">${LANG==="ko"?"내 계정":"My account"}</button>`}
 const PORTABLE_DEVICE_KEY="subscrap.device.id.v1";
 function portableDeviceId(){try{let id=localStorage.getItem(PORTABLE_DEVICE_KEY);if(!id){id="web-"+(window.crypto&&window.crypto.randomUUID?window.crypto.randomUUID():uid());localStorage.setItem(PORTABLE_DEVICE_KEY,id)}return id}catch(e){return"web-"+uid()}}
 function captureGoogleSession(){
@@ -1528,13 +1529,13 @@ function viewHome(){
  const yearly=D.total*12;
  let h=`<div class="head"><div><h1>${t("home.title")}</h1>
    <div class="sub">${subs.length}${LANG==="ko"?"개 구독 중":" active"}${D.counts.trial?` · ${D.counts.trial} ${LANG==="ko"?"체험":"trial"}`:""}</div></div>
-   ${discoveryCenterEnabled()?"":`<div class="row"><button class="iconbtn" onclick="toggleTheme()" aria-label="${t("set.theme")}">◐</button><button class="iconbtn" onclick="go('settings')" aria-label="${t("set.title")}">⚙</button></div>`}</div>`;
+   ${discoveryCenterEnabled()?"":`<div class="row">${accountEntryButton()}<button class="iconbtn" onclick="toggleTheme()" aria-label="${t("set.theme")}">◐</button><button class="iconbtn" onclick="go('settings')" aria-label="${t("set.title")}">⚙</button></div>`}</div>`;
 
  // 제품의 첫 행동: 자동 탐색을 금액 요약보다 먼저 보여 준다.
  const finderAction=googleSession()
   ?(LANG==="ko"?"찾은 유료서비스 확인하기":"Review detected paid services")
   :(LANG==="ko"?"Google 계정 연결하고 자동으로 찾기":"Connect Google and find automatically");
- h+=discoveryCenterEnabled()?discoveryHomeMarkup()+`<div class="home-tools"><button class="btn line sm" onclick="go('add')">${LANG==="ko"?"직접 등록":"Add manually"}</button><button class="iconbtn" onclick="toggleTheme()" aria-label="${t("set.theme")}">◐</button><button class="iconbtn" onclick="go('settings')" aria-label="${t("set.title")}">⚙</button></div>`:`<button class="auto-find-card" onclick="openDiscoveryHub()" aria-label="${LANG==="ko"?"여러 자료에서 내 유료서비스 자동으로 찾기":"Automatically find my paid services from multiple sources"}">
+ h+=discoveryCenterEnabled()?discoveryHomeMarkup()+`<div class="home-tools">${accountEntryButton()}<button class="btn line sm" onclick="go('add')">${LANG==="ko"?"직접 등록":"Add manually"}</button><button class="iconbtn" onclick="toggleTheme()" aria-label="${t("set.theme")}">◐</button><button class="iconbtn" onclick="go('settings')" aria-label="${t("set.title")}">⚙</button></div>`:`<button class="auto-find-card" onclick="openDiscoveryHub()" aria-label="${LANG==="ko"?"여러 자료에서 내 유료서비스 자동으로 찾기":"Automatically find my paid services from multiple sources"}">
    <div class="auto-find-icon" aria-hidden="true">✦</div><div class="grow" style="text-align:left">
     <div class="auto-find-kicker">${LANG==="ko"?"SUBSCRAP 핵심 기능":"SUBSCRAP CORE FEATURE"}</div>
     <div class="auto-find-title">${LANG==="ko"?"내 유료서비스 자동으로 찾기":"Automatically find my paid services"}</div>
@@ -2335,6 +2336,30 @@ function applyTheme(){const v=DB.d.set.theme;
  const dark=v==="dark"||(v==="system"&&window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches);
  document.documentElement.setAttribute("data-theme",dark?"dark":"light");
  const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute("content",dark?"#0F1420":"#1F3864")}
+function openAccount(){
+ if(!googleSession()){
+  openSheet(`<div class="grab"></div><h2>${LANG==="ko"?"내 계정":"My account"}</h2><p class="sm muted">${LANG==="ko"?"비밀번호 없이 Google로 로그인하면 여러 기기의 구독 자료를 직접 동기화하고, 연결한 자료 통로에서 유료서비스 후보를 찾을 수 있어요.":"Sign in with Google without a password to manually sync your subscription data between devices and find candidates from connected sources."}</p><button class="btn" onclick="startGoogleConnect()">${LANG==="ko"?"Google로 로그인·무료 가입":"Continue with Google"}</button><button class="btn ghost mt" onclick="closeSheet()">${t("common.close")}</button>`);
+  return;
+ }
+ openSheet(`<div class="grab"></div><h2>${LANG==="ko"?"내 계정":"My account"}</h2><div id="accountPanel" class="card flat" role="status" aria-live="polite">${LANG==="ko"?"계정 정보를 불러오는 중…":"Loading account information…"}</div><button class="btn ghost mt" onclick="closeSheet()">${t("common.close")}</button>`);refreshAccountPanel();
+}
+async function refreshAccountPanel(){
+ const panel=$("accountPanel");if(!panel||!googleSession())return;
+ try{
+  const profile=await googleApi("/v1/account"),name=typeof profile.displayName==="string"?profile.displayName:"";
+  const policyBase="https://hanksleekorea-boop.github.io/subscrap/docs/";
+  panel.innerHTML=`<div class="b">${LANG==="ko"?"Google 로그인 연결됨":"Google sign-in connected"}</div><p class="tiny muted mt">${LANG==="ko"?"이 화면에는 이메일 주소나 접근 열쇠를 표시하지 않습니다. 이름은 직접 저장할 때만 서버에 보관됩니다.":"This screen does not show your email address or access key. Your name is stored on the server only when you save it."}</p><label class="tiny b" for="accountDisplayName">${LANG==="ko"?"표시 이름":"Display name"}</label><input id="accountDisplayName" class="input mt" maxlength="80" value="${esc(name)}" autocomplete="name"><div class="btnrow mt"><button class="btn sm" onclick="saveAccountDisplayName()">${LANG==="ko"?"이름 저장":"Save name"}</button><button class="btn line sm" onclick="closeSheet();go('settings')">${LANG==="ko"?"자료·백업 설정":"Data & backup settings"}</button></div><div class="btnrow mt"><button class="btn ghost sm" onclick="exportBackup()">${LANG==="ko"?"이 기기 백업 저장":"Save device backup"}</button><button class="btn ghost sm" onclick="logoutFromThisDevice()">${LANG==="ko"?"이 기기에서 로그아웃":"Log out on this device"}</button></div><p class="tiny muted mt"><a href="${policyBase}PRIVACY.html" target="_blank" rel="noopener">${LANG==="ko"?"개인정보 처리방침":"Privacy policy"}</a> · <a href="${policyBase}SUPPORT_AND_INCIDENTS.html" target="_blank" rel="noopener">${LANG==="ko"?"도움말":"Support"}</a></p>`;
+ }catch(e){panel.innerHTML=`<div class="b">${LANG==="ko"?"계정 정보를 불러오지 못했어요":"Could not load account information"}</div><button class="btn line sm mt" onclick="refreshAccountPanel()">${LANG==="ko"?"다시 시도":"Try again"}</button>`}
+}
+async function saveAccountDisplayName(){
+ const input=$("accountDisplayName"),name=String(input?.value||"").trim();
+ try{await googleApi("/v1/account/profile",{method:"PUT",body:JSON.stringify({displayName:name})});toast(LANG==="ko"?"표시 이름을 저장했어요":"Display name saved");await refreshAccountPanel()}catch(e){toast(e.message)}
+}
+function logoutFromThisDevice(){
+ if(!confirm(LANG==="ko"?"이 기기에서만 로그아웃할까요? 서버의 연결과 저장한 자료는 삭제하지 않습니다.":"Log out on this device only? This does not delete your server connection or saved data."))return;
+ try{localStorage.removeItem(GOOGLE_SESSION_KEY);localStorage.removeItem(AUTH_PROVIDER_KEY)}catch(e){}
+ DISCOVERY_OVERVIEW.sequence++;Object.assign(DISCOVERY_OVERVIEW,{accounts:[],loaded:false,loading:false,error:null,session:null,pending:null});GOOGLE_DISCOVERIES=[];GOOGLE_REJECTED=[];GOOGLE_JOBS=[];DISCOVERY_FAILURES.clear();closeSheet();render();toast(LANG==="ko"?"이 기기에서 로그아웃했어요":"Logged out on this device");
+}
 function exportCSV(){
  const rows=[["name","amount","currency","cycle","next_billing","status","yearly"]];
  DB.d.subs.forEach(s=>rows.push([subName(s),(s.amountMinor/minorFactor(s.currency)),s.currency,s.cycle,
@@ -3081,7 +3106,7 @@ if("serviceWorker" in navigator&&(location.protocol==="https:"||["localhost","12
    <button class="iconbtn" onclick="dismissBanner()" aria-label="닫기">✕</button></div>`),2600);
  }
  // 데모 데이터 주입용 훅 (테스트 하네스에서 사용)
-window.__scrap={DB,addSub,dashboard,detectWaste,duplicateGroups,mergeDuplicateGroup,undoDuplicateMerge,canonicalServiceKey,canonicalServiceNameKey,computeNextBilling,convert,monthlyMinor,yearlyMinor,rollForward,pausedSubs,trialSubs,togglePause,shareCard,payMethods,payTotals,popularFor,findSameService,daysSinceUse,confirmDupAdd,myShareMinor,sharedSubs,settlement,timeline,cardStatus,searchCatalog,editDist,familyOffer,bundleOffers,bundleCatalog,reviewSubs,widgetSummary,tidyReceipts,yearSummary,fxShift,scanPaste,openGoogleAccounts,googleApiBase,googleSession,captureGoogleSession,syncGoogleSubscriptions,
+window.__scrap={DB,addSub,dashboard,detectWaste,duplicateGroups,mergeDuplicateGroup,undoDuplicateMerge,canonicalServiceKey,canonicalServiceNameKey,computeNextBilling,convert,monthlyMinor,yearlyMinor,rollForward,pausedSubs,trialSubs,togglePause,shareCard,payMethods,payTotals,popularFor,findSameService,daysSinceUse,confirmDupAdd,myShareMinor,sharedSubs,settlement,timeline,cardStatus,searchCatalog,editDist,familyOffer,bundleOffers,bundleCatalog,reviewSubs,widgetSummary,tidyReceipts,yearSummary,fxShift,scanPaste,openGoogleAccounts,googleApiBase,googleSession,captureGoogleSession,syncGoogleSubscriptions,openAccount,refreshAccountPanel,saveAccountDisplayName,logoutFromThisDevice,accountEntryButton,
   makePriceObservation,priceObservationList,recordPriceObservation,priceObservationSummary,priceAlertFromObservations,
   BACKUP_SCHEMA,createBackupEnvelope,parseBackupDocument,backupChecksum,normalizeStoredData,validateStoredData,saveRecoverySnapshot,hasRecoverySnapshot,restoreRecoverySnapshot,mergePortableData,mergeBackupDocument,mergeTombstones,applyPortableTombstones,markPortableDeleted,touchPortable,
   PURCHASE_IMPORT_MAX_BYTES,PURCHASE_IMPORT_MAX_ROWS,parseDelimitedDocument,purchaseImportMapping,parsePurchaseAmount,parsePurchaseDate,preparePurchaseImport,commitPurchaseImport,deletePurchaseImportData,importCandidateFingerprints,importCandidatesForReview,recentRejectedImportCandidates,setImportCandidateState,confirmImportCandidate,openDiscoveryHub,openApplePurchaseImport,importCandidateCard,
