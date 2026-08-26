@@ -238,7 +238,7 @@ label.lb{display:block;font-size:12.5px;font-weight:700;color:var(--text-sub);ma
    T-207 히스토리 / T-208 애널리틱스 / T-209 온보딩·게스트 / T-210 다크·접근성
    T-211 i18n / T-213 리포트 / T-307 플랜최적화
    ============================================================ */
-const VERSION="0.27.1";
+const VERSION="0.27.2";
 /* S1-003: 순수 상태 집계. 연결하지 않은 자료나 알 수 없는 상태를 성공으로 세지 않는다. */
 function discoverySummary(input={}){
  const kinds=new Set(["gmail","google_play","apple_import","csv_import"]),states=new Set(["not_started","in_progress","completed","partial","failed","reauth","permission_missing"]);
@@ -678,11 +678,38 @@ function setImportCandidateState(id,action){
  else return null;
  item.updatedAt=now;item.version=Math.max(0,Number(item.version||0))+1;if(!DB.save()){Object.keys(item).forEach(key=>delete item[key]);Object.assign(item,before);return null}return item;
 }
-function confirmImportCandidate(id,existingSub){
- const item=(DB.d.importCandidates||[]).find(row=>row.id===id);if(!item||!["NEW","LATER"].includes(item.reviewState))return null;
- if(!existingSub&&(!['weekly','monthly','yearly'].includes(item.cycle)||item.kind==='purchase'))return null;
- const sub=existingSub||addSub({slug:item.slug,customName:item.slug?null:item.name,amountMinor:item.amountMinor,currency:item.currency,cycle:item.cycle,firstBilledAt:item.occurredAt,source:item.sourceType});
- sub.importFingerprint=item.fingerprint;item.reviewState="CONFIRMED";item.subscriptionId=sub.id;item.reviewedAt=new Date().toISOString();item.updatedAt=item.reviewedAt;item.version=Math.max(0,Number(item.version||0))+1;touchPortable(sub);DB.save();return sub;
+function confirmImportCandidate(id,existingSub,edited){
+ const item=(DB.d.importCandidates||[]).find(row=>row.id===id);if(!item)return null;
+ if(item.reviewState==='CONFIRMED')return DB.d.subs.find(s=>s.id===item.subscriptionId)||null;
+ if(!['NEW','LATER'].includes(item.reviewState))return null;
+ if(edited?.candidateVersion!=null&&edited.candidateVersion!==item.version)return null;
+ if(existingSub&&!DB.d.subs.includes(existingSub))return null;
+ if(!existingSub&&!edited&&(!['weekly','monthly','yearly'].includes(item.cycle)||item.kind==='purchase'))return null;
+ const options=edited||{slug:item.slug,customName:item.slug?null:item.name,amountMinor:item.amountMinor,currency:item.currency,cycle:item.cycle,firstBilledAt:item.occurredAt,source:item.sourceType};
+ if(!existingSub&&(!Number.isSafeInteger(options.amountMinor)||options.amountMinor<=0||!CURRENCIES.includes(options.currency)||!['weekly','monthly','yearly','custom_days'].includes(options.cycle)))return null;
+ const before=cloneJSON(DB.d),prior={reviewState:item.reviewState,reviewedAt:item.reviewedAt||null,snoozedUntil:item.snoozedUntil||null};
+ try{
+  const sub=existingSub||addSub(options,{deferSave:true});
+  const previousSub=existingSub?cloneJSON(sub):null;
+  sub.importFingerprint=item.fingerprint;item.reviewState='CONFIRMED';item.subscriptionId=sub.id;item.reviewedAt=new Date().toISOString();delete item.snoozedUntil;touchPortable(item);touchPortable(sub);
+  item.confirmationUndo={prior,created:!existingSub,previousSub,subscription:cloneJSON(sub),receipts:cloneJSON(DB.d.receipts.filter(r=>r.subId===sub.id)),at:item.reviewedAt,version:item.version};
+  if(!DB.save())throw new Error('Local confirmation was not saved');
+  return sub;
+ }catch(e){DB.d=before;return null}
+}
+function undoImportConfirmation(id){
+ const item=(DB.d.importCandidates||[]).find(row=>row.id===id),op=item?.confirmationUndo;
+ if(!item||item.reviewState!=='CONFIRMED'||!op||item.version!==op.version||!Number.isFinite(Date.parse(op.at))||Date.now()-Date.parse(op.at)>30*864e5)return false;
+ const sub=DB.d.subs.find(s=>s.id===item.subscriptionId),material=s=>{const value=cloneJSON(s);delete value.lastViewedAt;return value};
+ if(!sub||JSON.stringify(material(sub))!==JSON.stringify(material(op.subscription))||JSON.stringify(DB.d.receipts.filter(r=>r.subId===sub.id))!==JSON.stringify(op.receipts))return false;
+ if(DB.d.journeys[sub.id]||DB.d.savings.some(s=>s.subId===sub.id))return false;
+ const before=cloneJSON(DB.d);
+ if(op.created){markPortableDeleted('subscription',sub.id);DB.d.subs=DB.d.subs.filter(s=>s.id!==sub.id);DB.d.receipts=DB.d.receipts.filter(r=>r.subId!==sub.id)}
+ else{const version=sub.version;Object.keys(sub).forEach(k=>delete sub[k]);Object.assign(sub,op.previousSub,{version});touchPortable(sub)}
+ item.reviewState=op.prior.reviewState;
+ for(const key of ['reviewedAt','snoozedUntil']){if(op.prior[key]==null)delete item[key];else item[key]=op.prior[key]}
+ delete item.subscriptionId;delete item.confirmationUndo;touchPortable(item);
+ if(!DB.save()){DB.d=before;return false}return true;
 }
 
 const DB={ // 저장소 (게스트 모드 = 로컬 저장, T-209)
@@ -1018,7 +1045,8 @@ function payTotals(){const base=DB.d.set.base,out={};
  activeSubs().forEach(s=>{const k=s.pay||"__none";const c=convert(monthlyMinor(s),s.currency,base);
   if(c!==null)out[k]=(out[k]||0)+c});
  return Object.entries(out).sort((a,b)=>b[1]-a[1])}
-function addSub(o){
+function addSub(o,options={}){
+ const before=options.deferSave?null:cloneJSON(DB.d);
  const first=o.firstBilledAt||iso(new Date());
  const s={id:uid(),slug:o.slug||null,customName:o.customName||null,category:o.category||null,memo:o.memo||null,pay:o.pay||null,endAt:o.endAt||null,lastUsedAt:o.lastUsedAt||null,
   share:o.share||null,
@@ -1029,7 +1057,7 @@ function addSub(o){
   priceHistory:[{at:first,minor:o.amountMinor}]};
  DB.d.subs.push(s);
  backfillReceipts(s);   // 과거 첫 결제일부터 지금까지의 결제 기록을 채운다 (BUG-001 수정)
- track("subscription_confirmed",{source:s.source,slug:s.slug});DB.save();return s;
+ track("subscription_confirmed",{source:s.source,slug:s.slug});if(!options.deferSave&&!DB.save()){DB.d=before;return null}return s;
 }
 /* 과거 결제 이력 소급 생성 — 최대 36건 (3년) 상한 */
 function backfillReceipts(s){
@@ -1757,6 +1785,7 @@ function submitForm(slug,editId){
   endAt:($("f_end")&&$("f_end").value)||null,
   candidateId:(!editId&&MANUAL_DRAFT&&MANUAL_DRAFT.candidateId)||null,
   importCandidateId:(!editId&&MANUAL_DRAFT&&MANUAL_DRAFT.importCandidateId)||null,
+  candidateVersion:(!editId&&MANUAL_DRAFT&&MANUAL_DRAFT.candidateVersion)||null,
   source:(!editId&&MANUAL_DRAFT&&MANUAL_DRAFT.source)||"manual",
   share:(function(){const el=$("f_people");if(!el)return null;
    const ppl=el.value.split(",").map(x=>x.trim()).filter(Boolean);
@@ -1780,7 +1809,7 @@ function submitForm(slug,editId){
   if(s.amountMinor!==o.amountMinor)s.priceHistory.push({at:iso(new Date()),minor:o.amountMinor});
   Object.assign(s,o);s.nextBillingAt=iso(computeNextBilling(o.firstBilledAt,o.cycle,o.cycleDays,new Date()));
   touchPortable(s);DB.save();}
- else{const added=addSub(o);if(o.candidateId)confirmGoogleDiscovery(o.candidateId);if(o.importCandidateId)confirmImportCandidate(o.importCandidateId,added)}
+ else{const added=o.importCandidateId?confirmImportCandidate(o.importCandidateId,null,o):addSub(o);if(!added){toast(LANG==='ko'?'저장하지 못했거나 후보가 변경됐어요. 다시 확인하세요.':'Could not save, or candidate changed. Review again.');return}if(o.importCandidateId)rememberImportConfirmation(o.importCandidateId);if(o.candidateId)confirmGoogleDiscovery(o.candidateId)}
  MANUAL_DRAFT=null;
  closeSheet();toast(t("t.saved"));go("home");
 }
@@ -1848,9 +1877,9 @@ function delSub(id){
  track("subscription_deleted",{});DB.save();closeSheet();toast(t("t.deleted"));render();
 }
 function confirmDupAdd(){
- const o=window.__pendingSub;window.__pendingSub=null;window.__dupOK=0;
+ const o=window.__pendingSub;window.__dupOK=0;
  if(!o){closeSheet();return}
- const added=addSub(o);if(o.candidateId)confirmGoogleDiscovery(o.candidateId);if(o.importCandidateId)confirmImportCandidate(o.importCandidateId,added);closeSheet();toast(t("t.saved"));go("home");
+ const added=o.importCandidateId?confirmImportCandidate(o.importCandidateId,null,o):addSub(o);if(!added){toast(LANG==='ko'?'저장하지 못했거나 후보가 변경됐어요. 다시 확인하세요.':'Could not save, or candidate changed. Review again.');return}window.__pendingSub=null;MANUAL_DRAFT=null;if(o.importCandidateId)rememberImportConfirmation(o.importCandidateId);if(o.candidateId)confirmGoogleDiscovery(o.candidateId);closeSheet();toast(t("t.saved"));go("home");
 }
 function openInbox(){
  const rev=reviewSubs(),allImports=importCandidatesForReview(),rejected=recentRejectedImportCandidates();
@@ -1887,7 +1916,7 @@ function bulkImportCandidateAction(action){const ids=[...IMPORT_SELECTED];if(!id
 function undoImportReviewChange(){if(!restoreRecoverySnapshot()){toast(LANG==="ko"?"되돌릴 복구본이 없거나 손상됐어요":"No valid recovery copy found");return}IMPORT_SELECTED.clear();toast(LANG==="ko"?"방금 일괄 작업을 취소했어요":"Undid the last bulk action");openInbox()}
 function moveImportReviewFocus(delta){const cards=[...document.querySelectorAll("#sheet [data-import-candidate]")];if(!cards.length)return;let index=cards.indexOf(document.activeElement);if(index<0)index=0;else index=(index+delta+cards.length)%cards.length;cards[index].focus();cards[index].scrollIntoView({block:"nearest"})}
 function confirmImportCandidateFromInbox(id){if(!confirmImportCandidate(id)){editImportCandidate(id);return}toast(LANG==="ko"?"구독으로 확정했어요":"Confirmed as a subscription");if(importCandidatesForReview().length||reviewSubs().length)openInbox();else{closeSheet();render()}}
-function editImportCandidate(id){const item=(DB.d.importCandidates||[]).find(row=>row.id===id);if(!item)return;MANUAL_DRAFT={name:item.name,amountMinor:item.amountMinor,currency:item.currency,occurredAt:item.occurredAt,cycle:item.cycle,importCandidateId:item.id,source:item.sourceType};closeSheet();ADDMODE="manual";go("add")}
+function editImportCandidate(id){const item=(DB.d.importCandidates||[]).find(row=>row.id===id);if(!item)return;MANUAL_DRAFT={name:item.name,amountMinor:item.amountMinor,currency:item.currency,occurredAt:item.occurredAt,cycle:item.cycle,importCandidateId:item.id,candidateVersion:item.version,source:item.sourceType};closeSheet();ADDMODE="manual";go("add")}
 function laterImportCandidate(id){if(!setImportCandidateState(id,"LATER"))return;toast(LANG==="ko"?"7일 뒤 다시 보여드릴게요":"We will show it again in 7 days");openInbox()}
 function rejectImportCandidate(id){if(!setImportCandidateState(id,"REJECTED"))return;toast(LANG==="ko"?"후보에서 제외했어요":"Removed from candidates");openInbox()}
 function restoreImportCandidate(id){if(!setImportCandidateState(id,"RESTORE"))return;toast(LANG==="ko"?"검토함으로 복원했어요":"Restored to review");openInbox()}
@@ -2726,7 +2755,9 @@ async function openUnifiedReview(refresh=true){
  renderUnifiedReview();
  if(!refresh||!session)return;
  try{
-  const [candidates,rejected,accounts]=await Promise.all([googleApi('/v1/google/discoveries'),googleApi('/v1/google/discoveries/rejected'),googleApi('/v1/google/accounts')]);
+  const [all,accounts]=await Promise.all([googleApi('/v1/discovery/candidates/review'),googleApi('/v1/google/accounts')]);
+  if(!Array.isArray(all)||!Array.isArray(accounts))throw new Error('Invalid review response');
+  const candidates=all.filter(c=>c.reviewState!=='REJECTED'),rejected=all.filter(c=>c.reviewState==='REJECTED');
   if(seq!==UNIFIED_REVIEW.sequence||session!==googleSession()||!document.querySelector('[data-unified-review]')||!$('sheet').classList.contains('on'))return;
   GOOGLE_DISCOVERIES=candidates;GOOGLE_REJECTED=rejected;DISCOVERY_OVERVIEW.accounts=accounts;UNIFIED_REVIEW.notice='';renderUnifiedReview();
  }catch(e){if(seq===UNIFIED_REVIEW.sequence&&session===googleSession()&&document.querySelector('[data-unified-review]')){UNIFIED_REVIEW.notice=LANG==='ko'?'서버 후보 갱신 실패. 저장된 파일 후보는 계속 검토할 수 있습니다.':'Server refresh failed. Saved file candidates remain available.';renderUnifiedReview()}}
@@ -2735,9 +2766,9 @@ function renderUnifiedReview(){
  const ko=LANG==='ko',state=UNIFIED_REVIEW,all=unifiedReviewRows(),rows=filterReviewRows(all,state.filter),visible=rows.slice(0,state.limit);
  const option=(value,label,current)=>`<option value="${esc(value)}" ${value===current?'selected':''}>${esc(label)}</option>`;
  const select=(id,label,values,current)=>`<label class="grow tiny" for="${id}">${label}<select class="inp" id="${id}" onchange="applyUnifiedFilters()">${values.map(([value,text])=>option(value,text,current)).join('')}</select></label>`;
- let html=`<div data-unified-review><div class="grab"></div><h2 class="b" style="font-size:18px">${ko?'모든 발견 후보 검토':'Review all discoveries'}</h2><p class="sm muted">${ko?'Google·Apple·CSV 결과를 함께 확인합니다. Google 보류 항목은 7일 뒤 다시 나타납니다.':'Review Google, Apple and CSV together. Snoozed Google items return after 7 days.'}</p><div role="status" class="sm">${esc(state.notice)}</div>
+ let html=`<div data-unified-review><div class="grab"></div><h2 class="b" style="font-size:18px">${ko?'모든 발견 후보 검토':'Review all discoveries'}</h2><p class="sm muted">${ko?'Google·Apple·CSV 결과를 함께 확인합니다. 보류 항목은 상태 필터에서 바로 찾을 수 있습니다.':'Review Google, Apple and CSV together. Use the state filter to see snoozed items now.'}</p><div role="status" class="sm">${esc(state.notice)}</div>
  <form onsubmit="event.preventDefault();applyUnifiedFilters()"><label class="tiny" for="ur-query">${ko?'이름·계정 검색':'Name or account'}</label><div class="row"><input id="ur-query" class="inp" maxlength="80" value="${esc(state.filter.query)}"><button class="btn sm" style="flex-shrink:0;white-space:nowrap" type="submit">${ko?'검색':'Search'}</button></div>
- <div class="row mt" style="gap:8px;flex-wrap:wrap">${select('ur-source',ko?'출처':'Source',[['all',ko?'전체':'All'],['gmail','Gmail'],['google_play','Play'],['apple_import','Apple'],['csv_import','CSV']],state.filter.source)}${select('ur-confidence',ko?'확신':'Confidence',[['all',ko?'전체':'All'],['high',ko?'높음':'High'],['review',ko?'확인 필요':'Needs review']],state.filter.confidence)}${select('ur-state',ko?'상태':'State',[['NEW',ko?'새 후보':'New'],['REJECTED',ko?'제외':'Rejected'],['all',ko?'받아온 전체':'All loaded']],state.filter.state)}</div>
+ <div class="row mt" style="gap:8px;flex-wrap:wrap">${select('ur-source',ko?'출처':'Source',[['all',ko?'전체':'All'],['gmail','Gmail'],['google_play','Play'],['apple_import','Apple'],['csv_import','CSV']],state.filter.source)}${select('ur-confidence',ko?'확신':'Confidence',[['all',ko?'전체':'All'],['high',ko?'높음':'High'],['review',ko?'확인 필요':'Needs review']],state.filter.confidence)}${select('ur-state',ko?'상태':'State',[['NEW',ko?'새 후보':'New'],['LATER',ko?'나중에':'Later'],['REJECTED',ko?'제외':'Rejected'],['all',ko?'받아온 전체':'All loaded']],state.filter.state)}</div>
  <div class="row mt" style="gap:8px;flex-wrap:wrap">${select('ur-currency',ko?'금액 필터 통화':'Amount currency',[['all',ko?'전체':'All'],...[...new Set(all.map(r=>r.currency).filter(Boolean))].map(c=>[c,c])],state.filter.currency)}<label class="grow tiny" for="ur-min">${ko?'최소 금액':'Minimum amount'}<input class="inp" id="ur-min" type="number" min="0" step="any" value="${esc(state.filter.min)}" onchange="applyUnifiedFilters()"></label></div></form>
  <div class="row mt" style="gap:6px;flex-wrap:wrap"><button class="btn ghost sm" onclick="selectUnifiedVisible()">${ko?'보이는 후보 선택':'Select visible'}</button><button class="btn ghost sm" onclick="bulkUnifiedReview('LATER')" ${state.busy?'disabled':''}>${ko?'선택 나중에':'Later selected'}</button><button class="btn ghost sm" onclick="bulkUnifiedReview('REJECTED')" ${state.busy?'disabled':''}>${ko?'선택 아님':'Reject selected'}</button><button class="btn ghost sm" onclick="undoUnifiedReview()" ${!state.undo.length||state.busy?'disabled':''}>${ko?'방금 처리 취소':'Undo last review'}</button></div>
  <p class="tiny muted">${ko?'표시':'Showing'} ${visible.length}/${rows.length} · J/K ${ko?'이동':'move'} · A ${ko?'선택':'select'} · X ${ko?'제외':'reject'} · L ${ko?'나중':'later'} · U ${ko?'취소':'undo'}</p>`;
@@ -2751,6 +2782,12 @@ function renderUnifiedReview(){
 }
 function applyUnifiedFilters(){const f=UNIFIED_REVIEW.filter;for(const [key,id]of [['query','query'],['source','source'],['confidence','confidence'],['state','state'],['currency','currency'],['min','min']])f[key]=String($('ur-'+id)?.value||'');UNIFIED_REVIEW.limit=50;UNIFIED_REVIEW.selected.clear();UNIFIED_REVIEW.notice=f.min!==''&&f.currency==='all'?(LANG==='ko'?'금액을 비교할 통화를 먼저 선택하세요.':'Choose one currency before comparing amounts.'):'';renderUnifiedReview()}
 function selectUnifiedVisible(){document.querySelectorAll('[data-unified-candidate] input[type="checkbox"]').forEach(node=>{node.checked=true;UNIFIED_REVIEW.selected.add(node.dataset.reviewKey)})}
+function rememberImportConfirmation(id){
+ if(!unifiedReviewEnabled())return;
+ const item=DB.d.importCandidates.find(c=>c.id===id);if(!item?.confirmationUndo)return;
+ UNIFIED_REVIEW.session=googleSession();UNIFIED_REVIEW.undo=[{origin:'local',id,action:'CONFIRMED',afterVersion:item.version}];
+ UNIFIED_REVIEW.notice=LANG==='ko'?'구독을 저장했습니다. 검토함에서 방금 확정을 취소할 수 있습니다.':'Subscription saved. Undo last confirmation from the review inbox.';
+}
 async function applyUnifiedReview(key,action,session){
  if(session!==googleSession()||session!==UNIFIED_REVIEW.session)throw new Error('Review session changed');
  const row=unifiedReviewRows().find(r=>r.key===key);if(!row)throw new Error('Candidate no longer available');
@@ -2760,13 +2797,14 @@ async function applyUnifiedReview(key,action,session){
   return{key,origin:row.origin,id:row.id,before,afterVersion:next.version};
  }
  if(!session)throw new Error('Sign in required');
- const route={LATER:'postpone',REJECTED:'dismiss',RESTORE:'restore'}[action];if(!route)throw new Error('Unsupported review action');
- await googleApi('/v1/google/discoveries/'+route,{method:'POST',body:JSON.stringify({discoveryId:row.id})});
+ if(!Number.isSafeInteger(row.original.version))throw new Error('Refresh server candidates before review');
+ const result=await googleApi('/v1/discovery/candidates/review',{method:'POST',body:JSON.stringify({candidateId:row.id,action,expectedVersion:row.original.version})});
+ if(!result?.candidate||!Number.isSafeInteger(result.version))throw new Error('Invalid review response');
  if(session!==googleSession())throw new Error('Review session changed');
  const before=cloneJSON(row.original);GOOGLE_DISCOVERIES=GOOGLE_DISCOVERIES.filter(i=>i.id!==row.id);GOOGLE_REJECTED=GOOGLE_REJECTED.filter(i=>i.id!==row.id);
- if(action==='REJECTED')GOOGLE_REJECTED.push({...row.original,reviewState:'REJECTED'});
- if(action==='RESTORE')GOOGLE_DISCOVERIES.push({...row.original,reviewState:'NEW'});
- return{key,origin:row.origin,id:row.id,before,action,session};
+ if(result.candidate.reviewState==='REJECTED')GOOGLE_REJECTED.push(result.candidate);
+ else GOOGLE_DISCOVERIES.push(result.candidate);
+ return{key,origin:row.origin,id:row.id,before,action,session,afterVersion:result.version,operationId:result.operationId};
 }
 async function reviewUnified(key,action){
  if(UNIFIED_REVIEW.busy)return;
@@ -2786,8 +2824,8 @@ async function undoUnifiedReview(){
  if(UNIFIED_REVIEW.busy)return;const session=googleSession();if(session!==UNIFIED_REVIEW.session){UNIFIED_REVIEW.undo=[];return}
  UNIFIED_REVIEW.busy=true;const retry=[];
  try{for(const change of UNIFIED_REVIEW.undo){if(session!==googleSession())break;try{
-   if(change.origin==='local'){const item=DB.d.importCandidates.find(i=>i.id===change.id);if(!item||item.version!==change.afterVersion)throw new Error('Candidate changed after review');const before=cloneJSON(item),next={...change.before,updatedAt:new Date().toISOString(),version:item.version+1};Object.keys(item).forEach(k=>delete item[k]);Object.assign(item,next);if(!DB.save()){Object.keys(item).forEach(k=>delete item[k]);Object.assign(item,before);throw new Error('Could not save undo')}}
-   else{if(change.action==='RESTORE')throw new Error('Restore cannot be automatically undone');await googleApi('/v1/google/discoveries/restore',{method:'POST',body:JSON.stringify({discoveryId:change.id})});if(session!==googleSession())throw new Error('Review session changed');GOOGLE_REJECTED=GOOGLE_REJECTED.filter(i=>i.id!==change.id);GOOGLE_DISCOVERIES=GOOGLE_DISCOVERIES.filter(i=>i.id!==change.id);GOOGLE_DISCOVERIES.push({...change.before,reviewState:'NEW'})}
+   if(change.origin==='local'){const item=DB.d.importCandidates.find(i=>i.id===change.id);if(!item||item.version!==change.afterVersion)throw new Error('Candidate changed after review');if(change.action==='CONFIRMED'){if(!undoImportConfirmation(change.id))throw new Error('Confirmation changed or could not be undone')}else{const before=cloneJSON(item),next={...change.before,updatedAt:new Date().toISOString(),version:item.version+1};Object.keys(item).forEach(k=>delete item[k]);Object.assign(item,next);if(!DB.save()){Object.keys(item).forEach(k=>delete item[k]);Object.assign(item,before);throw new Error('Could not save undo')}}}
+   else{const result=await googleApi('/v1/discovery/candidates/undo',{method:'POST',body:JSON.stringify({candidateId:change.id,expectedVersion:change.afterVersion,operationId:change.operationId})});if(session!==googleSession())throw new Error('Review session changed');if(!result?.candidate)throw new Error('Invalid undo response');GOOGLE_REJECTED=GOOGLE_REJECTED.filter(i=>i.id!==change.id);GOOGLE_DISCOVERIES=GOOGLE_DISCOVERIES.filter(i=>i.id!==change.id);(result.candidate.reviewState==='REJECTED'?GOOGLE_REJECTED:GOOGLE_DISCOVERIES).push(result.candidate)}
   }catch(e){retry.push(change)}}
   if(session===googleSession()){UNIFIED_REVIEW.undo=retry;UNIFIED_REVIEW.notice=retry.length?(LANG==='ko'?'일부 항목은 이후 변경되어 취소하지 않았습니다.':'Some items changed and were not undone.'):(LANG==='ko'?'방금 검토 처리를 취소했습니다.':'Last review undone.')}
  }finally{UNIFIED_REVIEW.busy=false;if(session===googleSession()&&document.querySelector('[data-unified-review]')&&$('sheet').classList.contains('on'))renderUnifiedReview()}
