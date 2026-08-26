@@ -238,7 +238,7 @@ label.lb{display:block;font-size:12.5px;font-weight:700;color:var(--text-sub);ma
    T-207 히스토리 / T-208 애널리틱스 / T-209 온보딩·게스트 / T-210 다크·접근성
    T-211 i18n / T-213 리포트 / T-307 플랜최적화
    ============================================================ */
-const VERSION="0.27.3";
+const VERSION="0.27.4";
 /* S1-003: 순수 상태 집계. 연결하지 않은 자료나 알 수 없는 상태를 성공으로 세지 않는다. */
 function discoverySummary(input={}){
  const kinds=new Set(["gmail","google_play","apple_import","csv_import"]),states=new Set(["not_started","in_progress","completed","partial","failed","reauth","permission_missing"]);
@@ -1386,6 +1386,7 @@ let IMPORT_REVIEW_LIMIT=50,IMPORT_REVIEW_SOURCE="all",IMPORT_REVIEW_QUERY="",IMP
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const GOOGLE_SESSION_KEY="subscrap.google.session.v1";
+const AUTH_PROVIDER_KEY="subscrap.auth.provider.v1";
 const DISCOVERY_OVERVIEW={accounts:[],loaded:false,loading:false,error:null,sequence:0,session:null,pending:null};
 let DISCOVERY_BUSY=false;
 const DISCOVERY_FAILURES=new Map();
@@ -1482,10 +1483,11 @@ function googleSession(){try{return localStorage.getItem(GOOGLE_SESSION_KEY)||""
 const PORTABLE_DEVICE_KEY="subscrap.device.id.v1";
 function portableDeviceId(){try{let id=localStorage.getItem(PORTABLE_DEVICE_KEY);if(!id){id="web-"+(window.crypto&&window.crypto.randomUUID?window.crypto.randomUUID():uid());localStorage.setItem(PORTABLE_DEVICE_KEY,id)}return id}catch(e){return"web-"+uid()}}
 function captureGoogleSession(){
- try{const p=new URLSearchParams(location.hash.replace(/^#/,"")),token=p.get("google_session");if(!token)return false;
-  localStorage.setItem(GOOGLE_SESSION_KEY,token);const email=p.get("google_account")||"";
-  p.delete("google_session");p.delete("google_account");history.replaceState(null,"",location.pathname+location.search+(p.toString()?"#"+p:""));
-  setTimeout(()=>{toast(LANG==="ko"?`${email||"Google 계정"} 연결 완료`:`${email||"Google account"} connected`);syncGoogleSubscriptions().catch(()=>{});},100);return true;
+ try{const p=new URLSearchParams(location.hash.replace(/^#/,"")),token=p.get("subscrap_session")||p.get("google_session");if(!token)return false;
+  const provider=p.get("account_provider")||(p.get("google_session")?"google":"account"),email=p.get("google_account")||"";
+  localStorage.setItem(GOOGLE_SESSION_KEY,token);localStorage.setItem(AUTH_PROVIDER_KEY,provider);
+  p.delete("subscrap_session");p.delete("account_provider");p.delete("google_session");p.delete("google_account");history.replaceState(null,"",location.pathname+location.search+(p.toString()?"#"+p:""));
+  setTimeout(()=>{if(provider==="apple")toast(LANG==="ko"?"Apple 로그인 완료 · 이 기기 자료 동기화는 설정에서 직접 시작하세요":"Apple sign-in complete · start device-data sync from Settings when ready");else{toast(LANG==="ko"?`${email||"Google 계정"} 연결 완료`:`${email||"Google account"} connected`);syncGoogleSubscriptions().catch(()=>{});}},100);return true;
  }catch(e){return false}
 }
 async function googleApi(path,options){
@@ -2413,8 +2415,8 @@ function importBackupMerge(ev){
  const rd=new FileReader();rd.onload=()=>{try{const next=mergeBackupDocument(String(rd.result));if(!confirm(LANG==="ko"?`현재 자료와 백업을 합쳐 구독 ${next.subs.length}개를 유지합니다. 삭제 기록도 반영할까요?`:`Merge current data with this backup and keep ${next.subs.length} subscriptions, including deletion records?`))return;if(!saveRecoverySnapshot("portable_merge"))throw new Error("recovery");const previous=cloneJSON(DB.d);DB.d=next;if(!DB.save()){DB.d=previous;throw new Error("storage")}track("backup_merged",{n:next.subs.length,tombstones:next.tombstones.length});toast(LANG==="ko"?"두 기기의 최신 변경을 안전하게 합쳤어요":"Merged the latest changes from both devices");render()}catch(e){toast(LANG==="ko"?"백업을 합치지 못했어요. 파일과 검사값을 확인하세요":"Could not merge this backup; check the file and checksum")}ev.target.value=""};rd.readAsText(f)
 }
 function portableSyncPayload(){const safe=row=>Object.assign({},row,{updatedAt:row.updatedAt||row.createdAt||new Date().toISOString(),version:Math.max(1,Number(row.version||1))});return{deviceId:portableDeviceId(),baseVersion:Number(DB.d.sync&&DB.d.sync.version||0),subscriptions:DB.d.subs.map(safe),importCandidates:(DB.d.importCandidates||[]).map(safe),tombstones:(DB.d.tombstones||[]).map(safe)}}
-async function syncPortableData(){if(!googleApiBase()||!googleSession()){toast(LANG==="ko"?"먼저 Google 계정으로 연결하세요":"Connect a Google account first");return}if(!saveRecoverySnapshot("server_sync")){toast(LANG==="ko"?"복구본을 만들지 못해 동기화를 중단했어요":"Sync stopped because a recovery copy could not be made");return}try{const remote=await googleApi("/v1/sync/merge",{method:"POST",body:JSON.stringify(portableSyncPayload())}),incoming=Object.assign(DB.def(),{subs:remote.subscriptions||[],importCandidates:remote.importCandidates||[],tombstones:remote.tombstones||[],sync:{deviceId:portableDeviceId(),version:Number(remote.version||0),lastMergedAt:remote.updatedAt||new Date().toISOString()}}),next=mergePortableData(DB.d,incoming);next.sync.version=Number(remote.version||next.sync.version);next.sync.deviceId=portableDeviceId();DB.d=next;if(!DB.save())throw new Error("storage");track("portable_sync_completed",{version:next.sync.version,subs:next.subs.length});toast(LANG==="ko"?`구독 ${next.subs.length}개를 안전하게 동기화했어요`:`Safely synced ${next.subs.length} subscriptions`);render()}catch(e){toast(e.message)}}
-async function openAccountDeletion(){if(!googleApiBase()||!googleSession()){toast(LANG==="ko"?"먼저 Google 계정으로 연결하세요":"Connect a Google account first");return}try{const status=await googleApi("/v1/account-deletion"),scheduled=status.status==="SCHEDULED";openSheet(`<div class="grab"></div><div class="b" style="font-size:18px">${LANG==="ko"?"서버 자료 삭제":"Delete server data"}</div><div class="card flat mt"><div class="sm b">${scheduled?(LANG==="ko"?"삭제 대기 중":"Deletion scheduled"):(LANG==="ko"?"삭제 요청 없음":"No deletion scheduled")}</div><div class="tiny muted mt">${scheduled?(LANG==="ko"?`${googleDate(status.executeAfter)} 이후 삭제됩니다. 그 전까지 취소하거나 자료를 내보낼 수 있습니다.`:`Deletion is due after ${googleDate(status.executeAfter)}. You can cancel or export before then.`):(LANG==="ko"?"요청하면 7일 동안 기다린 뒤 서버의 계정 자료를 삭제합니다. 기기 안 자료는 별도로 유지됩니다.":"A request waits seven days before server account data is deleted. On-device data remains separate.")}</div></div>${scheduled?`<button class="btn" onclick="cancelAccountDeletion()">${LANG==="ko"?"삭제 요청 취소":"Cancel deletion"}</button>`:`<button class="btn line" style="color:var(--danger)" onclick="requestAccountDeletion()">${LANG==="ko"?"7일 뒤 서버 자료 삭제 요청":"Request server deletion in 7 days"}</button>`}<button class="btn ghost mt" onclick="closeSheet()">${t("common.close")}</button>`) }catch(e){toast(e.message)}}
+async function syncPortableData(){if(!googleApiBase()||!googleSession()){toast(LANG==="ko"?"먼저 로그인하세요":"Sign in first");return}if(!saveRecoverySnapshot("server_sync")){toast(LANG==="ko"?"복구본을 만들지 못해 동기화를 중단했어요":"Sync stopped because a recovery copy could not be made");return}try{const remote=await googleApi("/v1/sync/merge",{method:"POST",body:JSON.stringify(portableSyncPayload())}),incoming=Object.assign(DB.def(),{subs:remote.subscriptions||[],importCandidates:remote.importCandidates||[],tombstones:remote.tombstones||[],sync:{deviceId:portableDeviceId(),version:Number(remote.version||0),lastMergedAt:remote.updatedAt||new Date().toISOString()}}),next=mergePortableData(DB.d,incoming);next.sync.version=Number(remote.version||next.sync.version);next.sync.deviceId=portableDeviceId();DB.d=next;if(!DB.save())throw new Error("storage");track("portable_sync_completed",{version:next.sync.version,subs:next.subs.length});toast(LANG==="ko"?`구독 ${next.subs.length}개를 안전하게 동기화했어요`:`Safely synced ${next.subs.length} subscriptions`);render()}catch(e){toast(e.message)}}
+async function openAccountDeletion(){if(!googleApiBase()||!googleSession()){toast(LANG==="ko"?"먼저 로그인하세요":"Sign in first");return}try{const status=await googleApi("/v1/account-deletion"),scheduled=status.status==="SCHEDULED";openSheet(`<div class="grab"></div><div class="b" style="font-size:18px">${LANG==="ko"?"서버 자료 삭제":"Delete server data"}</div><div class="card flat mt"><div class="sm b">${scheduled?(LANG==="ko"?"삭제 대기 중":"Deletion scheduled"):(LANG==="ko"?"삭제 요청 없음":"No deletion scheduled")}</div><div class="tiny muted mt">${scheduled?(LANG==="ko"?`${googleDate(status.executeAfter)} 이후 삭제됩니다. 그 전까지 취소하거나 자료를 내보낼 수 있습니다.`:`Deletion is due after ${googleDate(status.executeAfter)}. You can cancel or export before then.`):(LANG==="ko"?"요청하면 7일 동안 기다린 뒤 서버의 계정 자료를 삭제합니다. 기기 안 자료는 별도로 유지됩니다.":"A request waits seven days before server account data is deleted. On-device data remains separate.")}</div></div>${scheduled?`<button class="btn" onclick="cancelAccountDeletion()">${LANG==="ko"?"삭제 요청 취소":"Cancel deletion"}</button>`:`<button class="btn line" style="color:var(--danger)" onclick="requestAccountDeletion()">${LANG==="ko"?"7일 뒤 서버 자료 삭제 요청":"Request server deletion in 7 days"}</button>`}<button class="btn ghost mt" onclick="closeSheet()">${t("common.close")}</button>`) }catch(e){toast(e.message)}}
 async function requestAccountDeletion(){if(!confirm(LANG==="ko"?"서버 자료를 7일 뒤 삭제하도록 예약할까요? 그 전에는 취소할 수 있습니다.":"Schedule server data deletion in seven days? You can cancel before then."))return;try{await googleApi("/v1/account-deletion/request",{method:"POST",body:"{}"});toast(LANG==="ko"?"삭제 대기를 시작했어요":"Deletion wait started");await openAccountDeletion()}catch(e){toast(e.message)}}
 async function cancelAccountDeletion(){try{await googleApi("/v1/account-deletion/cancel",{method:"POST",body:"{}"});toast(LANG==="ko"?"삭제 요청을 취소했어요":"Deletion canceled");await openAccountDeletion()}catch(e){toast(e.message)}}
 
@@ -2446,6 +2448,7 @@ async function refreshGooglePanel(){
  if(!base){panel.innerHTML=`<div class="card flat"><div class="b">${LANG==="ko"?"연결 서버 설정 대기 중":"Connection server setup pending"}</div><div class="sm muted mt">${intro}</div><div class="tiny muted mt">${LANG==="ko"?"코드는 준비됐지만 실제 Google Cloud 인증 정보와 HTTPS API 주소가 배포 빌드에 아직 설정되지 않았습니다.":"The code is ready, but Google Cloud credentials and an HTTPS API address are not configured in this build."}</div></div><button class="btn" disabled>${LANG==="ko"?"운영 연결 후 이용 가능":"Available after deployment"}</button>`;return}
  try{
   await retryPendingGoogleConfirmations({silent:true});
+  const providerStatus=await googleApi("/v1/auth/providers").catch(()=>({apple:false,serverStorage:false}));
   const accounts=googleSession()?await googleApi("/v1/google/accounts") : [];
   let discoveries=[],rejected=[],subscriptions=[];if(googleSession()){[discoveries,rejected,subscriptions]=await Promise.all([googleApi("/v1/google/discoveries"),googleApi("/v1/google/discoveries/rejected"),googleApi("/v1/google/subscriptions")])};
   if(requestSeq!==DISCOVERY_OVERVIEW.sequence||identity!==googleSession())return;
@@ -2455,6 +2458,7 @@ async function refreshGooglePanel(){
   panel.innerHTML=`<div class="card flat"><div class="sm muted">${intro}</div><div class="tiny muted mt">${LANG==="ko"?"메일 원문은 저장하지 않으며, 연결 해제 시 해당 계정의 열쇠·작업·검토 후보를 서버에서 삭제합니다.":"Email source is not stored. Disconnecting deletes that account's token, jobs and review items from the server."}</div></div>
    ${accounts.map(a=>googleAccountCard(a,googleAccountCounts(a,subscriptions,discoveries))).join("")||`<div class="card flat center muted">${LANG==="ko"?"연결된 Google 계정이 없습니다.":"No Google account connected."}</div>`}
    <button class="btn" onclick="startGoogleConnect()">＋ ${LANG==="ko"?"Google 계정 연결":"Connect Google account"}</button>
+   ${providerStatus.apple?`<button class="btn line mt" onclick="startAppleSignIn()"> ${LANG==="ko"?"Apple 로그인으로 자료 저장·동기화":"Sign in with Apple for storage & sync"}</button>`:`<div class="card flat mt"><div class="sm b"> ${LANG==="ko"?"Apple 로그인 준비 중":"Apple sign-in setup pending"}</div><div class="tiny muted mt">${LANG==="ko"?"Apple 구매내역은 자동으로 읽지 않으며, 운영 Apple 개발자 설정이 완료되면 계정 로그인과 기기 자료 동기화를 사용할 수 있습니다.":"Apple purchase history is not read automatically. Account sign-in and device-data sync become available after Apple production configuration."}</div></div>`}
    ${GOOGLE_JOBS.length?`<button class="btn ghost mt" onclick="pollGooglePlay()">↻ ${LANG==="ko"?"Play 자료 준비 상태 확인":"Check Play export status"}</button>`:""}
    ${subscriptions.length?`<div class="b mt2 mb">${LANG==="ko"?"이전에 확정한 구독":"Previously confirmed subscriptions"} (${subscriptions.length})</div>${subscriptions.map(googleSubscriptionCard).join("")}`:""}
    ${discoveries.length?`<div class="b mt2 mb">${LANG==="ko"?"직접 확인할 항목":"Items to review"} (${discoveries.length})</div>${discoveries.map(googleDiscoveryCard).join("")}`:""}
@@ -2526,6 +2530,10 @@ async function retryPendingGoogleConfirmations(options={}){
 async function startGoogleConnect(){
  try{const result=await googleApi("/v1/google/connect-url",{method:"POST",body:JSON.stringify({sources:["gmail"]})});location.assign(result.url)}
  catch(e){toast(e.message)}
+}
+async function startAppleSignIn(){
+ try{const result=await googleApi("/v1/apple/connect-url",{method:"POST",body:"{}"});location.assign(result.url)}
+ catch(e){toast(LANG==="ko"?"Apple 로그인 운영 설정이 아직 완료되지 않았어요":"Apple production sign-in is not configured yet")}
 }
 async function startGooglePlayConnect(accountId){
  const same=confirm(LANG==="ko"?"Google Play 동의 화면에서는 지금 표시된 Gmail과 같은 Google 계정을 선택하세요. 계속할까요?":"In the Google Play consent screen, choose the same Google account shown on this card. Continue?");if(!same)return;
