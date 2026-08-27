@@ -238,7 +238,7 @@ label.lb{display:block;font-size:12.5px;font-weight:700;color:var(--text-sub);ma
    T-207 히스토리 / T-208 애널리틱스 / T-209 온보딩·게스트 / T-210 다크·접근성
    T-211 i18n / T-213 리포트 / T-307 플랜최적화
    ============================================================ */
-const VERSION="0.27.5";
+const VERSION="0.27.6";
 /* S1-003: 순수 상태 집계. 연결하지 않은 자료나 알 수 없는 상태를 성공으로 세지 않는다. */
 function discoverySummary(input={}){
  const kinds=new Set(["gmail","google_play","apple_import","csv_import"]),states=new Set(["not_started","in_progress","completed","partial","failed","reauth","permission_missing"]);
@@ -1387,6 +1387,7 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const GOOGLE_SESSION_KEY="subscrap.google.session.v1";
 const AUTH_PROVIDER_KEY="subscrap.auth.provider.v1";
+const AUTH_STATE={status:"checking",error:null};
 const DISCOVERY_OVERVIEW={accounts:[],loaded:false,loading:false,error:null,sequence:0,session:null,pending:null};
 let DISCOVERY_BUSY=false;
 const DISCOVERY_FAILURES=new Map();
@@ -1480,16 +1481,23 @@ async function runDiscoveryRescan(mode,target){
 }
 function googleApiBase(){return String(document.querySelector('meta[name="subscrap-api-base"]')?.content||"").replace(/\/$/,"")}
 function googleSession(){try{return localStorage.getItem(GOOGLE_SESSION_KEY)||""}catch(e){return""}}
-function accountEntryButton(){return `<button class="btn line sm" onclick="openAccount()">${LANG==="ko"?"내 계정":"My account"}</button>`}
+function refreshAuthState(){const next=googleSession()?"signedIn":"signedOut";AUTH_STATE.status=next;AUTH_STATE.error=null;return next}
+function accountEntryButton(){
+ const busy=["checking","signingIn"].includes(AUTH_STATE.status),signed=AUTH_STATE.status==="signedIn"||(!busy&&!!googleSession());
+ const label=busy?(LANG==="ko"?"로그인 확인 중…":"Checking sign-in…"):(signed?(LANG==="ko"?"내 계정":"My account"):(LANG==="ko"?"Google로 로그인·무료 가입":"Continue with Google"));
+ return `<button class="btn line sm" onclick="openAccount()" ${busy?'disabled aria-busy="true"':""}>${label}</button>`;
+}
 const PORTABLE_DEVICE_KEY="subscrap.device.id.v1";
 function portableDeviceId(){try{let id=localStorage.getItem(PORTABLE_DEVICE_KEY);if(!id){id="web-"+(window.crypto&&window.crypto.randomUUID?window.crypto.randomUUID():uid());localStorage.setItem(PORTABLE_DEVICE_KEY,id)}return id}catch(e){return"web-"+uid()}}
-function captureGoogleSession(){
- try{const p=new URLSearchParams(location.hash.replace(/^#/,"")),token=p.get("subscrap_session")||p.get("google_session");if(!token)return false;
-  const provider=p.get("account_provider")||(p.get("google_session")?"google":"account"),email=p.get("google_account")||"";
-  localStorage.setItem(GOOGLE_SESSION_KEY,token);localStorage.setItem(AUTH_PROVIDER_KEY,provider);
-  p.delete("subscrap_session");p.delete("account_provider");p.delete("google_session");p.delete("google_account");history.replaceState(null,"",location.pathname+location.search+(p.toString()?"#"+p:""));
-  setTimeout(()=>{if(provider==="apple")toast(LANG==="ko"?"Apple 로그인 완료 · 이 기기 자료 동기화는 설정에서 직접 시작하세요":"Apple sign-in complete · start device-data sync from Settings when ready");else{toast(LANG==="ko"?`${email||"Google 계정"} 연결 완료`:`${email||"Google account"} connected`);syncGoogleSubscriptions().catch(()=>{});}},100);return true;
- }catch(e){return false}
+async function captureGoogleSession(){
+ const p=new URLSearchParams(location.hash.replace(/^#/,"")),code=p.get("account_code"),provider=p.get("account_provider")||"google";
+ p.delete("account_code");p.delete("account_provider");history.replaceState(null,"",location.pathname+location.search+(p.toString()?"#"+p:""));
+ if(!code){refreshAuthState();return false}
+ AUTH_STATE.status="checking";AUTH_STATE.error=null;
+ try{const result=await googleApi("/v1/auth/exchange",{method:"POST",body:JSON.stringify({code})});if(!result?.session)throw new Error("Invalid login handoff");
+  localStorage.setItem(GOOGLE_SESSION_KEY,result.session);localStorage.setItem(AUTH_PROVIDER_KEY,result.provider||provider);refreshAuthState();
+  setTimeout(()=>{toast(LANG==="ko"?"Google 로그인 완료 · 자료 동기화는 설정에서 직접 시작하세요":"Google sign-in complete · start data sync from Settings when ready");syncGoogleSubscriptions().catch(()=>{})},100);return true;
+ }catch(e){AUTH_STATE.status="recoverableError";AUTH_STATE.error=e.message;setTimeout(()=>toast(LANG==="ko"?"로그인 확인 시간이 지났어요. 다시 시도해 주세요.":"Sign-in confirmation expired. Please try again."),100);return false}
 }
 async function googleApi(path,options){
  const base=googleApiBase();if(!base)throw new Error(LANG==="ko"?"Google 연결 서버가 아직 배포되지 않았어요":"Google connection server is not deployed yet");
@@ -2338,7 +2346,8 @@ function applyTheme(){const v=DB.d.set.theme;
  const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute("content",dark?"#0F1420":"#1F3864")}
 function openAccount(){
  if(!googleSession()){
-  openSheet(`<div class="grab"></div><h2>${LANG==="ko"?"내 계정":"My account"}</h2><p class="sm muted">${LANG==="ko"?"비밀번호 없이 Google로 로그인하면 여러 기기의 구독 자료를 직접 동기화하고, 연결한 자료 통로에서 유료서비스 후보를 찾을 수 있어요.":"Sign in with Google without a password to manually sync your subscription data between devices and find candidates from connected sources."}</p><button class="btn" onclick="startGoogleConnect()">${LANG==="ko"?"Google로 로그인·무료 가입":"Continue with Google"}</button><button class="btn ghost mt" onclick="closeSheet()">${t("common.close")}</button>`);
+  const note=AUTH_STATE.status==="recoverableError"?`<div class="card flat sm" role="alert">${LANG==="ko"?"로그인이 취소됐거나 완료 확인 시간이 지났어요. 원할 때 다시 시도할 수 있습니다.":"Sign-in was cancelled or confirmation expired. You can try again whenever you are ready."}</div>`:"";
+  openSheet(`<div class="grab"></div><h2>${LANG==="ko"?"내 계정":"My account"}</h2>${note}<p class="sm muted">${LANG==="ko"?"비밀번호 없이 Google로 로그인하면 여러 기기의 구독 자료를 직접 동기화하고, 연결한 자료 통로에서 유료서비스 후보를 찾을 수 있어요.":"Sign in with Google without a password to manually sync your subscription data between devices and find candidates from connected sources."}</p><button class="btn" onclick="startGoogleConnect()">${LANG==="ko"?"Google로 로그인·무료 가입":"Continue with Google"}</button><button class="btn ghost mt" onclick="closeSheet()">${t("common.close")}</button>`);
   return;
  }
  openSheet(`<div class="grab"></div><h2>${LANG==="ko"?"내 계정":"My account"}</h2><div id="accountPanel" class="card flat" role="status" aria-live="polite">${LANG==="ko"?"계정 정보를 불러오는 중…":"Loading account information…"}</div><button class="btn ghost mt" onclick="closeSheet()">${t("common.close")}</button>`);refreshAccountPanel();
@@ -2358,6 +2367,7 @@ async function saveAccountDisplayName(){
 function logoutFromThisDevice(){
  if(!confirm(LANG==="ko"?"이 기기에서만 로그아웃할까요? 서버의 연결과 저장한 자료는 삭제하지 않습니다.":"Log out on this device only? This does not delete your server connection or saved data."))return;
  try{localStorage.removeItem(GOOGLE_SESSION_KEY);localStorage.removeItem(AUTH_PROVIDER_KEY)}catch(e){}
+ AUTH_STATE.status="signedOut";AUTH_STATE.error=null;
  DISCOVERY_OVERVIEW.sequence++;Object.assign(DISCOVERY_OVERVIEW,{accounts:[],loaded:false,loading:false,error:null,session:null,pending:null});GOOGLE_DISCOVERIES=[];GOOGLE_REJECTED=[];GOOGLE_JOBS=[];DISCOVERY_FAILURES.clear();closeSheet();render();toast(LANG==="ko"?"이 기기에서 로그아웃했어요":"Logged out on this device");
 }
 function exportCSV(){
@@ -2553,8 +2563,9 @@ async function retryPendingGoogleConfirmations(options={}){
  return{confirmed,pending};
 }
 async function startGoogleConnect(){
+ if(AUTH_STATE.status==="signingIn")return;AUTH_STATE.status="signingIn";AUTH_STATE.error=null;closeSheet();render();
  try{const result=await googleApi("/v1/google/connect-url",{method:"POST",body:JSON.stringify({sources:["gmail"]})});location.assign(result.url)}
- catch(e){toast(e.message)}
+ catch(e){AUTH_STATE.status=e.status===503?"configurationError":"recoverableError";AUTH_STATE.error=e.message;render();toast(e.status===503?(LANG==="ko"?"Google 로그인 운영 설정을 확인하고 있어요":"Google sign-in configuration needs attention"):e.message)}
 }
 async function startAppleSignIn(){
  try{const result=await googleApi("/v1/apple/connect-url",{method:"POST",body:"{}"});location.assign(result.url)}
@@ -3062,20 +3073,27 @@ function showInstallHelp(){
 }
 
 /* 서비스 워커 (같은 폴더에 sw.js 가 있을 때만 — 없으면 조용히 넘어감) */
+let PWA_WAITING=null,PWA_RELOADING=false;
+function offerAppUpdate(reg){
+ if(!reg?.waiting)return;PWA_WAITING=reg.waiting;
+ showBanner(`<div class="row"><div class="grow"><div class="b sm">${LANG==="ko"?"새 버전이 준비됐어요":"An update is ready"}</div><div class="tiny muted">${LANG==="ko"?"저장 중인 작업을 마친 뒤 새 버전을 여세요.":"Finish any work, then open the new version."}</div></div><button class="btn sm" onclick="activateAppUpdate()">${LANG==="ko"?"새 버전 열기":"Open update"}</button><button class="iconbtn" onclick="dismissBanner()" aria-label="${LANG==="ko"?"나중에":"Later"}">✕</button></div>`);
+}
+function activateAppUpdate(){if(!PWA_WAITING)return;PWA_WAITING.postMessage({type:"SKIP_WAITING"})}
 if("serviceWorker" in navigator&&(location.protocol==="https:"||["localhost","127.0.0.1"].includes(location.hostname))){
+ navigator.serviceWorker.addEventListener("controllerchange",()=>{if(PWA_RELOADING)return;PWA_RELOADING=true;location.reload()});
  window.addEventListener("load",()=>{
   const swUrl=`sw.js?v=${encodeURIComponent(VERSION)}`;
   navigator.serviceWorker.register(swUrl,{updateViaCache:"none"})
-   .then(reg=>reg.update().catch(()=>{}))
+   .then(reg=>{if(reg.waiting)offerAppUpdate(reg);reg.addEventListener("updatefound",()=>{const worker=reg.installing;worker?.addEventListener("statechange",()=>{if(worker.state==="installed"&&navigator.serviceWorker.controller)offerAppUpdate(reg)})});return reg.update().catch(()=>{})})
    .catch(()=>navigator.serviceWorker.register(swUrl).catch(()=>{}));
  });
 }
 
 /* ================= 부팅 ================= */
-(function boot(){
+(async function boot(){
  DB.load();
  LANG=DB.d.set.lang||"ko";
- captureGoogleSession();
+ await captureGoogleSession();
  document.documentElement.lang=LANG;
  applyTheme();applyFont();
  if(window.matchMedia)matchMedia("(prefers-color-scheme:dark)").addEventListener?.("change",()=>{if(DB.d.set.theme==="system")applyTheme()});
@@ -3096,6 +3114,7 @@ if("serviceWorker" in navigator&&(location.protocol==="https:"||["localhost","12
  refreshDiscoveryOverview();
  window.addEventListener("offline",updateDiscoveryHome);
  window.addEventListener("online",()=>{updateDiscoveryHome();refreshDiscoveryOverview(true)});
+ window.addEventListener("focus",()=>{const before=AUTH_STATE.status,next=refreshAuthState();if(before!==next)render()});
  refreshFX();
  // iOS 설치 안내 배너 (beforeinstallprompt 없음)
  if(isIOS()&&!isStandalone()&&!bannerSuppressed()){
@@ -3106,7 +3125,7 @@ if("serviceWorker" in navigator&&(location.protocol==="https:"||["localhost","12
    <button class="iconbtn" onclick="dismissBanner()" aria-label="닫기">✕</button></div>`),2600);
  }
  // 데모 데이터 주입용 훅 (테스트 하네스에서 사용)
-window.__scrap={DB,addSub,dashboard,detectWaste,duplicateGroups,mergeDuplicateGroup,undoDuplicateMerge,canonicalServiceKey,canonicalServiceNameKey,computeNextBilling,convert,monthlyMinor,yearlyMinor,rollForward,pausedSubs,trialSubs,togglePause,shareCard,payMethods,payTotals,popularFor,findSameService,daysSinceUse,confirmDupAdd,myShareMinor,sharedSubs,settlement,timeline,cardStatus,searchCatalog,editDist,familyOffer,bundleOffers,bundleCatalog,reviewSubs,widgetSummary,tidyReceipts,yearSummary,fxShift,scanPaste,openGoogleAccounts,googleApiBase,googleSession,captureGoogleSession,syncGoogleSubscriptions,openAccount,refreshAccountPanel,saveAccountDisplayName,logoutFromThisDevice,accountEntryButton,
+window.__scrap={DB,addSub,dashboard,detectWaste,duplicateGroups,mergeDuplicateGroup,undoDuplicateMerge,canonicalServiceKey,canonicalServiceNameKey,computeNextBilling,convert,monthlyMinor,yearlyMinor,rollForward,pausedSubs,trialSubs,togglePause,shareCard,payMethods,payTotals,popularFor,findSameService,daysSinceUse,confirmDupAdd,myShareMinor,sharedSubs,settlement,timeline,cardStatus,searchCatalog,editDist,familyOffer,bundleOffers,bundleCatalog,reviewSubs,widgetSummary,tidyReceipts,yearSummary,fxShift,scanPaste,openGoogleAccounts,googleApiBase,googleSession,captureGoogleSession,syncGoogleSubscriptions,openAccount,refreshAccountPanel,saveAccountDisplayName,logoutFromThisDevice,accountEntryButton,refreshAuthState,AUTH_STATE,offerAppUpdate,activateAppUpdate,
   makePriceObservation,priceObservationList,recordPriceObservation,priceObservationSummary,priceAlertFromObservations,
   BACKUP_SCHEMA,createBackupEnvelope,parseBackupDocument,backupChecksum,normalizeStoredData,validateStoredData,saveRecoverySnapshot,hasRecoverySnapshot,restoreRecoverySnapshot,mergePortableData,mergeBackupDocument,mergeTombstones,applyPortableTombstones,markPortableDeleted,touchPortable,
   PURCHASE_IMPORT_MAX_BYTES,PURCHASE_IMPORT_MAX_ROWS,parseDelimitedDocument,purchaseImportMapping,parsePurchaseAmount,parsePurchaseDate,preparePurchaseImport,commitPurchaseImport,deletePurchaseImportData,importCandidateFingerprints,importCandidatesForReview,recentRejectedImportCandidates,setImportCandidateState,confirmImportCandidate,openDiscoveryHub,openApplePurchaseImport,importCandidateCard,
