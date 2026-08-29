@@ -240,7 +240,7 @@ label.lb{display:block;font-size:12.5px;font-weight:700;color:var(--text-sub);ma
 });
 
 /* Subscrap core */
-const VERSION="0.33.0";
+const VERSION="0.34.0";
 /* 1단계 무료판의 사용자 콘텐츠 원장. 화면마다 같은 약속·통로 범위·신뢰 표현을 사용한다. */
 const FREE_STAGE1_CONTENT=Object.freeze({
  version:"2026-08-29",
@@ -267,6 +267,14 @@ const FREE_STAGE2_CONTENT=Object.freeze({
  trust:{fresh:{ko:"최근 확인",en:"Recently reviewed"},aging:{ko:"재확인 예정",en:"Review due soon"},stale:{ko:"확인 필요",en:"Needs recheck"}},
  reviewResumeDays:30,
  contentReviewDays:180
+});
+const FREE_ADVANCED_CONTENT=Object.freeze({
+ version:"2026-08-29",
+ promise:{ko:"확인 범위, 저장자료 완성도, 앞으로 30일 결제와 지금 할 일을 한 번에 관리합니다.",en:"Manage coverage, saved-data completeness, the next 30 days of payments and your next actions in one place."},
+ healthFields:Object.freeze(["amount_currency","billing_cycle","next_billing_date","price_evidence"]),
+ forecastDays:30,
+ prioritySnoozeDays:7,
+ briefingBoundary:"derived_summary_without_message_bodies_or_authentication_secrets"
 });
 function freeContent(path,lang=LANG){let value=FREE_STAGE1_CONTENT;for(const key of String(path||"").split(".")){value=value&&value[key]}return value&&typeof value==="object"&&Object.prototype.hasOwnProperty.call(value,lang)?value[lang]:value}
 /* 연결하지 않은 자료나 알 수 없는 상태를 성공으로 세지 않는다. */
@@ -567,6 +575,8 @@ function validateStoredData(d){
  if(!d.tombstones.every(item=>item&&typeof item.id==="string"&&item.id.length<=100&&["subscription","import_candidate"].includes(item.entity)&&Number.isFinite(Date.parse(item.deletedAt))&&Number.isInteger(item.version)&&item.version>0))return false;
  if(!d.sync||typeof d.sync!=="object"||Array.isArray(d.sync)||!Number.isInteger(Number(d.sync.version||0))||Number(d.sync.version||0)<0)return false;
  if(!d.stage2||typeof d.stage2!=="object"||Array.isArray(d.stage2)||!d.stage2.recommendationFeedback||typeof d.stage2.recommendationFeedback!=="object"||Array.isArray(d.stage2.recommendationFeedback)||Object.keys(d.stage2.recommendationFeedback).length>5000||!d.stage2.notificationRead||typeof d.stage2.notificationRead!=="object"||Array.isArray(d.stage2.notificationRead)||Object.keys(d.stage2.notificationRead).length>5000)return false;
+ const feedbackStates=new Set(["hidden","wrong","useful","snoozed","resolved"]);
+ if(!Object.values(d.stage2.recommendationFeedback).every(row=>row&&typeof row==="object"&&!Array.isArray(row)&&feedbackStates.has(row.state)&&Number.isFinite(Date.parse(row.updatedAt))&&(row.snoozedUntil==null||row.state==="snoozed"&&Number.isFinite(Date.parse(row.snoozedUntil)))))return false;
  if(d.stage2.reviewResume!=null&&(!d.stage2.reviewResume||typeof d.stage2.reviewResume!=="object"||typeof d.stage2.reviewResume.key!=="string"||d.stage2.reviewResume.key.length>220||!Number.isFinite(Date.parse(d.stage2.reviewResume.updatedAt))))return false;
  if(!d.importCandidates.every(item=>item&&typeof item==="object"&&typeof item.id==="string"&&item.id.length<=100&&
   typeof item.name==="string"&&item.name.length<=160&&Number.isInteger(item.amountMinor)&&item.amountMinor>0&&
@@ -604,7 +614,8 @@ function newerPortable(a,b){const ac=portableClock(a),bc=portableClock(b);if(ac[
 function mergePortableRows(localRows,incomingRows){const map=new Map(),loose=[];for(const row of [...localRows,...incomingRows]){if(!row||typeof row!=="object")continue;if(typeof row.id!=="string"||!row.id){const key=backupChecksum(row);if(!loose.some(x=>backupChecksum(x)===key))loose.push(cloneJSON(row));continue}const old=map.get(row.id);map.set(row.id,cloneJSON(old?newerPortable(old,row):row))}return[...map.values(),...loose]}
 function mergeTombstones(localRows,incomingRows){const map=new Map();for(const row of [...localRows,...incomingRows]){if(!row||!row.entity||!row.id)continue;const key=row.entity+":"+row.id,old=map.get(key);map.set(key,cloneJSON(old?newerPortable(old,row):row))}return[...map.values()]}
 function applyPortableTombstones(data){const tombstones=mergeTombstones([],data.tombstones||[]),byKey=new Map(tombstones.map(t=>[t.entity+":"+t.id,t]));data.subs=data.subs.filter(row=>{const t=byKey.get("subscription:"+row.id);return!t||portableClock(row)[0]>portableClock(t)[0]});data.importCandidates=data.importCandidates.filter(row=>{const t=byKey.get("import_candidate:"+row.id);return!t||portableClock(row)[0]>portableClock(t)[0]});data.tombstones=tombstones;return data}
-function mergePortableData(local,incoming){const a=normalizeStoredData(local,DB.def()),b=normalizeStoredData(incoming,DB.def()),out=cloneJSON(a);for(const key of["subs","savings","receipts","events","importCandidates","importReports"])out[key]=mergePortableRows(a[key],b[key]);out.tombstones=mergeTombstones(a.tombstones,b.tombstones);out.journeys=Object.assign({},b.journeys,a.journeys);const resumeA=a.stage2&&a.stage2.reviewResume,resumeB=b.stage2&&b.stage2.reviewResume;out.stage2=Object.assign({},b.stage2,a.stage2,{recommendationFeedback:Object.assign({},b.stage2?.recommendationFeedback||{},a.stage2?.recommendationFeedback||{}),notificationRead:Object.assign({},b.stage2?.notificationRead||{},a.stage2?.notificationRead||{}),reviewResume:resumeA&&resumeB?cloneJSON(newerPortable(resumeA,resumeB)):cloneJSON(resumeA||resumeB||null)});out.sync=Object.assign({},a.sync,{version:Math.max(Number(a.sync.version||0),Number(b.sync.version||0))+1,lastMergedAt:new Date().toISOString()});applyPortableTombstones(out);if(!validateStoredData(out))throw new Error("merged backup data");return out}
+function mergeTimedState(left={},right={}){const out={};for(const key of new Set([...Object.keys(left||{}),...Object.keys(right||{})])){const a=left?.[key],b=right?.[key];out[key]=cloneJSON(a&&b?newerPortable(a,b):a||b)}return out}
+function mergePortableData(local,incoming){const a=normalizeStoredData(local,DB.def()),b=normalizeStoredData(incoming,DB.def()),out=cloneJSON(a);for(const key of["subs","savings","receipts","events","importCandidates","importReports"])out[key]=mergePortableRows(a[key],b[key]);out.tombstones=mergeTombstones(a.tombstones,b.tombstones);out.journeys=Object.assign({},b.journeys,a.journeys);const resumeA=a.stage2&&a.stage2.reviewResume,resumeB=b.stage2&&b.stage2.reviewResume;out.stage2=Object.assign({},b.stage2,a.stage2,{recommendationFeedback:mergeTimedState(a.stage2?.recommendationFeedback,b.stage2?.recommendationFeedback),notificationRead:Object.assign({},b.stage2?.notificationRead||{},a.stage2?.notificationRead||{}),reviewResume:resumeA&&resumeB?cloneJSON(newerPortable(resumeA,resumeB)):cloneJSON(resumeA||resumeB||null)});out.sync=Object.assign({},a.sync,{version:Math.max(Number(a.sync.version||0),Number(b.sync.version||0))+1,lastMergedAt:new Date().toISOString()});applyPortableTombstones(out);if(!validateStoredData(out))throw new Error("merged backup data");return out}
 function mergeBackupDocument(raw){return mergePortableData(DB.d,parseBackupDocument(raw))}
 function markPortableDeleted(entity,id,deletedAt){if(!id||!["subscription","import_candidate"].includes(entity))return null;const now=deletedAt||new Date().toISOString(),same=(DB.d.tombstones||[]).filter(t=>t.entity===entity&&t.id===id),version=Math.max(0,...same.map(t=>Number(t.version||0)))+1,row={entity,id,deletedAt:now,updatedAt:now,version};DB.d.tombstones=mergeTombstones((DB.d.tombstones||[]).filter(t=>!(t.entity===entity&&t.id===id)),[row]);return row}
 function touchPortable(row){if(!row||typeof row!=="object")return row;row.updatedAt=new Date().toISOString();row.version=Math.max(0,Number(row.version||0))+1;return row}
@@ -1167,6 +1178,44 @@ function stage2State(){
  if(!DB.d.stage2.notificationRead||typeof DB.d.stage2.notificationRead!=="object")DB.d.stage2.notificationRead={};
  return DB.d.stage2;
 }
+function advancedDataHealth(rows=activeSubs()){
+ const missing=[],fields=FREE_ADVANCED_CONTENT.healthFields,subs=(Array.isArray(rows)?rows:[]).filter(s=>s&&["active","trial"].includes(s.status));
+ let complete=0;
+ for(const s of subs){const absent=[];
+  const checks={amount_currency:Number.isSafeInteger(s.amountMinor)&&s.amountMinor>=0&&CURRENCIES.includes(s.currency),billing_cycle:["weekly","monthly","yearly","custom_days"].includes(s.cycle)&&(s.cycle!=="custom_days"||Number.isSafeInteger(s.cycleDays)&&s.cycleDays>0),next_billing_date:Number.isFinite(Date.parse(s.nextBillingAt)),price_evidence:Array.isArray(s.priceObservations)&&s.priceObservations.length>0};
+  for(const field of fields){if(checks[field])complete++;else absent.push(field)}
+  if(absent.length)missing.push({subId:s.id,name:subName(s),fields:absent});
+ }
+ const checked=subs.length*fields.length,score=checked?Math.round(complete/checked*100):0;
+ return{score,checked,complete,missing,label:!subs.length?"empty":score===100?"complete":score>=75?"good":"needs_attention",subscriptionCount:subs.length};
+}
+function advanceForecastDate(date,cycle,cycleDays){
+ if(cycle==="weekly")return new Date(+date+7*DAY);
+ if(cycle==="monthly")return addMonthsClamped(date,1);
+ if(cycle==="yearly")return addMonthsClamped(date,12);
+ if(cycle==="custom_days"&&Number.isSafeInteger(cycleDays)&&cycleDays>0)return new Date(+date+cycleDays*DAY);
+ return null;
+}
+function cashFlowForecast(options={}){
+ const days=Math.max(1,Math.min(90,Number.isSafeInteger(options.days)?options.days:FREE_ADVANCED_CONTENT.forecastDays));
+ const start=new Date(options.now||new Date());if(!Number.isFinite(+start))throw new Error("forecast date");start.setUTCHours(0,0,0,0);
+ const end=new Date(+start+days*DAY),events=[],excluded=[],totalsByCurrency={};
+ for(const s of activeSubs()){
+  if(!Number.isSafeInteger(s.amountMinor)||s.amountMinor<0||!CURRENCIES.includes(s.currency)){excluded.push({subId:s.id,reason:"amount_or_currency_missing"});continue}
+  if(!["weekly","monthly","yearly","custom_days"].includes(s.cycle)||(s.cycle==="custom_days"&&(!Number.isSafeInteger(s.cycleDays)||s.cycleDays<=0))){excluded.push({subId:s.id,reason:"billing_cycle_missing"});continue}
+  let next=new Date(s.nextBillingAt);if(!Number.isFinite(+next)){excluded.push({subId:s.id,reason:"next_billing_date_missing"});continue}next.setUTCHours(0,0,0,0);
+  let guard=0;while(next<start&&guard++<4000){next=advanceForecastDate(next,s.cycle,s.cycleDays);if(!next)break}
+  if(!next||guard>=4000){excluded.push({subId:s.id,reason:"schedule_could_not_advance"});continue}
+  while(next<=end&&events.length<5000&&guard++<5000){const event={subId:s.id,name:subName(s),at:iso(next),amountMinor:s.amountMinor,currency:s.currency};events.push(event);totalsByCurrency[s.currency]=(totalsByCurrency[s.currency]||0)+s.amountMinor;next=advanceForecastDate(next,s.cycle,s.cycleDays);if(!next)break}
+ }
+ events.sort((a,b)=>a.at.localeCompare(b.at)||a.name.localeCompare(b.name)||a.subId.localeCompare(b.subId));
+ return{from:iso(start),through:iso(end),days,events,totalsByCurrency,excluded,dataBoundary:"saved_schedule_estimate_not_a_charge_guarantee"};
+}
+function advancedFreeBriefing(){
+ const coverage=typeof currentCoverageRows==="function"?currentCoverageRows().map(row=>({type:row.type,state:row.state,candidateCount:Number(row.candidateCount||0),lastSuccessAt:row.lastSuccessAt||null})):[];
+ const reviewCount=(typeof GOOGLE_DISCOVERIES!=="undefined"?GOOGLE_DISCOVERIES.length:0)+(typeof importCandidatesForReview==="function"?importCandidatesForReview().length:0)+(typeof reviewSubs==="function"?reviewSubs().length:0);
+ return{schema:"subscrap-free-advanced-briefing/v1",generatedAt:new Date().toISOString(),dataBoundary:FREE_ADVANCED_CONTENT.briefingBoundary,coverage,reviewCount,subscriptionCount:activeSubs().length,health:advancedDataHealth(),forecast:cashFlowForecast(),priorityCount:priorityActions().length};
+}
 function billingAnomalies(now=new Date()){
  const out=[];
  for(const s of activeSubs()){
@@ -1179,10 +1228,10 @@ function billingAnomalies(now=new Date()){
  return out;
 }
 function priorityActions(options={}){
- const base=DB.d.set.base,feedback=stage2State().recommendationFeedback,rows=[],seen=new Set(),active=activeSubs();
+ const base=DB.d.set.base,feedback=stage2State().recommendationFeedback,rows=[],seen=new Set(),active=activeSubs(),now=Number.isFinite(Date.parse(options.now))?Date.parse(options.now):Date.now();
  const amounts=active.map(s=>({s,value:convert(monthlyMinor(s),s.currency,base)})).filter(x=>x.value!==null).sort((a,b)=>a.value-b.value);
  const median=amounts.length?amounts[Math.floor(amounts.length/2)].value:0;
- const add=row=>{if(!row||seen.has(row.id))return;seen.add(row.id);const state=feedback[row.id]?.state;if(!options.includeHidden&&["hidden","wrong"].includes(state))return;rows.push({...row,feedback:state||null})};
+ const add=row=>{if(!row||seen.has(row.id))return;seen.add(row.id);const item=feedback[row.id],state=item?.state,snoozed=state==="snoozed"&&Number.isFinite(Date.parse(item.snoozedUntil))&&Date.parse(item.snoozedUntil)>now;if(!options.includeHidden&&(["hidden","wrong","resolved"].includes(state)||snoozed))return;rows.push({...row,feedback:state||null,snoozedUntil:item?.snoozedUntil||null})};
  for(const s of active){
   const days=daysUntil(s.nextBillingAt),name=subName(s),amount=convert(monthlyMinor(s),s.currency,base);
   if(days>=0&&days<=7)add({id:`due:${s.id}:${s.nextBillingAt}`,type:"due",score:100-days,subId:s.id,title:LANG==="ko"?`${name} 결제 D-${days}`:`${name} payment in ${days}d`,reason:LANG==="ko"?"저장된 다음 결제일이 7일 안에 있습니다.":"The saved next billing date is within seven days.",action:"detail"});
@@ -1205,6 +1254,11 @@ function setPriorityFeedback(id,state){
  if(typeof id!=="string"||id.length>220||!["hidden","wrong","useful"].includes(state))return false;
  stage2State().recommendationFeedback[id]={state,updatedAt:new Date().toISOString()};return DB.save();
 }
+function snoozePriority(id,days=FREE_ADVANCED_CONTENT.prioritySnoozeDays){
+ if(typeof id!=="string"||!id||id.length>220||!Number.isInteger(days)||days<1||days>30)return false;
+ const now=new Date(),snoozedUntil=new Date(+now+days*DAY).toISOString();stage2State().recommendationFeedback[id]={state:"snoozed",snoozedUntil,updatedAt:now.toISOString()};return DB.save();
+}
+function resolvePriority(id){if(typeof id!=="string"||!id||id.length>220)return false;stage2State().recommendationFeedback[id]={state:"resolved",updatedAt:new Date().toISOString()};return DB.save()}
 function notificationItems(){
  const state=stage2State(),seen=new Set(),out=[];
  for(const row of priorityActions({includeHidden:false})){
@@ -1687,6 +1741,9 @@ function viewHome(){
  if(D.excluded.length)h+=`<div class="tiny mt" style="color:var(--warn)">⚠ ${D.excluded.join(", ")} ${LANG==="ko"?"환율 정보가 없어 합계에서 뺐어요":"excluded (no rate)"}</div>`;
  h+=`</div>`;
 
+ // 고급 무료판: 저장자료 완성도와 앞으로 30일 결제를 통화를 섞지 않고 보여 준다.
+ h+=advancedFreeHomeMarkup();
+
  // 절약 배지
  if(S.year>0)h+=`<div class="card flat row between"><div><div class="tiny muted b">${t("home.saved")}</div>
    <div class="b" style="font-size:21px;color:var(--success)">${fmt(S.year,S.base)}</div></div>
@@ -1710,7 +1767,7 @@ function viewHome(){
  // 2단계: 설명 가능한 우선 행동. 모든 추천에는 이유·실행·숨김·오류 신고를 함께 둔다.
  const priorities=priorityActions(),unread=notificationItems().filter(row=>!row.readAt).length;
  if(priorities.length){h+=`<div class="row between mt2 mb"><div class="b">${LANG==="ko"?"지금 먼저 확인할 것":"Review first"}</div><button class="btn ghost sm" onclick="openNotificationCenter()">🔔 ${LANG==="ko"?"알림함":"Inbox"} ${unread?`<span class="badge blue">${unread}</span>`:""}</button></div>`;
-  priorities.slice(0,5).forEach(row=>{h+=`<div class="card flat" data-priority-action="${esc(row.id)}"><div class="row"><div class="grow"><div class="sm b">${esc(row.title)}</div><div class="tiny muted mt">${LANG==="ko"?"추천 이유:":"Why:"} ${esc(row.reason)}</div></div><span class="badge ${row.score>=90?"amber":""}">${row.score}</span></div><div class="btnrow mt"><button class="btn sm" onclick="openPriorityAction('${esc(row.id)}')">${LANG==="ko"?"확인하고 처리":"Review and act"}</button><button class="btn sm ghost" onclick="priorityFeedback('${esc(row.id)}','hidden')">${LANG==="ko"?"숨기기":"Hide"}</button><button class="btn sm ghost" onclick="priorityFeedback('${esc(row.id)}','wrong')">${LANG==="ko"?"잘못된 추천":"Wrong suggestion"}</button></div></div>`})}
+  priorities.slice(0,5).forEach(row=>{h+=`<div class="card flat" data-priority-action="${esc(row.id)}"><div class="row"><div class="grow"><div class="sm b">${esc(row.title)}</div><div class="tiny muted mt">${LANG==="ko"?"추천 이유:":"Why:"} ${esc(row.reason)}</div></div><span class="badge ${row.score>=90?"amber":""}">${row.score}</span></div><div class="btnrow mt"><button class="btn sm" onclick="openPriorityAction('${esc(row.id)}')">${LANG==="ko"?"확인하고 처리":"Review and act"}</button><button class="btn sm ghost" onclick="priorityLifecycle('${esc(row.id)}','snooze')">${LANG==="ko"?"7일 뒤":"In 7 days"}</button><button class="btn sm ghost" onclick="priorityLifecycle('${esc(row.id)}','resolve')">${LANG==="ko"?"처리 완료":"Done"}</button><button class="btn sm ghost" onclick="priorityFeedback('${esc(row.id)}','wrong')">${LANG==="ko"?"잘못된 추천":"Wrong suggestion"}</button></div></div>`})}
 
  // 절약 기회
  if(flags.length){h+=`<div class="row between mt2 mb"><div class="b">${t("home.chance")}</div>
@@ -1786,6 +1843,35 @@ function viewHome(){
  return h;
 }
 
+function advancedHealthLabel(health){
+ const ko=LANG==="ko",labels={empty:ko?"구독을 등록하면 점검해요":"Add subscriptions to check",complete:ko?"자료가 모두 채워졌어요":"All saved details are complete",good:ko?"대부분 채워졌어요":"Most saved details are complete",needs_attention:ko?"확인할 자료가 있어요":"Some saved details need review"};return labels[health.label]||labels.needs_attention;
+}
+function forecastTotalsMarkup(forecast){
+ const rows=Object.entries(forecast.totalsByCurrency).sort(([a],[b])=>a.localeCompare(b));
+ return rows.length?rows.map(([currency,minor])=>`<span class="badge blue" data-forecast-total="${esc(currency)}">${esc(fmt(minor,currency))}</span>`).join(" "):`<span class="tiny muted">${LANG==="ko"?"예정 결제 없음":"No scheduled payments"}</span>`;
+}
+function advancedFreeHomeMarkup(){
+ const health=advancedDataHealth(),forecast=cashFlowForecast(),ko=LANG==="ko";
+ return `<section class="card" data-advanced-free-home aria-labelledby="advancedFreeTitle"><div class="row between"><div><div id="advancedFreeTitle" class="b">${ko?"내 구독 한눈 점검":"Subscription checkup"}</div><div class="tiny muted mt">${ko?"저장자료가 얼마나 채워졌는지와 앞으로 30일 예상을 보여드려요.":"See saved-data completeness and the next 30-day estimate."}</div></div><button class="btn ghost sm" onclick="openAdvancedBriefing()">${ko?"전체 브리핑":"Full briefing"}</button></div>
+  <div class="grid3 mt"><button class="stat" data-health-summary onclick="openAdvancedHealth()" style="text-align:left"><div class="v">${health.score}%</div><div class="k">${ko?"자료 채움 정도":"Data completeness"}</div></button><button class="stat" data-forecast-summary onclick="openCashFlowForecast()" style="text-align:left"><div class="v">${forecast.events.length}</div><div class="k">${ko?"30일 결제 건수":"Payments in 30 days"}</div></button><button class="stat" onclick="openAdvancedBriefing()" style="text-align:left"><div class="v">${priorityActions().length}</div><div class="k">${ko?"지금 할 일":"Actions now"}</div></button></div>
+  <div class="tiny muted mt">${esc(advancedHealthLabel(health))}${health.missing.length?` · ${ko?"고칠 구독":"subscriptions to update"} ${health.missing.length}`:""}</div><div class="row mt" style="gap:6px;flex-wrap:wrap"><span class="tiny b">${ko?"30일 통화별 예상":"30-day totals by currency"}</span>${forecastTotalsMarkup(forecast)}</div><div class="tiny muted mt">${ko?"저장된 결제일 기준 예상이며 실제 청구를 보장하지 않습니다.":"Based on saved billing dates; not a guarantee of actual charges."}</div></section>`;
+}
+function advancedFieldLabel(field){const ko=LANG==="ko",map={amount_currency:ko?"금액·통화":"Amount & currency",billing_cycle:ko?"결제주기":"Billing cycle",next_billing_date:ko?"다음 결제일":"Next billing date",price_evidence:ko?"가격 근거":"Price evidence"};return map[field]||field}
+function openAdvancedHealth(){
+ const health=advancedDataHealth(),ko=LANG==="ko",rows=health.missing.length?health.missing.map(row=>`<button class="card row between" style="width:100%;text-align:left" onclick="openDetail('${esc(row.subId)}')"><div><div class="sm b">${esc(row.name)}</div><div class="tiny muted mt">${row.fields.map(advancedFieldLabel).map(esc).join(" · ")}</div></div><span>→</span></button>`).join(""):`<div class="empty"><div class="big">✓</div><div class="b">${ko?"저장자료가 모두 채워졌어요":"All saved details are complete"}</div></div>`;
+ openSheet(`<div data-advanced-health><div class="grab"></div><h2 class="b" style="font-size:18px">${ko?"내 구독 자료 점검":"Subscription data checkup"}</h2><div class="card"><div class="total">${health.score}%</div><div class="sm">${esc(advancedHealthLabel(health))}</div><div class="tiny muted mt">${ko?"금액·통화, 결제주기, 다음 결제일, 가격 근거의 채움 정도입니다. 서비스 품질 점수가 아닙니다.":"Completeness of amount/currency, cycle, next date and price evidence—not a service quality score."}</div></div>${rows}<button class="btn ghost" onclick="closeSheet()">${t("common.close")}</button></div>`);
+}
+function openCashFlowForecast(){
+ const forecast=cashFlowForecast(),ko=LANG==="ko",events=forecast.events.length?forecast.events.map(row=>`<button class="card row between" style="width:100%;text-align:left" onclick="openDetail('${esc(row.subId)}')"><div><div class="sm b">${esc(row.name)}</div><div class="tiny muted">${esc(row.at)}</div></div><div class="b">${esc(fmt(row.amountMinor,row.currency))}</div></button>`).join(""):`<div class="empty"><div class="big">📅</div><div class="b">${ko?"저장자료 기준 예정 결제가 없어요":"No payments scheduled from saved data"}</div></div>`;
+ openSheet(`<div data-cash-flow-forecast><div class="grab"></div><h2 class="b" style="font-size:18px">${ko?"앞으로 30일 결제 예상":"Next 30 days payment estimate"}</h2><div class="card"><div class="row" style="gap:6px;flex-wrap:wrap">${forecastTotalsMarkup(forecast)}</div><div class="tiny muted mt">${esc(forecast.from)} ~ ${esc(forecast.through)} · ${ko?"통화를 서로 섞지 않았습니다. 실제 청구를 보장하지 않습니다.":"Currencies are kept separate. This is not a guarantee of actual charges."}</div>${forecast.excluded.length?`<div class="tiny mt" style="color:var(--warn)">${ko?"자료 부족으로 예상에서 제외":"Excluded for incomplete data"}: ${forecast.excluded.length}</div>`:""}</div>${events}<button class="btn ghost" onclick="closeSheet()">${t("common.close")}</button></div>`);
+}
+function openAdvancedBriefing(){
+ const briefing=advancedFreeBriefing(),ko=LANG==="ko";
+ openSheet(`<div data-advanced-briefing><div class="grab"></div><h2 class="b" style="font-size:18px">${ko?"내 무료 월간 브리핑":"My free monthly briefing"}</h2><p class="sm muted">${ko?"연결 범위, 후보, 구독, 자료 점검, 30일 결제, 지금 할 일을 한 장으로 정리했습니다.":"Coverage, findings, subscriptions, data checkup, 30-day payments and actions in one summary."}</p><div class="grid3"><div class="stat"><div class="v">${briefing.reviewCount}</div><div class="k">${ko?"검토 후보":"To review"}</div></div><div class="stat"><div class="v">${briefing.subscriptionCount}</div><div class="k">${ko?"활성 구독":"Active"}</div></div><div class="stat"><div class="v">${briefing.health.score}%</div><div class="k">${ko?"자료 채움":"Completeness"}</div></div></div><div class="card flat mt"><div class="sm b">${ko?"30일 통화별 예상":"30-day totals by currency"}</div><div class="row mt" style="gap:6px;flex-wrap:wrap">${forecastTotalsMarkup(briefing.forecast)}</div><div class="tiny muted mt">${ko?"저장자료에서 계산한 요약이며 메일 원문이나 로그인 정보는 포함하지 않습니다.":"Derived from saved data; message bodies and sign-in information are excluded."}</div></div><button class="btn" onclick="downloadAdvancedBriefing()">${ko?"브리핑 JSON 내려받기":"Download briefing JSON"}</button><button class="btn ghost mt" onclick="closeSheet()">${t("common.close")}</button></div>`);
+}
+function advancedBriefingDocument(){return JSON.stringify(advancedFreeBriefing(),null,2)}
+function downloadAdvancedBriefing(){const blob=new Blob([advancedBriefingDocument()],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`subscrap-briefing-${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast(LANG==="ko"?"무료 브리핑을 저장했어요":"Free briefing saved")}
+
 function openPriorityAction(id){
  const row=priorityActions({includeHidden:true}).find(item=>item.id===id);if(!row)return;
  markNotificationRead(id);track("notification_opened",{type:row.type,action:row.action});
@@ -1798,10 +1884,14 @@ function priorityFeedback(id,state){
  track("recommendation_feedback",{state});toast(state==="wrong"?(LANG==="ko"?"잘못된 추천으로 기록했어요":"Marked as a wrong suggestion"):(LANG==="ko"?"이 추천을 숨겼어요":"Suggestion hidden"));
  if(document.querySelector("[data-notification-center]"))openNotificationCenter();else render();
 }
+function priorityLifecycle(id,action){
+ const ok=action==="snooze"?snoozePriority(id):action==="resolve"?resolvePriority(id):false;if(!ok){toast(LANG==="ko"?"상태를 저장하지 못했어요":"Could not save the action state");return}
+ track("recommendation_feedback",{state:action});toast(action==="snooze"?(LANG==="ko"?"7일 뒤 다시 보여드릴게요":"We will show it again in 7 days"):(LANG==="ko"?"처리 완료로 기록했어요":"Marked as done"));if(document.querySelector("[data-notification-center]"))openNotificationCenter();else render();
+}
 function markAllNotificationsRead(){for(const row of notificationItems())stage2State().notificationRead[row.id]=new Date().toISOString();DB.save();openNotificationCenter()}
 function openNotificationCenter(){
  const ko=LANG==="ko",rows=notificationItems(),unread=rows.filter(row=>!row.readAt).length;
- const cards=rows.length?rows.map(row=>`<div class="card flat" data-notification-item="${esc(row.id)}" style="${row.readAt?"opacity:.72":"border-left:4px solid var(--accent)"}"><div class="sm b">${esc(row.title)}</div><div class="tiny muted mt">${ko?"이유":"Reason"}: ${esc(row.reason)}</div>${row.accountId?`<div class="tiny muted">${ko?"연결 계정":"Connected account"}: ${esc(row.accountId)}</div>`:""}<div class="btnrow mt"><button class="btn sm" onclick="openPriorityAction('${esc(row.id)}')">${ko?"확인하고 처리":"Review and act"}</button><button class="btn ghost sm" onclick="priorityFeedback('${esc(row.id)}','hidden')">${ko?"숨기기":"Hide"}</button><button class="btn ghost sm" onclick="priorityFeedback('${esc(row.id)}','wrong')">${ko?"잘못된 추천":"Wrong suggestion"}</button></div></div>`).join(""):`<div class="empty"><div class="big">✓</div><div class="b">${ko?"확인할 알림이 없어요":"No alerts to review"}</div></div>`;
+ const cards=rows.length?rows.map(row=>`<div class="card flat" data-notification-item="${esc(row.id)}" style="${row.readAt?"opacity:.72":"border-left:4px solid var(--accent)"}"><div class="sm b">${esc(row.title)}</div><div class="tiny muted mt">${ko?"이유":"Reason"}: ${esc(row.reason)}</div>${row.accountId?`<div class="tiny muted">${ko?"연결 계정":"Connected account"}: ${esc(row.accountId)}</div>`:""}<div class="btnrow mt"><button class="btn sm" onclick="openPriorityAction('${esc(row.id)}')">${ko?"확인하고 처리":"Review and act"}</button><button class="btn ghost sm" onclick="priorityLifecycle('${esc(row.id)}','snooze')">${ko?"7일 뒤":"In 7 days"}</button><button class="btn ghost sm" onclick="priorityLifecycle('${esc(row.id)}','resolve')">${ko?"처리 완료":"Done"}</button><button class="btn ghost sm" onclick="priorityFeedback('${esc(row.id)}','wrong')">${ko?"잘못된 추천":"Wrong suggestion"}</button></div></div>`).join(""):`<div class="empty"><div class="big">✓</div><div class="b">${ko?"확인할 알림이 없어요":"No alerts to review"}</div></div>`;
  openSheet(`<div data-notification-center><div class="grab"></div><div class="row between mb"><div><div class="b" style="font-size:17px">🔔 ${ko?"내 알림함":"My notification inbox"}</div><div class="tiny muted mt">${ko?`읽지 않음 ${unread}개 · 기기에서 중복 없이 관리`:`${unread} unread · deduplicated on this device`}</div></div>${unread?`<button class="btn ghost sm" onclick="markAllNotificationsRead()">${ko?"모두 읽음":"Read all"}</button>`:""}</div>${cards}<button class="btn ghost mt" onclick="closeSheet()">${t("common.close")}</button></div>`)
 }
 
@@ -3324,7 +3414,7 @@ if("serviceWorker" in navigator&&(location.protocol==="https:"||["localhost","12
  }
  // 앱 기능을 한 곳에서 연결한다.
 window.__scrap={DB,addSub,dashboard,detectWaste,duplicateGroups,mergeDuplicateGroup,undoDuplicateMerge,canonicalServiceKey,canonicalServiceNameKey,computeNextBilling,convert,monthlyMinor,yearlyMinor,rollForward,pausedSubs,trialSubs,togglePause,shareCard,payMethods,payTotals,popularFor,findSameService,daysSinceUse,confirmDupAdd,myShareMinor,sharedSubs,settlement,timeline,cardStatus,searchCatalog,editDist,familyOffer,bundleOffers,bundleCatalog,reviewSubs,widgetSummary,tidyReceipts,yearSummary,fxShift,scanPaste,openGoogleAccounts,googleApiBase,googleSession,captureGoogleSession,syncGoogleSubscriptions,openAccount,refreshAccountPanel,saveAccountDisplayName,logoutFromThisDevice,accountEntryButton,refreshAuthState,AUTH_STATE,offerAppUpdate,activateAppUpdate,
-  makePriceObservation,priceObservationList,recordPriceObservation,priceObservationSummary,priceAlertFromObservations,billingAnomalies,priorityActions,setPriorityFeedback,notificationItems,markNotificationRead,stage2State,FREE_STAGE2_CONTENT,
+  makePriceObservation,priceObservationList,recordPriceObservation,priceObservationSummary,priceAlertFromObservations,billingAnomalies,priorityActions,setPriorityFeedback,snoozePriority,resolvePriority,notificationItems,markNotificationRead,stage2State,FREE_STAGE2_CONTENT,FREE_ADVANCED_CONTENT,advancedDataHealth,cashFlowForecast,advancedFreeBriefing,
   BACKUP_SCHEMA,createBackupEnvelope,parseBackupDocument,backupChecksum,normalizeStoredData,validateStoredData,saveRecoverySnapshot,hasRecoverySnapshot,restoreRecoverySnapshot,mergePortableData,mergeBackupDocument,mergeTombstones,applyPortableTombstones,markPortableDeleted,touchPortable,
   PURCHASE_IMPORT_MAX_BYTES,PURCHASE_IMPORT_MAX_ROWS,parseDelimitedDocument,purchaseImportMapping,parsePurchaseAmount,parsePurchaseDate,preparePurchaseImport,resolveLocalService,commitPurchaseImport,deletePurchaseImportData,importCandidateFingerprints,importCandidatesForReview,recentRejectedImportCandidates,setImportCandidateState,confirmImportCandidate,openDiscoveryHub,openApplePurchaseImport,importCandidateCard,
   discoverySummary,discoveryChannels,discoveryCoverageRows,currentDiscoverySummary,discoveryCenterEnabled,refreshDiscoveryOverview,runDiscoveryRescan,portableSyncPayload,
