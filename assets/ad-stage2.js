@@ -7,6 +7,7 @@
   const outcomes = [];
   let manifest = null, coarseCountry = 'ZZ', countrySource = 'unset', running = false;
   const publicSurface = document.body?.dataset.adSurface === 'public-content';
+  const stage3Managed = document.querySelector('meta[name="subscrap-stage3-managed"]')?.content === '1';
 
   function sanitize(input) {
     if (!input || typeof input !== 'object' || Array.isArray(input)) return null;
@@ -36,6 +37,7 @@
     return errors <= manifest.budgets.errorRate && !recent.some(row => row.status === 'policy_block' || row.status === 'invalid_traffic_block');
   }
   async function request(consent) {
+    if (stage3Managed) return Object.freeze({ action: 'no_ads', reason: 'stage3_managed' });
     if (running || !publicSurface || !manifest?.enabled) return Object.freeze({ action: 'no_ads', reason: 'stage2_not_ready' });
     const context = contextFromPage(consent);
     if (!context || context.childDirected || !context.consentGranted) return Object.freeze({ action: 'no_ads', reason: 'consent_or_context_blocked' });
@@ -59,7 +61,7 @@
     if (!['policy_block','invalid_traffic_block'].includes(reason)) return false;
     outcomes.push({ provider: id, status: reason, latencyMs: 0, at: Date.now() }); return true;
   }
-  function status() { return Object.freeze({ publicSurface, enabled: manifest?.enabled === true, mode: manifest?.mode || 'loading', providerCount: manifest?.providerCount || 0, adapters: adapters.size, countrySource, simultaneousExternalProviders: running ? 1 : 0, privateDataUsed: false }); }
+  function status() { return Object.freeze({ publicSurface, enabled: manifest?.enabled === true, mode: manifest?.mode || 'loading', providerCount: manifest?.providerCount || 0, adapters: adapters.size, countrySource, stage3Managed, simultaneousExternalProviders: running ? 1 : 0, privateDataUsed: false }); }
 
   window.SubScrapAdsStage2 = Object.freeze({ setCoarseCountry, registerAdapter, request, blockProvider, status });
   fetch(manifestUrl, { credentials: 'omit', referrerPolicy: 'no-referrer' }).then(response => response.ok ? response.json() : Promise.reject(new Error('manifest'))).then(value => {
