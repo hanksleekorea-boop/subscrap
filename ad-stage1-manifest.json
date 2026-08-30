@@ -1,0 +1,15 @@
+{
+  "schema": "subscrap-ad-stage1-public/v1",
+  "version": "0.36.0",
+  "origin": "https://hanksleekorea-boop.github.io/subscrap",
+  "generatedAt": "2026-08-30T08:59:13.228Z",
+  "contentCount": 22,
+  "languageCount": 2,
+  "routeCount": 46,
+  "adEnabled": false,
+  "privateAppAdFree": true,
+  "consentDefaultDenied": true,
+  "userDiscoveryDataAllowedForAds": false,
+  "certifiedCmpRequired": true,
+  "customDomainRequired": true
+}

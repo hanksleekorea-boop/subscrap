@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hanksleekorea-boop.github.io/subscrap/sitemap.xml
