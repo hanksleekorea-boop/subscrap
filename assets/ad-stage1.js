@@ -11,9 +11,11 @@
   const certified = meta('subscrap-cmp-certified') === '1';
   const publisher = meta('subscrap-ad-publisher');
   const publisherValid = /^ca-pub-\d{16}$/.test(publisher);
+  const stage2Managed = meta('subscrap-stage2-managed') === '1';
   let loaded = false;
 
   function loadAds() {
+    if (stage2Managed) return false;
     if (loaded || !publicSurface || !enabled || !certified || !publisherValid) return false;
     loaded = true;
     const script = document.createElement('script');
@@ -32,6 +34,7 @@
       return false;
     }
     window.gtag('consent', 'update', { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: signal.personalized === true ? 'granted' : 'denied', analytics_storage: 'denied' });
+    window.dispatchEvent(new CustomEvent('subscrap:certified-consent', { detail: { granted: true, personalized: signal.personalized === true } }));
     return loadAds();
   }
 
@@ -40,5 +43,5 @@
     window.dispatchEvent(new CustomEvent('subscrap:open-certified-cmp'));
   }));
 
-  window.SubScrapAds = Object.freeze({ signalCertifiedConsent, deny: () => signalCertifiedConsent(null), status: () => Object.freeze({ publicSurface, enabled, certified, publisherValid, loaded }) });
+  window.SubScrapAds = Object.freeze({ signalCertifiedConsent, deny: () => signalCertifiedConsent(null), status: () => Object.freeze({ publicSurface, enabled, certified, publisherValid, stage2Managed, loaded }) });
 })();
