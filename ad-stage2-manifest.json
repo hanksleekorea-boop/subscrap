@@ -1,6 +1,6 @@
 {
   "schema": "subscrap-ad-stage2-public/v1",
-  "version": "0.38.0",
+  "version": "0.39.0",
   "enabled": false,
   "mode": "stage2_disabled_preview",
   "providerCount": 0,
@@ -54,7 +54,7 @@
   "userDiscoveryDataAllowedForAds": false,
   "valuesExposed": false,
   "origin": "https://hanksleekorea-boop.github.io/subscrap",
-  "generatedAt": "2026-08-30T11:56:23.824Z",
+  "generatedAt": "2026-08-30T12:59:51.107Z",
   "runtime": "https://hanksleekorea-boop.github.io/subscrap/assets/ad-stage2.js",
   "operations": "https://hanksleekorea-boop.github.io/subscrap/ad-operations/",
   "providerIdentifiersPublished": false
