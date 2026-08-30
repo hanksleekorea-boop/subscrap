@@ -1,0 +1,61 @@
+{
+  "schema": "subscrap-ad-stage2-public/v1",
+  "version": "0.37.0",
+  "enabled": false,
+  "mode": "stage2_disabled_preview",
+  "providerCount": 0,
+  "providers": [
+    {
+      "id": "google_ad_manager",
+      "active": false
+    },
+    {
+      "id": "media_net",
+      "active": false
+    },
+    {
+      "id": "kakao_adfit",
+      "active": false
+    },
+    {
+      "id": "adsense",
+      "active": false
+    }
+  ],
+  "budgets": {
+    "maxSimultaneousExternalProviders": 1,
+    "invalidTrafficRate": 0.02,
+    "errorRate": 0.05,
+    "latencyP95Ms": 2500,
+    "clsP75": 0.1,
+    "metricsMaxAgeHours": 24
+  },
+  "contextualInputs": [
+    "publicRoute",
+    "language",
+    "countryCode",
+    "deviceClass",
+    "contextTopic",
+    "consentGranted",
+    "personalizedAllowed",
+    "childDirected"
+  ],
+  "prohibitedInputs": [
+    "account",
+    "Gmail",
+    "receipts",
+    "transactions",
+    "subscriptions",
+    "amounts",
+    "renewal dates",
+    "identifiers"
+  ],
+  "privateAppAdFree": true,
+  "userDiscoveryDataAllowedForAds": false,
+  "valuesExposed": false,
+  "origin": "https://hanksleekorea-boop.github.io/subscrap",
+  "generatedAt": "2026-08-30T09:59:31.113Z",
+  "runtime": "https://hanksleekorea-boop.github.io/subscrap/assets/ad-stage2.js",
+  "operations": "https://hanksleekorea-boop.github.io/subscrap/ad-operations/",
+  "providerIdentifiersPublished": false
+}
