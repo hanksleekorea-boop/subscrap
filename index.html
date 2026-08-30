@@ -240,7 +240,7 @@ label.lb{display:block;font-size:12.5px;font-weight:700;color:var(--text-sub);ma
 });
 
 /* Subscrap core */
-const VERSION="0.38.0";
+const VERSION="0.39.0";
 /* 1단계 무료판의 사용자 콘텐츠 원장. 화면마다 같은 약속·통로 범위·신뢰 표현을 사용한다. */
 const FREE_STAGE1_CONTENT=Object.freeze({
  version:"2026-08-29",
@@ -808,6 +808,28 @@ const DB={ // 저장소 (게스트 모드 = 로컬 저장)
    return this.d},
  save(){try{localStorage.setItem(this.key,JSON.stringify(this.d));return true}catch(e){toast("저장 공간이 부족해요");return false}},
 };
+const LOCAL_VAULT_SCHEMA="subscrap-local-vault/v1",LOCAL_VAULT_ITERATIONS=310000,LOCAL_VAULT_MAX_BYTES=7*1024*1024;
+function vaultBytesToBase64(input){const bytes=input instanceof Uint8Array?input:new Uint8Array(input);let text="";for(let i=0;i<bytes.length;i+=32768)text+=String.fromCharCode(...bytes.subarray(i,i+32768));return btoa(text)}
+function vaultBase64ToBytes(value,maxBytes=LOCAL_VAULT_MAX_BYTES){if(typeof value!=="string"||!value||value.length>Math.ceil(maxBytes*4/3)+8||!/^[A-Za-z0-9+/]+={0,2}$/.test(value))throw new Error("vault_base64");let text;try{text=atob(value)}catch(e){throw new Error("vault_base64")}if(text.length>maxBytes)throw new Error("vault_size");const bytes=new Uint8Array(text.length);for(let i=0;i<text.length;i++)bytes[i]=text.charCodeAt(i);return bytes}
+function vaultPassphrase(value){if(typeof value!=="string"||value.length<12||value.length>128)throw new Error("vault_passphrase");return value}
+function vaultExactKeys(value,keys){if(!value||typeof value!=="object"||Array.isArray(value))return false;const actual=Object.keys(value).sort(),expected=[...keys].sort();return actual.length===expected.length&&actual.every((key,index)=>key===expected[index])}
+async function vaultKey(passphrase,salt,iterations){if(!globalThis.crypto?.subtle)throw new Error("vault_crypto_unavailable");const material=await crypto.subtle.importKey("raw",new TextEncoder().encode(vaultPassphrase(passphrase)),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",hash:"SHA-256",salt,iterations},material,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
+async function createEncryptedVaultDocument(data,passphrase){
+ const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12)),key=await vaultKey(passphrase,salt,LOCAL_VAULT_ITERATIONS),aad=new TextEncoder().encode(LOCAL_VAULT_SCHEMA);
+ const plaintext=new TextEncoder().encode(JSON.stringify(createBackupEnvelope(data)));if(plaintext.byteLength>5*1024*1024)throw new Error("vault_size");
+ const ciphertext=await crypto.subtle.encrypt({name:"AES-GCM",iv,additionalData:aad,tagLength:128},key,plaintext);
+ return{schema:LOCAL_VAULT_SCHEMA,createdAt:new Date().toISOString(),kdf:{name:"PBKDF2",hash:"SHA-256",iterations:LOCAL_VAULT_ITERATIONS,salt:vaultBytesToBase64(salt)},cipher:{name:"AES-GCM",tagLength:128,iv:vaultBytesToBase64(iv)},ciphertext:vaultBytesToBase64(ciphertext)};
+}
+async function decryptEncryptedVaultDocument(input,passphrase){
+ const document=typeof input==="string"?JSON.parse(input):input;
+ if(!vaultExactKeys(document,["schema","createdAt","kdf","cipher","ciphertext"])||document.schema!==LOCAL_VAULT_SCHEMA||!Number.isFinite(Date.parse(document.createdAt)))throw new Error("vault_document");
+ if(!vaultExactKeys(document.kdf,["name","hash","iterations","salt"])||document.kdf.name!=="PBKDF2"||document.kdf.hash!=="SHA-256"||document.kdf.iterations!==LOCAL_VAULT_ITERATIONS)throw new Error("vault_kdf");
+ if(!vaultExactKeys(document.cipher,["name","tagLength","iv"])||document.cipher.name!=="AES-GCM"||document.cipher.tagLength!==128)throw new Error("vault_cipher");
+ const salt=vaultBase64ToBytes(document.kdf.salt,16),iv=vaultBase64ToBytes(document.cipher.iv,12),ciphertext=vaultBase64ToBytes(document.ciphertext);if(salt.length!==16||iv.length!==12||ciphertext.length<17)throw new Error("vault_shape");
+ const key=await vaultKey(passphrase,salt,document.kdf.iterations),aad=new TextEncoder().encode(LOCAL_VAULT_SCHEMA);let plaintext;
+ try{plaintext=await crypto.subtle.decrypt({name:"AES-GCM",iv,additionalData:aad,tagLength:128},key,ciphertext)}catch(e){throw new Error("vault_authentication")}
+ const text=new TextDecoder("utf-8",{fatal:true}).decode(plaintext);return parseBackupDocument(text);
+}
 function saveRecoverySnapshot(reason){
  try{const envelope=createBackupEnvelope(DB.d);envelope.reason=reason||"change";
   localStorage.setItem(RECOVERY_KEY,JSON.stringify(envelope));return true}catch(e){return false}
@@ -1649,6 +1671,7 @@ async function runDiscoveryRescan(mode,target){
 function googleApiBase(){return String(document.querySelector('meta[name="subscrap-api-base"]')?.content||"").replace(/\/$/,"")}
 function googleSession(){try{let value=sessionStorage.getItem(GOOGLE_SESSION_KEY)||"";if(!value){value=localStorage.getItem(GOOGLE_SESSION_KEY)||"";if(value)sessionStorage.setItem(GOOGLE_SESSION_KEY,value)}localStorage.removeItem(GOOGLE_SESSION_KEY);return value}catch(e){return""}}
 function refreshAuthState(){const next=googleSession()?"signedIn":"signedOut";AUTH_STATE.status=next;AUTH_STATE.error=null;return next}
+async function probeCookieSession(){if(!googleApiBase()){refreshAuthState();return false}try{await googleApi("/v1/account",{cookieProbe:true});sessionStorage.setItem(GOOGLE_SESSION_KEY,"cookie");refreshAuthState();return true}catch(e){refreshAuthState();return false}}
 function accountEntryButton(){
  const busy=["checking","signingIn"].includes(AUTH_STATE.status),signed=AUTH_STATE.status==="signedIn"||(!busy&&!!googleSession());
  const label=busy?(LANG==="ko"?"로그인 확인 중…":"Checking sign-in…"):(signed?(LANG==="ko"?"내 계정":"My account"):(LANG==="ko"?"Google로 로그인·무료 가입":"Continue with Google"));
@@ -1659,19 +1682,19 @@ function portableDeviceId(){try{let id=localStorage.getItem(PORTABLE_DEVICE_KEY)
 async function captureGoogleSession(){
  const p=new URLSearchParams(location.hash.replace(/^#/,"")),code=p.get("account_code"),provider=p.get("account_provider")||"google";
  p.delete("account_code");p.delete("account_provider");history.replaceState(null,"",location.pathname+location.search+(p.toString()?"#"+p:""));
- if(!code){refreshAuthState();return false}
+ if(!code)return probeCookieSession();
  AUTH_STATE.status="checking";AUTH_STATE.error=null;
- try{const result=await googleApi("/v1/auth/exchange",{method:"POST",body:JSON.stringify({code})});if(!result?.session)throw new Error("Invalid login handoff");
-  sessionStorage.setItem(GOOGLE_SESSION_KEY,result.session);sessionStorage.setItem(AUTH_PROVIDER_KEY,result.provider||provider);localStorage.removeItem(GOOGLE_SESSION_KEY);localStorage.removeItem(AUTH_PROVIDER_KEY);refreshAuthState();
+ try{const result=await googleApi("/v1/auth/exchange",{method:"POST",body:JSON.stringify({code})});if(!result?.session&&result?.transport!=="http_only_cookie")throw new Error("Invalid login handoff");
+  sessionStorage.setItem(GOOGLE_SESSION_KEY,result.transport==="http_only_cookie"?"cookie":result.session);sessionStorage.setItem(AUTH_PROVIDER_KEY,result.provider||provider);localStorage.removeItem(GOOGLE_SESSION_KEY);localStorage.removeItem(AUTH_PROVIDER_KEY);refreshAuthState();
   setTimeout(()=>{toast(LANG==="ko"?"Google 로그인 완료 · 자료 동기화는 설정에서 직접 시작하세요":"Google sign-in complete · start data sync from Settings when ready");syncGoogleSubscriptions().catch(()=>{})},100);return true;
  }catch(e){AUTH_STATE.status="recoverableError";AUTH_STATE.error=e.message;setTimeout(()=>toast(LANG==="ko"?"로그인 확인 시간이 지났어요. 다시 시도해 주세요.":"Sign-in confirmation expired. Please try again."),100);return false}
 }
 async function googleApi(path,options){
  const base=googleApiBase();if(!base)throw new Error(LANG==="ko"?"지금은 Google 계정 연결을 사용할 수 없어요":"Google account connection is currently unavailable");
  const headers=Object.assign({"content-type":"application/json"},options?.headers||{}),session=googleSession();
- if(session)headers.authorization="Bearer "+session;
+ if(session&&session!=="cookie")headers.authorization="Bearer "+session;
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),90000);
- try{const response=await fetch(base+path,Object.assign({signal:controller.signal},options||{},{headers}));
+ try{const clean=Object.assign({},options||{});delete clean.cookieProbe;const response=await fetch(base+path,Object.assign({signal:controller.signal,credentials:"include"},clean,{headers}));
   let payload={};try{payload=await response.json()}catch(e){}
   if(!response.ok){const error=new Error(payload.error?.message||(LANG==="ko"?"Google 요청을 처리하지 못했어요":"Google request failed"));error.status=response.status;throw error}
   return payload.data;
@@ -1721,9 +1744,9 @@ function viewHome(){
  h+=discoveryCenterEnabled()?discoveryHomeMarkup()+`<div class="home-tools">${accountEntryButton()}<button class="btn line sm" onclick="go('add')">${LANG==="ko"?"직접 등록":"Add manually"}</button><button class="iconbtn" onclick="toggleTheme()" aria-label="${t("set.theme")}">◐</button><button class="iconbtn" onclick="go('settings')" aria-label="${t("set.title")}">⚙</button></div>`:`<button class="auto-find-card" onclick="openDiscoveryHub()" aria-label="${LANG==="ko"?"여러 자료에서 내 유료서비스 자동으로 찾기":"Automatically find my paid services from multiple sources"}">
    <div class="auto-find-icon" aria-hidden="true">✦</div><div class="grow" style="text-align:left">
     <div class="auto-find-kicker">${LANG==="ko"?"SUBSCRAP 핵심 기능":"SUBSCRAP CORE FEATURE"}</div>
-    <div class="auto-find-title">${LANG==="ko"?"내 유료서비스 자동으로 찾기":"Automatically find my paid services"}</div>
+    <div class="auto-find-title">${LANG==="ko"?"내가 이용 중인 유료서비스 찾기":"Find the paid services I use"}</div>
     <div class="auto-find-copy">${LANG==="ko"?"Gmail·Google Play·Apple 구매내역·선택한 CSV를 함께 확인해요.":"Check Gmail, Google Play, Apple purchase history and selected CSV files."}</div>
-    <div class="auto-find-privacy">${LANG==="ko"?"필요한 권한만 요청 · 언제든 연결 해제 가능":"Only the needed permission · disconnect anytime"}</div>
+    <div class="auto-find-privacy">${LANG==="ko"?"필요한 권한만 요청 · 언제든 연결 해제 가능 · 아직 확인하지 않은 범위도 표시":"Only the needed permission · disconnect anytime · unchecked coverage stays visible"}</div>
    </div><div class="auto-find-cta">${esc(finderAction)} <span aria-hidden="true">→</span></div>
   </button>`;
 
@@ -2580,6 +2603,9 @@ function viewSettings(){
   <button class="btn ghost mt" onclick="openCards()">💳 ${t("card.title")}</button>
   <button class="btn ghost mt" onclick="openPaste()">📋 ${t("paste.title")}</button>
   <button class="btn ghost mt" onclick="exportBackup()">${t("set.backup")}</button>
+  <button class="btn ghost mt" onclick="exportEncryptedVault()">🔐 ${LANG==="ko"?"암호화 금고 파일 만들기":"Create encrypted vault file"}</button>
+  <input type="file" id="vaultfile" accept=".json,application/json" style="display:none" onchange="importEncryptedVault(event)">
+  <button class="btn ghost mt" onclick="$('vaultfile').click()">🔓 ${LANG==="ko"?"암호화 금고 파일 열기":"Open encrypted vault file"}</button>
   <input type="file" id="bkfile" accept=".json,application/json" style="display:none" onchange="importBackup(event)">
   <button class="btn ghost mt" onclick="$('bkfile').click()">${t("set.restore")}</button>
   <input type="file" id="mergefile" accept=".json,application/json" style="display:none" onchange="importBackupMerge(event)">
@@ -2634,6 +2660,7 @@ async function saveAccountDisplayName(){
 }
 function logoutFromThisDevice(){
  if(!confirm(LANG==="ko"?"이 기기에서만 로그아웃할까요? 서버의 연결과 저장한 자료는 삭제하지 않습니다.":"Log out on this device only? This does not delete your server connection or saved data."))return;
+ if(googleSession()==="cookie"&&googleApiBase())googleApi("/v1/auth/logout",{method:"POST",body:"{}"}).catch(()=>{});
  try{sessionStorage.removeItem(GOOGLE_SESSION_KEY);sessionStorage.removeItem(AUTH_PROVIDER_KEY);localStorage.removeItem(GOOGLE_SESSION_KEY);localStorage.removeItem(AUTH_PROVIDER_KEY)}catch(e){}
  AUTH_STATE.status="signedOut";AUTH_STATE.error=null;
  DISCOVERY_OVERVIEW.sequence++;Object.assign(DISCOVERY_OVERVIEW,{accounts:[],loaded:false,loading:false,error:null,session:null,pending:null});GOOGLE_DISCOVERIES=[];GOOGLE_REJECTED=[];GOOGLE_JOBS=[];DISCOVERY_FAILURES.clear();closeSheet();render();toast(LANG==="ko"?"이 기기에서 로그아웃했어요":"Logged out on this device");
@@ -2692,6 +2719,17 @@ function exportBackup(){
  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
  a.download="subscrap-backup-"+iso(new Date())+".json";a.click();
  track("backup_exported",{});toast(t("t.saved"));
+}
+async function exportEncryptedVault(){
+ const passphrase=prompt(LANG==="ko"?"금고 비밀문구를 12자 이상 입력하세요. 잊으면 복구할 수 없으며 SubScrap은 이 문구를 저장하지 않습니다.":"Enter a vault passphrase of at least 12 characters. It cannot be recovered and SubScrap does not store it.");if(passphrase===null)return;
+ const confirmation=prompt(LANG==="ko"?"같은 비밀문구를 다시 입력하세요.":"Enter the same passphrase again.");if(confirmation===null)return;
+ if(passphrase!==confirmation||passphrase.length<12){toast(LANG==="ko"?"비밀문구가 다르거나 12자보다 짧아요":"Passphrases differ or are shorter than 12 characters");return}
+ try{const document=await createEncryptedVaultDocument(DB.d,passphrase),blob=new Blob([JSON.stringify(document,null,1)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="subscrap-vault-"+iso(new Date())+".json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);track("encrypted_vault_exported",{});toast(LANG==="ko"?"암호화 금고 파일을 저장했어요":"Saved encrypted vault file")}catch(e){toast(LANG==="ko"?"이 브라우저에서 금고 파일을 만들지 못했어요":"Could not create a vault file in this browser")}
+}
+async function importEncryptedVault(ev){
+ const file=ev.target.files&&ev.target.files[0];if(!file)return;if(file.size>LOCAL_VAULT_MAX_BYTES){toast(LANG==="ko"?"암호화 금고 파일이 너무 커요":"Encrypted vault file is too large");ev.target.value="";return}
+ const passphrase=prompt(LANG==="ko"?"이 금고의 비밀문구를 입력하세요. 문구는 저장하거나 전송하지 않습니다.":"Enter this vault's passphrase. It is not stored or transmitted.");if(passphrase===null){ev.target.value="";return}
+ try{const restored=await decryptEncryptedVaultDocument(await file.text(),passphrase);if(!confirm(LANG==="ko"?`검증한 암호화 금고의 구독 ${restored.subs.length}개로 현재 기기 자료를 바꿀까요?`:`Replace this device's data with ${restored.subs.length} subscriptions from the verified encrypted vault?`))return;if(!saveRecoverySnapshot("encrypted_vault_restore"))throw new Error("recovery");const previous=cloneJSON(DB.d);DB.d=restored;if(!DB.save()){DB.d=previous;throw new Error("storage")}LANG=DB.d.set.lang||LANG;applyTheme();applyFont();track("encrypted_vault_restored",{n:restored.subs.length});toast(LANG==="ko"?"암호화 금고를 검증하고 복원했어요":"Verified and restored encrypted vault");render()}catch(e){toast(LANG==="ko"?"비밀문구가 틀렸거나 금고 파일이 손상됐어요":"Wrong passphrase or damaged vault file")}finally{ev.target.value=""}
 }
 function importBackup(ev){
  const f=ev.target.files&&ev.target.files[0];if(!f)return;
@@ -3381,7 +3419,7 @@ if("serviceWorker" in navigator&&(location.protocol==="https:"||["localhost","12
 (async function boot(){
  DB.load();
  LANG=DB.d.set.lang||"ko";
- await captureGoogleSession();
+ const authCapture=captureGoogleSession();
  document.documentElement.lang=LANG;
  applyTheme();applyFont();
  if(window.matchMedia)matchMedia("(prefers-color-scheme:dark)").addEventListener?.("change",()=>{if(DB.d.set.theme==="system")applyTheme()});
@@ -3420,6 +3458,7 @@ window.__scrap={DB,addSub,dashboard,detectWaste,duplicateGroups,mergeDuplicateGr
   discoverySummary,discoveryChannels,discoveryCoverageRows,currentDiscoverySummary,discoveryCenterEnabled,refreshDiscoveryOverview,runDiscoveryRescan,portableSyncPayload,
   PRODUCT_CATALOG,planCatalog,yearlyPlanDiscount,entitlementState,hasProEntitlement,
   savingsSummary,pendingAlerts,alertReason,alertSourceLabel,savingsReason,googleScanLabel,googleScanNote,googleAccountCounts,googleDiscoveryReason,googleDiscoveryCard,openGoogleDiscoveryAdd,addSaving,cancelJourney,cancellationCaseState,cancelStateLabel,transitionCancelJourney,markCancellationRequested,startRebillCheck,confirmNoRebill,reportRebill,unifiedReviewRows,saveUnifiedReviewResume,savedUnifiedReviewResume,resumeUnifiedReview,CATALOG,fmt,iso,VERSION};
+ if(await authCapture)render();
 })();
 </script>
 </body>

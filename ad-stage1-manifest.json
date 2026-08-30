@@ -1,8 +1,8 @@
 {
   "schema": "subscrap-ad-stage1-public/v1",
-  "version": "0.38.0",
+  "version": "0.39.0",
   "origin": "https://hanksleekorea-boop.github.io/subscrap",
-  "generatedAt": "2026-08-30T11:56:10.949Z",
+  "generatedAt": "2026-08-30T12:59:40.300Z",
   "contentCount": 22,
   "languageCount": 2,
   "routeCount": 46,
