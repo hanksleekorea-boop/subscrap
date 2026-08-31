@@ -13,6 +13,7 @@
   const publisherValid = /^ca-pub-\d{16}$/.test(publisher);
   const stage2Managed = meta('subscrap-stage2-managed') === '1';
   let loaded = false;
+  let initializedUnits = 0;
 
   function loadAds() {
     if (stage2Managed) return false;
@@ -23,7 +24,13 @@
     script.crossOrigin = 'anonymous';
     script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(publisher);
     document.head.appendChild(script);
-    document.querySelectorAll('[data-ad-slot]').forEach((slot) => { slot.hidden = false; slot.removeAttribute('aria-hidden'); });
+    script.addEventListener('load', () => {
+      document.querySelectorAll('ins.adsbygoogle').forEach((unit) => {
+        if (unit.dataset.subscrapInitialized === '1') return;
+        unit.dataset.subscrapInitialized = '1';
+        try { (window.adsbygoogle = window.adsbygoogle || []).push({}); initializedUnits += 1; } catch (error) { unit.dataset.subscrapInitialized = 'error'; }
+      });
+    }, { once: true });
     return true;
   }
 
@@ -38,10 +45,15 @@
     return loadAds();
   }
 
+  window.googlefc = window.googlefc || {};
+  window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
   document.querySelectorAll('[data-privacy-choices]').forEach((button) => button.addEventListener('click', () => {
-    window.gtag('consent', 'update', deny);
-    window.dispatchEvent(new CustomEvent('subscrap:open-certified-cmp'));
+    if (typeof window.googlefc.showRevocationMessage === 'function') window.googlefc.showRevocationMessage();
+    else window.googlefc.callbackQueue.push({ CONSENT_API_READY: () => {
+      if (typeof window.googlefc.showRevocationMessage === 'function') window.googlefc.showRevocationMessage();
+    } });
   }));
 
-  window.SubScrapAds = Object.freeze({ signalCertifiedConsent, deny: () => signalCertifiedConsent(null), status: () => Object.freeze({ publicSurface, enabled, certified, publisherValid, stage2Managed, loaded }) });
+  if (publicSurface && enabled && certified && publisherValid && !stage2Managed) loadAds();
+  window.SubScrapAds = Object.freeze({ signalCertifiedConsent, deny: () => signalCertifiedConsent(null), loadAds, status: () => Object.freeze({ publicSurface, enabled, certified, publisherValid, stage2Managed, loaded, initializedUnits }) });
 })();
