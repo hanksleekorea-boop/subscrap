@@ -1458,10 +1458,36 @@ function detectWaste(){
      if(gain>=s.amountMinor)out.push({id:"ann:"+s.id,kind:"annual",subId:s.id,
        text:t("flag.annual",{a:fmt(gain,s.currency)}),gain,cur:s.currency});}}}
  });
- bundleOffers().forEach(b=>out.push({id:"bun:"+normalizedServiceName(b.name)+":"+normalizedServiceName(b.plan),kind:"bundle",subId:b.ids[0],
+ bundleOffers().forEach(b=>out.push({id:"bun:"+normalizedServiceName(b.name)+":"+normalizedServiceName(b.plan),kind:"bundle",subId:b.ids[0],ids:b.ids.slice(),
   text:t("bundle.title")+" "+b.name+" — "+t("flag.annual",{a:fmt(b.saveYear,b.cur)}),gain:b.saveYear,cur:b.cur}));
  return out.filter(f=>!DB.d.flags[f.id]).sort((a,b)=>{
   const ga=convert(a.gain,a.cur,DB.d.set.base)||0,gb=convert(b.gain,b.cur,DB.d.set.base)||0;return gb-ga;});
+}
+
+/* 현재 저장된 유료서비스에서 실행 가능한 절약 제안을 연간·월간 예상액으로 집계한다.
+   같은 서비스에 여러 제안이 겹치면 큰 제안부터 하나만 합계에 넣어 과대 계산을 피한다. */
+function savingsPotential(flags){
+ const source=Array.isArray(flags)?flags:detectWaste(),base=DB.d.set.base;
+ const rows=source.map((flag,index)=>{
+  const affectedIds=(Array.isArray(flag.ids)&&flag.ids.length?flag.ids:[flag.subId]).filter(Boolean).map(String).sort();
+  const converted=Number(flag.gain)>0?convert(Number(flag.gain),flag.cur,base):null;
+  const sub=flag.subId?DB.d.subs.find(row=>row.id===flag.subId):null;
+  return{id:String(flag.id||`${flag.kind||"opportunity"}:${index}`),kind:String(flag.kind||"other"),subId:flag.subId||null,
+   affectedIds,text:String(flag.text||""),serviceName:sub?subName(sub):"",annualMinor:Number(flag.gain)||0,currency:flag.cur||base,
+   convertedAnnualMinor:Number.isFinite(converted)&&converted>0?Math.round(converted):null,countedInTotal:false,overlapWith:[]};
+ });
+ const priced=rows.filter(row=>row.convertedAnnualMinor!==null).sort((a,b)=>
+  b.convertedAnnualMinor-a.convertedAnnualMinor||a.id.localeCompare(b.id));
+ const used=new Map();let annualMinor=0,countedItemCount=0;
+ priced.forEach(row=>{
+  const overlaps=row.affectedIds.filter(id=>used.has(id));
+  if(overlaps.length){row.overlapWith=[...new Set(overlaps.map(id=>used.get(id)))];return}
+  row.countedInTotal=true;annualMinor+=row.convertedAnnualMinor;countedItemCount++;
+  row.affectedIds.forEach(id=>used.set(id,row.id));
+ });
+ return{schema:"subscrap-savings-potential/v1",base,annualMinor,monthlyMinor:Math.round(annualMinor/12),itemCount:rows.length,
+  countedItemCount,overlapExcludedCount:priced.length-countedItemCount,unpricedCount:rows.length-priced.length,items:rows,
+  dataBoundary:"estimate_requires_user_action_and_billing_confirmation"};
 }
 const POPULAR_BY_COUNTRY={
  KR:["netflix","youtube-premium","coupang","chatgpt","tving","melon","claude","wavve","naver-plus","icloud","millie","baemin-club"],
@@ -1744,7 +1770,7 @@ function ddayBadge(s){const d=daysUntil(s.nextBillingAt);
 
 /* ---------------- 홈 ---------------- */
 function viewHome(){
- const D=dashboard(),S=savingsSummary(),flags=detectWaste(),subs=activeSubs();
+ const D=dashboard(),S=savingsSummary(),flags=detectWaste(),potential=savingsPotential(flags),subs=activeSubs();
  const yearly=D.total*12;
  let h=`<div class="head"><div><h1>${t("home.title")}</h1>
    <div class="sub">${subs.length}${LANG==="ko"?"개 구독 중":" active"}${D.counts.trial?` · ${D.counts.trial} ${LANG==="ko"?"체험":"trial"}`:""}</div></div>
@@ -1764,7 +1790,7 @@ function viewHome(){
   </button>`;
 
  // 총액 카드
- h+=`<div class="card"><div class="tiny muted b">${t("home.month_total")}</div>
+ h+=`<div class="card" data-month-total><div class="tiny muted b">${t("home.month_total")}</div>
   <div class="total">${fmt(D.total,D.base)}</div>
   <div class="row mt" style="gap:8px;flex-wrap:wrap">
    ${D.firstMonth?`<span class="delta flat">${LANG==="ko"?"이번 달부터 기록 시작":"first month"}</span>`
@@ -1776,6 +1802,19 @@ function viewHome(){
   curs.map(c=>`<div><div class="tiny muted b">${c}</div><div class="sm b">${fmt(D.byCur[c],c)}</div></div>`).join("")+`</div>`}
  if(D.excluded.length)h+=`<div class="tiny mt" style="color:var(--warn)">⚠ ${D.excluded.join(", ")} ${LANG==="ko"?"환율 정보가 없어 합계에서 뺐어요":"excluded (no rate)"}</div>`;
  h+=`</div>`;
+
+ // 현재 유료서비스 전체를 겹치지 않게 계산한 예상 절감액을 홈 전면에 보여 준다.
+ if(subs.length)h+=`<section class="card" data-savings-potential-home aria-labelledby="savingsPotentialTitle" style="border-left:4px solid var(--success)">
+  <div class="row between"><div class="grow"><div id="savingsPotentialTitle" class="tiny muted b">${LANG==="ko"?"예상 절감 가능액":"Estimated savings potential"}</div>
+   <div class="total" style="font-size:28px">${fmt(potential.annualMinor,potential.base)}<span class="tiny muted">${LANG==="ko"?" / 연":" / year"}</span></div>
+   <div class="sm b">${LANG==="ko"?`월 환산 ${fmt(potential.monthlyMinor,potential.base)}`:`Monthly equivalent ${fmt(potential.monthlyMinor,potential.base)}`}</div></div>
+   <div style="font-size:30px" aria-hidden="true">✂</div></div>
+  <div class="tiny muted mt">${potential.annualMinor>0
+   ?(LANG==="ko"?`중복·미사용·연간·가족·묶음 제안 ${potential.countedItemCount}건을 서비스별로 겹치지 않게 계산했어요.`:`Calculated ${potential.countedItemCount} non-overlapping duplicate, unused, annual, family and bundle opportunities.`)
+   :(LANG==="ko"?"현재 자료로 금액을 계산할 수 있는 절약 제안이 아직 없어요. 사용 기록과 요금 정보를 채우면 더 정확해집니다.":"No priced savings opportunity can be calculated from the current data yet. Add usage and plan details for a better estimate.")}</div>
+  <div class="tiny muted mt">⚠ ${LANG==="ko"?"예상액이며, 실제 절약은 변경·해지 뒤 청구 내역에서 확인해야 합니다.":"This is an estimate. Confirm actual savings on statements after changing or cancelling a plan."}</div>
+  <button class="btn sm mt" onclick="openSavingsPotential()">${LANG==="ko"?"서비스별 절감액과 근거 보기":"See savings by service and evidence"}</button>
+ </section>`;
 
  // 고급 무료판: 저장자료 완성도와 앞으로 30일 결제를 통화를 섞지 않고 보여 준다.
  h+=advancedFreeHomeMarkup();
@@ -1964,6 +2003,35 @@ function viewAccount(){const ko=LANG==="ko",signed=!!googleSession();return `<di
  <div class="grid3 mb"><div class="stat"><div class="v">${DB.d.subs.length}</div><div class="k">${ko?"저장 구독":"Subscriptions"}</div></div><div class="stat"><div class="v">${importCandidatesForReview().length}</div><div class="k">${ko?"검토 후보":"Candidates"}</div></div><div class="stat"><div class="v">Free</div><div class="k">${ko?"현재 요금제":"Current plan"}</div></div></div>
  <div class="card"><button class="btn ghost" onclick="openAccount()">${ko?"계정·로그인 관리":"Account and sign-in"}</button><button class="btn ghost mt" onclick="openNotificationCenter()">🔔 ${ko?"내 알림함":"My notification inbox"} (${notificationItems().filter(row=>!row.readAt).length})</button><button class="btn ghost mt" onclick="go('settings')">${ko?"설정·백업·가져오기":"Settings, backup and import"}</button><button class="btn ghost mt" onclick="go('report')">${ko?"지출 리포트":"Spending reports"}</button><button class="btn ghost mt" onclick="openPrivacy()">${ko?"개인정보·동의·자료 삭제":"Privacy, consent and data deletion"}</button><button class="btn ghost mt" onclick="openHelp()">${t("set.help")}</button><button class="btn ghost mt" onclick="openSupportCenter()">${ko?"서비스 상태·문의":"Service status and support"}</button></div>`}
 function dismissFlag(id){DB.d.flags[id]=Date.now();DB.save();track("waste_dismissed",{id});toast(t("t.ignored"));render()}
+function savingsOpportunityAction(flag){
+ if(flag.kind==="family")return `openFamily('${flag.subId}')`;
+ if(flag.kind==="bundle")return "openBundles()";
+ if(flag.kind==="dup")return `openDuplicateMerge('${esc(flag.id)}')`;
+ if(flag.kind==="annual"||flag.kind==="cat")return `openDetail('${flag.subId}')`;
+ return `openCancel('${flag.subId}')`;
+}
+function savingsOpportunityLabel(kind){
+ const ko={dup:"중복 구독",zombie:"장기 미사용",family:"가족 요금제",annual:"연간 요금제",bundle:"묶음 요금제",cat:"같은 종류 점검"};
+ const en={dup:"Duplicate subscription",zombie:"Long unused",family:"Family plan",annual:"Annual plan",bundle:"Bundle plan",cat:"Category review"};
+ return(LANG==="ko"?ko:en)[kind]||(LANG==="ko"?"절약 제안":"Savings opportunity");
+}
+function openSavingsPotential(){
+ const flags=detectWaste(),value=savingsPotential(flags),byId=new Map(flags.map(flag=>[String(flag.id),flag]));
+ const priced=value.items.filter(row=>row.convertedAnnualMinor!==null).sort((a,b)=>
+  Number(b.countedInTotal)-Number(a.countedInTotal)||b.convertedAnnualMinor-a.convertedAnnualMinor||a.id.localeCompare(b.id));
+ const rows=priced.length?priced.map(row=>{const flag=byId.get(row.id)||row,monthly=Math.round(row.convertedAnnualMinor/12),converted=row.currency!==value.base;
+  return `<div class="card flat" data-savings-potential-item="${esc(row.id)}"><div class="row between"><div class="grow"><div class="sm b">${esc(row.serviceName||savingsOpportunityLabel(row.kind))}</div><div class="tiny muted">${esc(savingsOpportunityLabel(row.kind))}</div></div><div style="text-align:right"><div class="sm b" style="color:${row.countedInTotal?"var(--success)":"var(--text-sub)"}">${fmt(row.convertedAnnualMinor,value.base)}/${LANG==="ko"?"연":"yr"}</div><div class="tiny muted">${fmt(monthly,value.base)}/${LANG==="ko"?"월":"mo"}</div></div></div>
+   ${converted?`<div class="tiny muted mt">${LANG==="ko"?"원래 제안액":"Original estimate"}: ${fmt(row.annualMinor,row.currency)}</div>`:""}
+   <div class="tiny muted mt">${LANG==="ko"?"근거:":"Evidence:"} ${esc(savingsReason(flag,DB.d.subs.find(s=>s.id===row.subId)))}</div>
+   ${row.countedInTotal?"":`<div class="tiny mt" style="color:var(--warn)">${LANG==="ko"?"합계에서 제외 — 같은 서비스의 더 큰 제안과 겹칩니다.":"Excluded from total — overlaps a larger opportunity for the same service."}</div>`}
+   <button class="btn sm ghost mt" onclick="${savingsOpportunityAction(flag)}">${LANG==="ko"?"확인하고 절약하기":"Review and save"}</button></div>`}).join("")
+  :`<div class="empty"><div class="sm">${LANG==="ko"?"현재 계산 가능한 절감액이 없습니다.":"There is no calculable savings amount yet."}</div><div class="tiny muted mt">${LANG==="ko"?"서비스 금액·사용 기록·결제 기록을 확인하면 새 제안이 생길 수 있어요.":"Review prices, usage and payment records to unlock more suggestions."}</div></div>`;
+ openSheet(`<div class="grab"></div><div class="b mb" style="font-size:18px">${LANG==="ko"?"내 유료서비스 절감 가능액":"Savings potential for my paid services"}</div>
+  <div class="card" data-savings-potential-total><div class="tiny muted b">${LANG==="ko"?"겹치지 않게 합산한 예상액":"Non-overlapping estimate"}</div><div class="total" style="font-size:28px;color:var(--success)">${fmt(value.annualMinor,value.base)}<span class="tiny muted">/${LANG==="ko"?"연":"yr"}</span></div><div class="sm b">${LANG==="ko"?`월 환산 ${fmt(value.monthlyMinor,value.base)}`:`Monthly equivalent ${fmt(value.monthlyMinor,value.base)}`}</div></div>
+  <div class="tiny muted mb">${LANG==="ko"?"같은 서비스에 여러 제안이 있으면 금액이 큰 하나만 합계에 넣었습니다. 환율 변동, 세금, 실제 요금제 조건에 따라 달라질 수 있습니다.":"When suggestions overlap on the same service, only the larger one is counted. Exchange rates, tax and actual plan terms may change the result."}</div>
+  ${rows}<div class="tiny mt" style="color:var(--warn)">${LANG==="ko"?"이 금액은 보장이 아닙니다. 요금제 변경·해지를 직접 완료하고 이후 청구 내역에서 실제 절약을 확인하세요.":"This amount is not guaranteed. Complete changes or cancellations yourself and verify actual savings on later statements."}</div>
+  <button class="btn ghost mt" onclick="closeSheet()">${t("common.close")}</button>`);
+}
 function openDuplicateMerge(flagId){
  const f=detectWaste().find(x=>x.id===flagId&&x.kind==="dup");if(!f)return;
  const subs=f.ids.map(id=>DB.d.subs.find(s=>s.id===id)).filter(Boolean);
@@ -2520,8 +2588,7 @@ function viewReport(){
   if(c)cats[subCat(s)]=(cats[subCat(s)]||0)+c});
  const catArr=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
  const catTot=catArr.reduce((a,x)=>a+x[1],0)||1;
- const flags=detectWaste();let sim=0;flags.forEach(f=>{if(f.kind==="zombie"||f.kind==="dup"||f.kind==="annual"){
-  const c=convert(f.gain,f.cur,base);if(c)sim+=c}});
+ const flags=detectWaste(),potential=savingsPotential(flags),sim=potential.annualMinor;
  let h=`<div class="head"><div><h1>${t("rep.title")}</h1><div class="sub">${LANG==="ko"?"내 구독 지출 한눈에":"Your subscription spending"}</div></div></div>
   <div class="card"><div class="tiny muted b mb">${t("rep.trend")}</div>
    <div style="display:flex;align-items:flex-end;gap:7px;height:120px">`+
@@ -2537,8 +2604,8 @@ function viewReport(){
    <div class="stat"><div class="v">${activeSubs().length}</div><div class="k">${LANG==="ko"?"구독 수":"Active"}</div></div>
    <div class="stat"><div class="v" style="color:var(--success)">${fmt(S.year,base)}</div><div class="k">${t("home.saved")}</div></div>
    <div class="stat"><div class="v" style="color:var(--warn)">${fmt(sim,base)}</div><div class="k">${t("rep.sim")}</div></div></div>`;
- if(sim>0)h+=`<div class="card" style="border-left:4px solid var(--warn)"><div class="sm b">${LANG==="ko"?`지금 정리하면 1년에 ${fmt(sim,base)}를 아낄 수 있어요`:`Cancel the flagged ones and save ${fmt(sim,base)}/yr`}</div>
-   <button class="btn sm mt" onclick="go('home')">${LANG==="ko"?"절약 기회 보기":"See opportunities"}</button></div>`;
+ if(sim>0)h+=`<div class="card" style="border-left:4px solid var(--warn)"><div class="sm b">${LANG==="ko"?`현재 자료 기준 연 ${fmt(sim,base)} 절감 가능성이 있어요`:`Current data suggests ${fmt(sim,base)}/yr in savings potential`}</div>
+   <div class="tiny muted mt">${LANG==="ko"?"겹치는 제안은 한 번만 계산한 예상액이며 실제 절약은 청구 내역 확인이 필요합니다.":"Overlapping suggestions are counted once; verify actual savings on statements."}</div><button class="btn sm mt" onclick="openSavingsPotential()">${LANG==="ko"?"서비스별 절감액 보기":"See savings by service"}</button></div>`;
  const pt=payTotals();
  if(pt.length>1){const ptot=pt.reduce((a,x)=>a+x[1],0)||1;
   h+=`<div class="card"><div class="tiny muted b mb">💳 ${t("pay.by")}</div>`+
@@ -3501,7 +3568,7 @@ if("serviceWorker" in navigator&&(location.protocol==="https:"||["localhost","12
    <button class="iconbtn" onclick="dismissBanner()" aria-label="닫기">✕</button></div>`),2600);
  }
  // 앱 기능을 한 곳에서 연결한다.
-window.__scrap={DB,addSub,dashboard,detectWaste,duplicateGroups,mergeDuplicateGroup,undoDuplicateMerge,canonicalServiceKey,canonicalServiceNameKey,computeNextBilling,convert,monthlyMinor,yearlyMinor,rollForward,pausedSubs,trialSubs,togglePause,shareCard,payMethods,payTotals,popularFor,findSameService,daysSinceUse,confirmDupAdd,myShareMinor,sharedSubs,settlement,timeline,cardStatus,searchCatalog,editDist,familyOffer,bundleOffers,bundleCatalog,reviewSubs,widgetSummary,tidyReceipts,yearSummary,fxShift,scanPaste,openGoogleAccounts,googleApiBase,googleSession,captureGoogleSession,syncGoogleSubscriptions,openAccount,refreshAccountPanel,saveAccountDisplayName,logoutFromThisDevice,accountEntryButton,refreshAuthState,AUTH_STATE,offerAppUpdate,activateAppUpdate,
+window.__scrap={DB,addSub,dashboard,detectWaste,savingsPotential,openSavingsPotential,duplicateGroups,mergeDuplicateGroup,undoDuplicateMerge,canonicalServiceKey,canonicalServiceNameKey,computeNextBilling,convert,monthlyMinor,yearlyMinor,rollForward,pausedSubs,trialSubs,togglePause,shareCard,payMethods,payTotals,popularFor,findSameService,daysSinceUse,confirmDupAdd,myShareMinor,sharedSubs,settlement,timeline,cardStatus,searchCatalog,editDist,familyOffer,bundleOffers,bundleCatalog,reviewSubs,widgetSummary,tidyReceipts,yearSummary,fxShift,scanPaste,openGoogleAccounts,googleApiBase,googleSession,captureGoogleSession,syncGoogleSubscriptions,openAccount,refreshAccountPanel,saveAccountDisplayName,logoutFromThisDevice,accountEntryButton,refreshAuthState,AUTH_STATE,offerAppUpdate,activateAppUpdate,
   makePriceObservation,priceObservationList,recordPriceObservation,priceObservationSummary,priceAlertFromObservations,billingAnomalies,priorityActions,setPriorityFeedback,snoozePriority,resolvePriority,notificationItems,markNotificationRead,systemNotificationCandidates,markSystemNotificationSent,systemNotificationStatus,systemNotificationDescription,enableSystemNotifications,disableSystemNotifications,deliverSystemNotifications,stage2State,FREE_STAGE2_CONTENT,FREE_ADVANCED_CONTENT,advancedDataHealth,cashFlowForecast,advancedFreeBriefing,
   BACKUP_SCHEMA,createBackupEnvelope,parseBackupDocument,backupChecksum,normalizeStoredData,validateStoredData,saveRecoverySnapshot,hasRecoverySnapshot,restoreRecoverySnapshot,mergePortableData,mergeBackupDocument,mergeTombstones,applyPortableTombstones,markPortableDeleted,touchPortable,
   PURCHASE_IMPORT_MAX_BYTES,PURCHASE_IMPORT_MAX_ROWS,parseDelimitedDocument,purchaseImportMapping,parsePurchaseAmount,parsePurchaseDate,preparePurchaseImport,resolveLocalService,commitPurchaseImport,deletePurchaseImportData,importCandidateFingerprints,importCandidatesForReview,recentRejectedImportCandidates,setImportCandidateState,confirmImportCandidate,openDiscoveryHub,openApplePurchaseImport,importCandidateCard,
