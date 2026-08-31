@@ -26,7 +26,7 @@ html[data-theme="dark"]{
   --line:#2C3648; --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.3);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text)}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);max-width:100%;overflow-x:clip}
 html{font-size:15px}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
  font-size:1rem;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:none}
@@ -63,7 +63,10 @@ a{color:var(--accent)}
 .discovery-stat strong{display:block;font-size:1.03rem;color:var(--text);margin-top:3px}
 .discovery-status{font-size:.84rem;color:var(--text-sub);margin-top:9px;line-height:1.5}
 .discovery-center .btn{white-space:normal;min-height:44px}
-.home-tools{display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px}
+html[data-performance="light"] *,html[data-performance="light"] *::before,html[data-performance="light"] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+html[data-performance="light"] .decorative,html[data-performance="light"] canvas{display:none!important}
+.home-tools{display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.card .btn{max-width:100%;white-space:normal;overflow-wrap:anywhere}
 @media(min-width:900px){.discovery-stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
 html[data-theme="dark"] .auto-find-card{color:#fff;background:linear-gradient(135deg,#355B92 0%,#27669D 58%,#2E89B5 100%)}
 .row{display:flex;align-items:center;gap:12px}
@@ -241,6 +244,8 @@ label.lb{display:block;font-size:12.5px;font-weight:700;color:var(--text-sub);ma
 
 /* Subscrap core */
 const VERSION="0.41.0";
+const V3_STAGE1_FEATURES=Object.freeze({"trustCenter":false,"coveragePassport":true,"lightMode":true,"localOcr":false,"nativeAndroid":false,"pushCenter":false});
+function v3Feature(name){return V3_STAGE1_FEATURES[name]===true}
 /* 1단계 무료판의 사용자 콘텐츠 원장. 화면마다 같은 약속·통로 범위·신뢰 표현을 사용한다. */
 const FREE_STAGE1_CONTENT=Object.freeze({
  version:"2026-08-29",
@@ -1604,6 +1609,31 @@ function track(name,props){
 }
 </script>
 
+/* Local receipt extraction. Source bytes remain in this browser and are discarded after preview. */
+const LOCAL_OCR_MAX_BYTES=12*1024*1024;
+function localReceiptFields(text){
+ const safe=String(text||"").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g," ").slice(0,20000);
+ const amount=safe.match(/(?:USD|EUR|GBP|KRW|JPY|CAD|AUD|\$|€|£|₩|¥)\s*([0-9][0-9,.]{0,14})|([0-9][0-9,.]{0,14})\s*(USD|EUR|GBP|KRW|JPY|CAD|AUD)/i);
+ const date=safe.match(/\b(20\d{2}[-/.](?:0?[1-9]|1[0-2])[-/.](?:0?[1-9]|[12]\d|3[01]))\b/);
+ const currency=(amount&&(amount[3]||amount[0].match(/USD|EUR|GBP|KRW|JPY|CAD|AUD/i)?.[0]))||({"$":"USD","€":"EUR","£":"GBP","₩":"KRW","¥":"JPY"}[amount?.[0]?.trim()?.[0]])||null;
+ const value=amount?Number(String(amount[1]||amount[2]||"").replace(/,/g,"")):null;
+ const merchant=safe.split(/\r?\n/).map(v=>v.trim()).find(v=>v.length>=2&&!/invoice|receipt|영수증|결제|payment|total/i.test(v))||null;
+ return Object.freeze({merchantRawSafe:merchant&&merchant.slice(0,120),amount:Number.isFinite(value)&&value>0?value:null,currency:currency&&currency.toUpperCase(),observedAt:date?date[1].replace(/[/.]/g,"-"):null,confidence:amount?"medium":"low",reasonCodes:amount?["ocr_amount_signal"]:["ocr_needs_review"]});
+}
+async function readLocalReceipt(file){
+ if(!file||file.size>LOCAL_OCR_MAX_BYTES)throw new Error("file_too_large");
+ if(/^text\//.test(file.type)||/\.(txt|csv|tsv)$/i.test(file.name||""))return localReceiptFields(await file.text());
+ if(/^image\//.test(file.type)&&typeof TextDetector==="function"){
+  const bitmap=await createImageBitmap(file);
+  try{const rows=await new TextDetector().detect(bitmap);return localReceiptFields(rows.map(r=>r.rawValue||"").join("\n"))}finally{bitmap.close()}
+ }
+ throw new Error("local_ocr_unavailable");
+}
+async function importLocalReceipt(event){
+ const file=event.target.files&&event.target.files[0];if(!file)return;
+ try{const row=await readLocalReceipt(file);openSheet(`<div class="grab"></div><h2>${LANG==="ko"?"기기에서 읽은 후보":"Candidate read on this device"}</h2><p class="tiny muted">${LANG==="ko"?"원본 파일은 서버로 보내거나 저장하지 않았습니다. 값이 맞는지 확인한 뒤 직접 등록하세요.":"The source file was not uploaded or stored. Check the values before adding it."}</p><div class="card flat"><div class="b">${esc(row.merchantRawSafe|| (LANG==="ko"?"서비스명 확인 필요":"Service name needed"))}</div><div class="sm muted mt">${row.amount?`${esc(row.currency||"")} ${row.amount}`:(LANG==="ko"?"금액 확인 필요":"Amount needed")} · ${esc(row.observedAt|| (LANG==="ko"?"날짜 확인 필요":"Date needed"))}</div></div><button class="btn" onclick="closeSheet();go('add')">${LANG==="ko"?"직접 확인해 등록":"Review and add"}</button><button class="btn ghost mt" onclick="closeSheet()">${LANG==="ko"?"원본과 후보 폐기":"Discard source and candidate"}</button>`)}catch(error){toast(error.message==="file_too_large"?(LANG==="ko"?"12MB 이하 파일을 선택하세요":"Choose a file up to 12MB"):(LANG==="ko"?"이 브라우저에서는 이 파일의 로컬 글자 읽기를 지원하지 않습니다. 표 파일이나 직접 등록을 이용하세요.":"Local text recognition for this file is unavailable in this browser. Use a table file or manual entry."))}finally{event.target.value=""}
+}
+
 <script>
 /* ================= 뷰 렌더링 ================= */
 let VIEW="home",SEL=null,ADDMODE="search",ADDSEL=null,CALM=new Date(),MANUAL_DRAFT=null,GOOGLE_DISCOVERIES=[],GOOGLE_REJECTED=[];
@@ -2662,6 +2692,7 @@ function viewSettings(){
   <select class="inp" id="s_cur" onchange="setBase(this.value)">`+
    CURRENCIES.map(c=>`<option ${c===st.base?"selected":""}>${c}</option>`).join("")+`</select>
   <div class="tiny muted mt">${LANG==="ko"?"환율은 하루 한 번 자동으로 받아와요. 인터넷이 없으면 저장된 값을 써요.":"Rates refresh daily; offline uses the last saved table."}</div></div>
+ ${v3Feature("lightMode")?`<div class="card"><div class="b sm">${LANG==="ko"?"경량 모드":"Light mode"}</div><div class="tiny muted mt">${LANG==="ko"?"느린 네트워크나 저사양 기기에서 장식과 움직임을 줄입니다. 후보 검토·백업·삭제 기능은 그대로 유지됩니다.":"Reduces decoration and motion on slow networks or lower-powered devices. Review, backup and deletion remain available."}</div><button class="btn line mt" aria-pressed="${DB.d.set.performanceMode==="light"}" onclick="togglePerformanceMode()">${DB.d.set.performanceMode==="light"?(LANG==="ko"?"표준 모드로 전환":"Use standard mode"):(LANG==="ko"?"경량 모드 켜기":"Turn on light mode")}</button></div>`:""}
  <div class="card"><div class="b sm mb">${t("set.alerts")}</div>
   ${sw("billing",t("al.billing"),A.billing)}${sw("annualRenewal",LANG==="ko"?"연간 갱신 30일 전 알림":"Annual renewal reminder",A.annualRenewal)}${sw("trial",t("al.trial"),A.trial)}
   ${sw("price",t("al.price"),A.price)}${sw("zombie",t("al.zombie"),A.zombie)}
@@ -2677,6 +2708,7 @@ function viewSettings(){
   <button class="btn ghost mt" onclick="openPlans()">⭐ ${LANG==="ko"?"Subscrap Pro 요금·기능":"Subscrap Pro plans"}</button>
   <input type="file" id="csvfile" accept=".csv,text/csv" style="display:none" onchange="importCSV(event)">
   <button class="btn ghost mt" onclick="$('csvfile').click()">${LANG==="ko"?"CSV를 후보로 안전하게 가져오기":"Safely import CSV as candidates"}</button>
+  ${v3Feature("localOcr")?`<input type="file" id="localocrfile" accept="image/*,.pdf,.txt,.csv,.tsv" style="display:none" onchange="importLocalReceipt(event)"><button class="btn ghost mt" onclick="$('localocrfile').click()">📷 ${LANG==="ko"?"사진·문서에서 기기 안에서 찾기":"Find locally from a photo or document"}</button>`:""}
   <input type="file" id="purchasefile" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values,text/plain" style="display:none" onchange="loadPurchaseImportFile(event,PURCHASE_IMPORT_SOURCE)">
   <button class="btn ghost mt" onclick="openApplePurchaseImport()"> ${LANG==="ko"?"Apple 구매내역에서 찾기":"Find from Apple purchase history"}</button>
   <button class="btn ghost mt" onclick="openGoogleAccounts()">G&nbsp; ${LANG==="ko"?"Google 계정에서 유료서비스 찾기":"Find paid services in Google"}</button>
@@ -2717,6 +2749,8 @@ function setFont(v){DB.d.set.fontScale=v;DB.save();applyFont();render()}
 function applyFont(){document.documentElement.style.fontSize=(15*(DB.d.set.fontScale||1))+"px"}
 function setLang(l){LANG=l;DB.d.set.lang=l;document.documentElement.lang=l;DB.save();track("lang_changed",{l});render()}
 function setTheme(v){DB.d.set.theme=v;DB.save();applyTheme();track("theme_changed",{v});render()}
+function togglePerformanceMode(){DB.d.set.performanceMode=DB.d.set.performanceMode==="light"?"standard":"light";DB.save();applyPerformanceMode();render()}
+function applyPerformanceMode(){if(!v3Feature("lightMode")){document.documentElement.removeAttribute("data-performance");return}const automatic=DB.d.set.performanceMode==null&&((navigator.connection&&["slow-2g","2g"].includes(navigator.connection.effectiveType))||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=2));document.documentElement.setAttribute("data-performance",DB.d.set.performanceMode==="light"||automatic?"light":"standard")}
 function toggleTheme(){const cur=document.documentElement.getAttribute("data-theme");setTheme(cur==="dark"?"light":"dark")}
 function applyTheme(){const v=DB.d.set.theme;
  const dark=v==="dark"||(v==="system"&&window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches);
@@ -3536,7 +3570,7 @@ if("serviceWorker" in navigator&&(location.protocol==="https:"||["localhost","12
  LANG=DB.d.set.lang||"ko";
  const authCapture=captureGoogleSession();
  document.documentElement.lang=LANG;
- applyTheme();applyFont();
+ applyTheme();applyFont();applyPerformanceMode();
  if(window.matchMedia)matchMedia("(prefers-color-scheme:dark)").addEventListener?.("change",()=>{if(DB.d.set.theme==="system")applyTheme()});
  // 국가/통화 추정 (최초 1회)
  if(!DB.d.set._guessed){
