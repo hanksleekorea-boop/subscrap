@@ -4,6 +4,7 @@ self.addEventListener("message",e=>{if(e.data&&e.data.type==="SKIP_WAITING")self
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x.startsWith(P)&&x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;
  const u=new URL(e.request.url);if(u.origin!==self.location.origin)return;
+ if(u.pathname.includes("/assets/ocr/")){e.respondWith(caches.open(C).then(async c=>{const hit=await c.match(e.request);if(hit)return hit;const res=await fetch(e.request);if(res&&res.ok)await c.put(e.request,res.clone());return res}));return}
  if(e.request.mode!=="navigate")return;
  e.respondWith(fetch(e.request,{cache:"no-store"}).then(res=>{
   if(res&&res.ok){const cl=res.clone();caches.open(C).then(c=>c.put(e.request,cl).catch(()=>{}))}return res;

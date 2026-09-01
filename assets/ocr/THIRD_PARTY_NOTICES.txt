@@ -1,0 +1,6 @@
+Subscrap local OCR third-party notices
+Tesseract.js 6.0.1 — Apache-2.0
+Tesseract.js Core 6.1.2 — Apache-2.0
+Mozilla PDF.js 5.4.149 — Apache-2.0
+Tesseract eng/kor trained data packages 1.0.0 — MIT
+All components are loaded from this same Subscrap origin only when the user selects local OCR.
