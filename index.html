@@ -1802,7 +1802,7 @@ async function runDiscoveryRescan(mode,target){
 function googleApiBase(){return String(document.querySelector('meta[name="subscrap-api-base"]')?.content||"").replace(/\/$/,"")}
 function googleSession(){try{let value=sessionStorage.getItem(GOOGLE_SESSION_KEY)||"";if(!value){value=localStorage.getItem(GOOGLE_SESSION_KEY)||"";if(value)sessionStorage.setItem(GOOGLE_SESSION_KEY,value)}localStorage.removeItem(GOOGLE_SESSION_KEY);return value}catch(e){return""}}
 function refreshAuthState(){const next=googleSession()?"signedIn":"signedOut";AUTH_STATE.status=next;AUTH_STATE.error=null;return next}
-async function probeCookieSession(){if(!googleApiBase()){refreshAuthState();return false}try{await googleApi("/v1/account",{cookieProbe:true});sessionStorage.setItem(GOOGLE_SESSION_KEY,"cookie");refreshAuthState();return true}catch(e){refreshAuthState();return false}}
+async function probeCookieSession(){const base=googleApiBase();if(!base||new URL(base).origin!==location.origin){refreshAuthState();return false}try{await googleApi("/v1/account",{cookieProbe:true});sessionStorage.setItem(GOOGLE_SESSION_KEY,"cookie");refreshAuthState();return true}catch(e){refreshAuthState();return false}}
 function accountEntryButton(){
  const busy=["checking","signingIn"].includes(AUTH_STATE.status),signed=AUTH_STATE.status==="signedIn"||(!busy&&!!googleSession());
  const label=busy?(LANG==="ko"?"로그인 확인 중…":"Checking sign-in…"):(signed?(LANG==="ko"?"내 계정":"My account"):(LANG==="ko"?"Google로 로그인·무료 가입":"Continue with Google"));
