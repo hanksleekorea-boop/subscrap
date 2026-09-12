@@ -8,6 +8,7 @@
   const meta = (name) => document.querySelector('meta[name="' + name + '"]')?.content || '';
   const publicSurface = document.body?.dataset.adSurface === 'public-content';
   const enabled = meta('subscrap-ad-enabled') === '1';
+  const liveAdsEnabled = meta('subscrap-live-ads-enabled') === '1';
   const certified = meta('subscrap-cmp-certified') === '1';
   const regionReady = meta('subscrap-ad-region-ready') === '1';
   const publisher = meta('subscrap-ad-publisher');
@@ -32,6 +33,8 @@
   let loaded = false;
   let initializedUnits = 0;
   let selectedSlotKey = null;
+
+  document.querySelectorAll('[data-house-service-promo]').forEach((promo) => { promo.hidden = liveAdsEnabled; });
 
   function loadAds() {
     const slot = selectedSlot();
@@ -112,5 +115,5 @@
     setTimeout(() => { selectedGroup = target; updateGuideCatalog(); }, 0);
   }));
 
-  window.SubScrapAds = Object.freeze({ signalCertifiedConsent, deny: () => signalCertifiedConsent(null), loadAds, status: () => Object.freeze({ publicSurface, enabled, certified, regionReady, publisherValid, stage2Managed, contentLengthReady: contentLengthReady(), loaded, initializedUnits, selectedSlotKey, selectedViewport: viewport(), pilotSlotKeys, definedSlotKeys: slotDefinitions.map((slot) => slot.key) }) });
+  window.SubScrapAds = Object.freeze({ signalCertifiedConsent, deny: () => signalCertifiedConsent(null), loadAds, status: () => Object.freeze({ publicSurface, enabled, liveAdsEnabled, certified, regionReady, publisherValid, stage2Managed, contentLengthReady: contentLengthReady(), loaded, initializedUnits, selectedSlotKey, selectedViewport: viewport(), houseCreativeVisible: !liveAdsEnabled && document.querySelectorAll('[data-house-service-promo]:not([hidden])').length > 0, pilotSlotKeys, definedSlotKeys: slotDefinitions.map((slot) => slot.key) }) });
 })();
