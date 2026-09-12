@@ -9,15 +9,39 @@
   const publicSurface = document.body?.dataset.adSurface === 'public-content';
   const enabled = meta('subscrap-ad-enabled') === '1';
   const certified = meta('subscrap-cmp-certified') === '1';
+  const regionReady = meta('subscrap-ad-region-ready') === '1';
   const publisher = meta('subscrap-ad-publisher');
   const publisherValid = /^ca-pub-\d{16}$/.test(publisher);
   const stage2Managed = meta('subscrap-stage2-managed') === '1';
+  const slotDefinitions = [{"key":"LM26-23-subscrap-public-guide-pc-inarticle-v1","format":"in_article","viewport":"desktop","pilot":true,"defaultEnabled":false,"routePattern":"^/global/(?:ko/)?guides/cancellation-link-safety/$","anchor":"[data-ad-anchor=\"first-complete-section\"]","contentRequirement":"first_complete_public_section","idEnvKey":"ADSENSE_SLOT_LM26_23_PUBLIC_GUIDE_PC_INARTICLE_V1"},{"key":"LM26-23-subscrap-service-guide-pc-display-v1","format":"responsive_display","viewport":"desktop","pilot":false,"defaultEnabled":false,"routePattern":"^/global/(?:ko/)?guides/cancellation-link-safety/$","anchor":"[data-ad-anchor=\"after-cancellation-facts\"]","contentRequirement":"complete_public_guide_and_cancellation_facts","idEnvKey":"ADSENSE_SLOT_LM26_23_SERVICE_GUIDE_PC_DISPLAY_V1"},{"key":"LM26-23-subscrap-guide-end-pc-multiplex-v1","format":"multiplex","viewport":"desktop","pilot":false,"defaultEnabled":false,"routePattern":"^/global/(?:ko/)?guides/cancellation-link-safety/$","anchor":"[data-ad-anchor=\"guide-end\"]","contentRequirement":"complete_public_guide_conclusion","idEnvKey":"ADSENSE_SLOT_LM26_23_GUIDE_END_PC_MULTIPLEX_V1"},{"key":"LM26-23-subscrap-public-guide-m-inarticle-v1","format":"in_article","viewport":"mobile","pilot":true,"defaultEnabled":false,"routePattern":"^/global/(?:ko/)?guides/cancellation-link-safety/$","anchor":"[data-ad-anchor=\"first-complete-section\"]","contentRequirement":"first_complete_public_section","idEnvKey":"ADSENSE_SLOT_LM26_23_PUBLIC_GUIDE_M_INARTICLE_V1"}];
+  const minimumContentChars = 280;
+  const pilotSlotKeys = slotDefinitions.filter((slot) => slot.pilot).map((slot) => slot.key);
+  const normalizedPath = String(location.pathname || '').replace(/^\/subscrap(?=\/|$)/, '') || '/';
+  const isAllowedRoute = (slot) => {
+    try { return new RegExp(slot.routePattern).test(normalizedPath); } catch (error) { return false; }
+  };
+  const viewport = () => window.matchMedia('(max-width: 640px)').matches ? 'mobile' : 'desktop';
+  const contentLengthReady = () => String(document.querySelector('main#main article')?.textContent || '').trim().length >= minimumContentChars;
+  const selectedSlot = () => {
+    const currentViewport = viewport();
+    return slotDefinitions.find((slot) => slot.pilot && slot.viewport === currentViewport && isAllowedRoute(slot)
+      && document.querySelector('[data-ad-anchor="first-complete-section"][data-guide-complete="true"]')
+      && contentLengthReady()
+      && document.querySelector('ins.adsbygoogle[data-ad-slot-key="' + slot.key + '"][data-ad-viewport="' + currentViewport + '"]')) || null;
+  };
   let loaded = false;
   let initializedUnits = 0;
+  let selectedSlotKey = null;
 
   function loadAds() {
-    if (stage2Managed) return false;
-    if (loaded || !publicSurface || !enabled || !certified || !publisherValid) return false;
+    const slot = selectedSlot();
+    if (stage2Managed || loaded || !publicSurface || !enabled || !certified || !regionReady || !publisherValid || !slot) return false;
+    const unit = document.querySelector('ins.adsbygoogle[data-ad-slot-key="' + slot.key + '"]');
+    if (!unit || !/^\d{10}$/.test(unit.dataset.adSlot || '')) return false;
+    document.querySelectorAll('ins.adsbygoogle[data-ad-slot-key]').forEach((candidate) => {
+      if (candidate !== unit) candidate.closest('[data-ad-slot-key]')?.setAttribute('hidden', 'hidden');
+    });
+    selectedSlotKey = slot.key;
     loaded = true;
     const script = document.createElement('script');
     script.async = true;
@@ -25,17 +49,15 @@
     script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(publisher);
     document.head.appendChild(script);
     script.addEventListener('load', () => {
-      document.querySelectorAll('ins.adsbygoogle').forEach((unit) => {
-        if (unit.dataset.subscrapInitialized === '1') return;
-        unit.dataset.subscrapInitialized = '1';
-        try { (window.adsbygoogle = window.adsbygoogle || []).push({}); initializedUnits += 1; } catch (error) { unit.dataset.subscrapInitialized = 'error'; }
-      });
+      if (unit.dataset.subscrapInitialized === '1') return;
+      unit.dataset.subscrapInitialized = '1';
+      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); initializedUnits += 1; } catch (error) { unit.dataset.subscrapInitialized = 'error'; }
     }, { once: true });
     return true;
   }
 
   function signalCertifiedConsent(signal) {
-    const valid = signal && signal.granted === true && signal.source === 'certified-cmp';
+    const valid = signal && signal.granted === true && signal.source === 'certified-cmp' && regionReady && signal.regionReady !== false;
     if (!valid) {
       window.gtag('consent', 'update', deny);
       return false;
@@ -90,6 +112,5 @@
     setTimeout(() => { selectedGroup = target; updateGuideCatalog(); }, 0);
   }));
 
-  if (publicSurface && enabled && certified && publisherValid && !stage2Managed) loadAds();
-  window.SubScrapAds = Object.freeze({ signalCertifiedConsent, deny: () => signalCertifiedConsent(null), loadAds, status: () => Object.freeze({ publicSurface, enabled, certified, publisherValid, stage2Managed, loaded, initializedUnits }) });
+  window.SubScrapAds = Object.freeze({ signalCertifiedConsent, deny: () => signalCertifiedConsent(null), loadAds, status: () => Object.freeze({ publicSurface, enabled, certified, regionReady, publisherValid, stage2Managed, contentLengthReady: contentLengthReady(), loaded, initializedUnits, selectedSlotKey, selectedViewport: viewport(), pilotSlotKeys, definedSlotKeys: slotDefinitions.map((slot) => slot.key) }) });
 })();

@@ -2,7 +2,7 @@
   "schema": "subscrap-ad-stage1-public/v2",
   "version": "0.41.1",
   "origin": "https://hanksleekorea-boop.github.io/subscrap",
-  "generatedAt": "2026-09-11T12:37:23.624Z",
+  "generatedAt": "2026-09-12T11:46:25.108Z",
   "contentCount": 60,
   "languageCount": 2,
   "routeCount": 122,
@@ -10,6 +10,67 @@
   "adCodeInstalled": false,
   "adServingReady": false,
   "siteStatus": "not-configured",
+  "definedSlotKeys": [
+    "LM26-23-subscrap-public-guide-pc-inarticle-v1",
+    "LM26-23-subscrap-service-guide-pc-display-v1",
+    "LM26-23-subscrap-guide-end-pc-multiplex-v1",
+    "LM26-23-subscrap-public-guide-m-inarticle-v1"
+  ],
+  "pilotSlotKeys": [
+    "LM26-23-subscrap-public-guide-pc-inarticle-v1",
+    "LM26-23-subscrap-public-guide-m-inarticle-v1"
+  ],
+  "renderAllowedSlotKeys": [],
+  "slotDefinitions": [
+    {
+      "key": "LM26-23-subscrap-public-guide-pc-inarticle-v1",
+      "format": "in_article",
+      "viewport": "desktop",
+      "pilot": true,
+      "defaultEnabled": false,
+      "routePattern": "^/global/(?:ko/)?guides/cancellation-link-safety/$",
+      "anchor": "[data-ad-anchor=\"first-complete-section\"]",
+      "contentRequirement": "first_complete_public_section",
+      "slotIdConfigured": false,
+      "enabled": false
+    },
+    {
+      "key": "LM26-23-subscrap-service-guide-pc-display-v1",
+      "format": "responsive_display",
+      "viewport": "desktop",
+      "pilot": false,
+      "defaultEnabled": false,
+      "routePattern": "^/global/(?:ko/)?guides/cancellation-link-safety/$",
+      "anchor": "[data-ad-anchor=\"after-cancellation-facts\"]",
+      "contentRequirement": "complete_public_guide_and_cancellation_facts",
+      "slotIdConfigured": false,
+      "enabled": false
+    },
+    {
+      "key": "LM26-23-subscrap-guide-end-pc-multiplex-v1",
+      "format": "multiplex",
+      "viewport": "desktop",
+      "pilot": false,
+      "defaultEnabled": false,
+      "routePattern": "^/global/(?:ko/)?guides/cancellation-link-safety/$",
+      "anchor": "[data-ad-anchor=\"guide-end\"]",
+      "contentRequirement": "complete_public_guide_conclusion",
+      "slotIdConfigured": false,
+      "enabled": false
+    },
+    {
+      "key": "LM26-23-subscrap-public-guide-m-inarticle-v1",
+      "format": "in_article",
+      "viewport": "mobile",
+      "pilot": true,
+      "defaultEnabled": false,
+      "routePattern": "^/global/(?:ko/)?guides/cancellation-link-safety/$",
+      "anchor": "[data-ad-anchor=\"first-complete-section\"]",
+      "contentRequirement": "first_complete_public_section",
+      "slotIdConfigured": false,
+      "enabled": false
+    }
+  ],
   "adUnitTypes": [],
   "adUnitCount": 0,
   "privateAppAdFree": true,
@@ -17,6 +78,7 @@
   "userDiscoveryDataAllowedForAds": false,
   "certifiedCmpRequired": true,
   "certifiedCmpActive": false,
+  "regionReady": false,
   "registeredSiteMatched": false,
-  "customDomainRequired": false
+  "customDomainRequired": true
 }
