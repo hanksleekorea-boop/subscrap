@@ -1,0 +1,159 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "top10-lock",
+  "source_artifact_ids": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007",
+    "SRC-008",
+    "SRC-009",
+    "SRC-010",
+    "SRC-011",
+    "SRC-012",
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "rank": 1,
+      "name": "Rocket Money",
+      "url": "https://www.rocketmoney.com/feature/manage-subscriptions",
+      "similarity": 93,
+      "excellence": 90,
+      "why": "반복결제 탐지와 구독 관리·취소라는 핵심 과업이 가장 직접적으로 겹침",
+      "evidence": [
+        "SRC-001",
+        "SRC-002"
+      ],
+      "limits": "금융계정 연결과 일부 유료 취소 지원은 지역·계획별 차이 확인 필요"
+    },
+    {
+      "rank": 2,
+      "name": "Monarch Money",
+      "url": "https://www.monarchmoney.com/features/recurring",
+      "similarity": 88,
+      "excellence": 92,
+      "why": "반복비용 탐지, 달력, 예산·거래를 한 흐름으로 제공",
+      "evidence": [
+        "SRC-003",
+        "SRC-004"
+      ],
+      "limits": "공개 페이지와 도움말로 확인한 범위만 반영"
+    },
+    {
+      "rank": 3,
+      "name": "PocketGuard",
+      "url": "https://pocketguard.com/help/",
+      "similarity": 82,
+      "excellence": 82,
+      "why": "지출·예산·반복 청구를 함께 관리하는 개인재무 제품",
+      "evidence": [
+        "SRC-005"
+      ],
+      "limits": "세부 자동 탐지 성능은 미판정"
+    },
+    {
+      "rank": 4,
+      "name": "Emma",
+      "url": "https://help.emma-app.com/en-us/article/how-can-i-check-my-recurring-subscriptions-1442u2m/",
+      "similarity": 80,
+      "excellence": 80,
+      "why": "연결 계정의 반복 거래·구독을 피드에서 보여 줌",
+      "evidence": [
+        "SRC-006"
+      ],
+      "limits": "공식 도움말 확인 범위 외 기능은 미판정"
+    },
+    {
+      "rank": 5,
+      "name": "Snoop",
+      "url": "https://snoop.app/",
+      "similarity": 77,
+      "excellence": 80,
+      "why": "다중 계정 지출 추적과 청구 절감 메시지가 겹침",
+      "evidence": [
+        "SRC-007"
+      ],
+      "limits": "영국 중심 제공 범위와 지역성 확인 필요"
+    },
+    {
+      "rank": 6,
+      "name": "Trim",
+      "url": "https://www.trimapp.co/",
+      "similarity": 76,
+      "excellence": 78,
+      "why": "반복결제 탐지와 취소·협상으로 비용 절감을 전면에 둠",
+      "evidence": [
+        "SRC-012"
+      ],
+      "limits": "마케팅 주장과 실제 성과를 분리해야 함"
+    },
+    {
+      "rank": 7,
+      "name": "YNAB",
+      "url": "https://www.ynab.com/",
+      "similarity": 65,
+      "excellence": 91,
+      "why": "예산·계획·행동 변화의 세계적 기준",
+      "evidence": [
+        "SRC-008"
+      ],
+      "limits": "자동 구독 탐지 여부는 이번 조사에서 확인하지 않음"
+    },
+    {
+      "rank": 8,
+      "name": "Quicken Simplifi",
+      "url": "https://www.quicken.com/products/simplifi",
+      "similarity": 63,
+      "excellence": 86,
+      "why": "통합 개인재무·지출 가시화의 비교 기준",
+      "evidence": [
+        "SRC-009"
+      ],
+      "limits": "반복결제 세부 기능 미판정"
+    },
+    {
+      "rank": 9,
+      "name": "Copilot Money",
+      "url": "https://copilot.money/",
+      "similarity": 61,
+      "excellence": 84,
+      "why": "거래 분류와 개인재무 대시보드 경험의 비교 기준",
+      "evidence": [
+        "SRC-010"
+      ],
+      "limits": "구독 특화 기능 미판정"
+    },
+    {
+      "rank": 10,
+      "name": "Bobby",
+      "url": "https://bobbyapp.co/",
+      "similarity": 58,
+      "excellence": 74,
+      "why": "수동 구독 목록·갱신 관리라는 좁은 과업이 겹침",
+      "evidence": [
+        "SRC-011"
+      ],
+      "limits": "자동 자료 연결은 확인되지 않음"
+    }
+  ],
+  "counts": {
+    "locked": 10
+  },
+  "unknowns": [],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ],
+  "lock_reason": "유사도와 우수성 관문을 동시에 통과한 후보 10개; 분야별 교체 금지"
+}

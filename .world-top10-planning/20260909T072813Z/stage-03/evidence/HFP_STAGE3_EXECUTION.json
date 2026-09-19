@@ -1,0 +1,22 @@
+{
+  "schema": "subscrap-hfp-stage-evidence/v1",
+  "stage_id": "STAGE-3-CORE",
+  "source_plan": "docs/SUBSCRAP_HOUSEHOLD_FINANCE_PIVOT_DEVELOPMENT_PLAN_V2_FIVE_STAGE_20260907.md",
+  "status": "PUBLIC_CANDIDATE_LOCAL",
+  "passed": true,
+  "command": "npm.cmd run test:hfp-stage3",
+  "checks": [
+    "FINANCE_GOOGLE_EVIDENCE_PASSED pending=2 autoConfirmed=0 rawStored=0",
+    "FINANCE_SUBSCRIPTION_LINK_PASSED ambiguous_safe=true delete_cascade=0",
+    "FINANCE_OPPORTUNITIES_PASSED types=8 conservative=true fx_evidence=true",
+    "FINANCE_REALIZED_SAVINGS_PASSED screen_open_is_not_saving=true",
+    "FINANCE_CHANGE_DETECTOR_PASSED unknown_cause_review=true",
+    "FINANCE_FORECAST_PASSED horizons=30,90 pending_separate=true",
+    "FINANCE_SAVINGS_PERSONAS_PASSED personas=1000 faults=5",
+    "FINANCE_STAGE3_BROWSER_PASSED browsers=Chrome+Edge viewports=320,390,768,1440",
+    "HFP_STAGE3_GATE_PASSED status=PUBLIC_CANDIDATE insights=1"
+  ],
+  "external_evidence": false,
+  "user_financial_data_used": false,
+  "note": "로컬 코드·자동검사 완료이며 실제 Gmail/Play 운영 연결, 외부 공개, 실기기·사람 검수는 포함하지 않음"
+}

@@ -1,0 +1,60 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "benchmark-statistics",
+  "source_artifact_ids": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007",
+    "SRC-008",
+    "SRC-009",
+    "SRC-010",
+    "SRC-011",
+    "SRC-012",
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "metric": "subscrap_mean",
+      "value": 3.03125
+    },
+    {
+      "metric": "top10_mean",
+      "value": 3.46875
+    },
+    {
+      "metric": "mean_gap",
+      "value": 0.4375
+    },
+    {
+      "metric": "fields_with_gap_ge_2",
+      "value": 6
+    },
+    {
+      "metric": "peer_unknown_fields",
+      "value": 84
+    }
+  ],
+  "counts": {
+    "fields": 32
+  },
+  "unknowns": [
+    "시장 점유율",
+    "실사용 성공률"
+  ],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ],
+  "confidence": "LOW_TO_MEDIUM"
+}

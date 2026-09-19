@@ -1,0 +1,50 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "outcome-frontier-hypotheses",
+  "source_artifact_ids": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007",
+    "SRC-008",
+    "SRC-009",
+    "SRC-010",
+    "SRC-011",
+    "SRC-012",
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "id": "OF-001",
+      "hypothesis": "근거·범위·예상/실제 절감을 한 화면에 보이면 사용자의 잘못된 해지 행동이 감소한다",
+      "metric": "review correction rate; verified savings rate",
+      "test": "비식별 파일럿 A/B",
+      "status": "PLANNED"
+    },
+    {
+      "id": "OF-002",
+      "hypothesis": "로컬 우선 통로를 첫 행동으로 두면 로그인 없는 첫 가치 시간이 감소한다",
+      "metric": "time_to_first_review",
+      "test": "브라우저 파일 fixture test",
+      "status": "READY"
+    }
+  ],
+  "counts": {
+    "hypotheses": 2
+  },
+  "unknowns": [],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ]
+}

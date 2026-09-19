@@ -1,0 +1,422 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "benchmark-matrix",
+  "source_artifact_ids": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007",
+    "SRC-008",
+    "SRC-009",
+    "SRC-010",
+    "SRC-011",
+    "SRC-012",
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "field_id": "FIELD-001",
+      "dimension": "발견",
+      "subscrap": {
+        "score": 2,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 2,
+      "unknown_peer_count": 1
+    },
+    {
+      "field_id": "FIELD-002",
+      "dimension": "자료입력",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 3,
+      "gap": 0,
+      "unknown_peer_count": 1
+    },
+    {
+      "field_id": "FIELD-003",
+      "dimension": "반복탐지",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 1,
+      "unknown_peer_count": 1
+    },
+    {
+      "field_id": "FIELD-004",
+      "dimension": "다중계정",
+      "subscrap": {
+        "score": 2,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 2,
+      "unknown_peer_count": 1
+    },
+    {
+      "field_id": "FIELD-005",
+      "dimension": "이메일·파일",
+      "subscrap": {
+        "score": 4,
+        "evidence": "SRC-013",
+        "status": "SUPPORTED"
+      },
+      "top10_mean": 3,
+      "gap": -1,
+      "unknown_peer_count": 1
+    },
+    {
+      "field_id": "FIELD-006",
+      "dimension": "모바일",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 1,
+      "unknown_peer_count": 1
+    },
+    {
+      "field_id": "FIELD-007",
+      "dimension": "PC웹",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 1,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-008",
+      "dimension": "달력",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 1,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-009",
+      "dimension": "예산",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 1,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-010",
+      "dimension": "절감기회",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 1,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-011",
+      "dimension": "해지안내",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 3,
+      "gap": 0,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-012",
+      "dimension": "알림",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 1,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-013",
+      "dimension": "설명가능성",
+      "subscrap": {
+        "score": 4,
+        "evidence": "SRC-013",
+        "status": "SUPPORTED"
+      },
+      "top10_mean": 4,
+      "gap": 0,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-014",
+      "dimension": "개인정보",
+      "subscrap": {
+        "score": 4,
+        "evidence": "SRC-013/SRC-015",
+        "status": "SUPPORTED"
+      },
+      "top10_mean": 3,
+      "gap": -1,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-015",
+      "dimension": "보안",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 3,
+      "gap": 0,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-016",
+      "dimension": "내보내기·삭제",
+      "subscrap": {
+        "score": 4,
+        "evidence": "SRC-013",
+        "status": "SUPPORTED"
+      },
+      "top10_mean": 3,
+      "gap": -1,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-017",
+      "dimension": "오프라인",
+      "subscrap": {
+        "score": 4,
+        "evidence": "SRC-013",
+        "status": "SUPPORTED"
+      },
+      "top10_mean": 2,
+      "gap": -2,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-018",
+      "dimension": "접근성",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 3,
+      "gap": 0,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-019",
+      "dimension": "다국어",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 3,
+      "gap": 0,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-020",
+      "dimension": "가구",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 3,
+      "gap": 0,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-021",
+      "dimension": "온보딩",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 1,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-022",
+      "dimension": "빈·오류상태",
+      "subscrap": {
+        "score": 4,
+        "evidence": "SRC-013",
+        "status": "SUPPORTED"
+      },
+      "top10_mean": 3,
+      "gap": -1,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-023",
+      "dimension": "동기화",
+      "subscrap": {
+        "score": 2,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 2,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-024",
+      "dimension": "외부연결",
+      "subscrap": {
+        "score": 2,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 2,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-025",
+      "dimension": "데이터소유권",
+      "subscrap": {
+        "score": 4,
+        "evidence": "SRC-013",
+        "status": "SUPPORTED"
+      },
+      "top10_mean": 3,
+      "gap": -1,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-026",
+      "dimension": "지원",
+      "subscrap": {
+        "score": 2,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 2,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-027",
+      "dimension": "광고·신뢰",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 3,
+      "gap": 0,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-028",
+      "dimension": "성능",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 3,
+      "gap": 0,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-029",
+      "dimension": "안정성",
+      "subscrap": {
+        "score": 3,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 1,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-030",
+      "dimension": "관측성",
+      "subscrap": {
+        "score": 2,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 3,
+      "gap": 1,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-031",
+      "dimension": "무료범위",
+      "subscrap": {
+        "score": 4,
+        "evidence": "SRC-013",
+        "status": "SUPPORTED"
+      },
+      "top10_mean": 3,
+      "gap": -1,
+      "unknown_peer_count": 3
+    },
+    {
+      "field_id": "FIELD-032",
+      "dimension": "운영",
+      "subscrap": {
+        "score": 2,
+        "evidence": "SRC-013",
+        "status": "PARTIAL"
+      },
+      "top10_mean": 4,
+      "gap": 2,
+      "unknown_peer_count": 3
+    }
+  ],
+  "counts": {
+    "fields": 32,
+    "indicators": 160
+  },
+  "unknowns": [],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ],
+  "score_note": "보수적 내부 점수; 공식 자료가 없는 기능은 peer score를 2 이하로 제한"
+}

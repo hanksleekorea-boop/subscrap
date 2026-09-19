@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-08-20T04:17:39Z",
+  "evidenceBoundary": "파일·공개 URL·자동 검사·공식 비교 근거만 사용. 실제 Gmail 원문·결제 정보·기기 화면은 사용하지 않음.",
+  "service": {
+    "name": "Subscrap",
+    "description": "사용자가 직접 적은 구독과 사용자가 허용한 Gmail·Google Play 자료에서 찾은 후보를 한곳에 모아 지출 이해와 절약 판단을 돕는 개인 구독 관리 서비스.",
+    "evidence": ["docs/PRODUCT_PLAN.md §1", "https://hanksleekorea-boop.github.io/subscrap/"]
+  },
+  "users": [
+    {"segment": "여러 구독을 쓰는 개인", "need": "월별 지출·다음 결제일을 이해"},
+    {"segment": "여러 Google 계정을 쓰는 개인", "need": "계정별 후보를 섞이지 않게 검토"},
+    {"segment": "해지를 고려하는 개인", "need": "공식 안내와 재청구 확인으로 실제 중단 판단"}
+  ],
+  "problem": "정기결제가 여러 서비스·통화·Google 계정에 흩어지고, 자동 탐지 결과의 근거와 범위를 이해하기 어렵다.",
+  "coreFlow": ["직접 등록 또는 Google 계정 연결", "Gmail·Google Play 후보 탐지", "출처·이유·금액 확인", "확정·무시·직접 등록", "합계·결제일·절약 기회 확인", "공식 해지 안내와 다음 청구 확인"],
+  "platforms": {
+    "mobileWeb": "구현·공개됨(PWA)",
+    "pwa": "구현됨, 실제 설치형 검증 미실시",
+    "desktopWeb": "구현·공개됨",
+    "nativeMobile": "미확인"
+  },
+  "features": [
+    {"name": "직접 등록·수정·검색·필터·정렬", "evidence": "app/src/p3_views.js, tests/e2e.js"},
+    {"name": "합계·결제일·캘린더·절약 기회", "evidence": "docs/PRODUCT_PLAN.md §4, tests/e2e.js"},
+    {"name": "Gmail·Google Play 분리 동의와 후보 탐지", "evidence": "docs/GOOGLE_DISCOVERY.md, server/google.js, server/google.test.js"},
+    {"name": "후보 근거·직접 등록·무시", "evidence": "app/src/p3_views.js, server/server.js, 336/336 검사"},
+    {"name": "해지 공식 안내·백업·내보내기·다통화", "evidence": "docs/PRODUCT_PLAN.md §4, parser/, tests/"}
+  ],
+  "commercial": {"model": "무료 기본 기능과 유료 후보가 있으나 실제 결제 제공자·상품·환불 시험은 미확인", "stage": "공개 PWA v0.21.2, 로컬·운영 서버 후보 v0.21.3", "markets": "한국어·영어 UI, 국가별 가격·법적 출시 범위는 미확인"},
+  "technology": {"stack": "정적 HTML/JavaScript PWA, Node.js 서버, Cloud Run 운영 API, GitHub Pages 공개", "testing": "자동 검사 336/336, 접근성 8화면 심각 위반 0, 가상 사용자 1,000명 불변식 위반 0", "security": "분리 OAuth, 암호화 토큰 보관 경로, 원문 미보관, 사용자 격리, 로그인 없는 후보 무시 401"},
+  "policySurface": {"privacy": "데이터·개인정보 안내와 범위 고지 구현 근거 있음", "refundAndSupport": "공개 운영 정책·실제 지원 채널·환불 절차는 미확인"}
+}

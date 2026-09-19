@@ -1,0 +1,23 @@
+{
+  "schema": "subscrap-hfp-stage-evidence/v1",
+  "stage_id": "STAGE-5-RELEASE",
+  "source_plan": "docs/SUBSCRAP_HOUSEHOLD_FINANCE_PIVOT_DEVELOPMENT_PLAN_V2_FIVE_STAGE_20260907.md",
+  "status": "LOCAL_CONTRACT_COMPLETE_EXTERNAL_PENDING",
+  "passed": true,
+  "command": "npm.cmd run test:hfp-stage5",
+  "checks": [
+    "FINANCE_PROVIDER_REGISTRY_PASSED providers=1 approvedReadOnly=1",
+    "FINANCE_PILOT_CONTRACT_PASSED=7",
+    "FINANCE_PROVIDER_SYNC_PASSED encrypted_cursor=true hmac_dedupe=true pending_posted=true raw_ref=0",
+    "FINANCE_REPOSITORY_CONTRACT_PASSED atomic=true isolation=true version_conflict=true backup=true delete_audit=true",
+    "FINANCE_STATEMENT_PACKS_PASSED countries=50 humanReviewRequired=50 generatedOnly=true",
+    "FINANCE_OPERATIONS_OBSERVABILITY_PASSED aggregate_only=true sensitive_fields=0",
+    "FINANCE_STAGE5_RELEASE_GATE_PASSED fail_closed=true external_evidence=false operational_days=0"
+  ],
+  "external_evidence": false,
+  "pending_cards": ["S5-07", "S5-10", "S5-11", "S5-12"],
+  "user_financial_data_used": false,
+  "phone_used": false,
+  "b_drive_access": false,
+  "note": "로컬 계약·안전장치 완료. 법률/외부 제공자/실기기/30일 운영 증거가 없으므로 전체 RELEASE로 승격하지 않음"
+}

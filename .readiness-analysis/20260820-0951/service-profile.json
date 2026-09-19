@@ -1,0 +1,28 @@
+{
+  "analysisId": "subscrap-20260820-0951",
+  "generatedAt": "2026-08-20T09:51:00+07:00",
+  "scope": "analysis-only; product code, dependencies, configuration, deployment, Git and phones unchanged",
+  "service": {
+    "name": "Subscrap",
+    "publicUrl": "https://hanksleekorea-boop.github.io/subscrap/",
+    "primaryDomain": {
+      "name": "개인 구독 관리·발견",
+      "score": 100,
+      "breakdown": { "problem": 40, "userBuyer": 20, "flow": 20, "revenue": 10, "mobilePc": 10 }
+    },
+    "auxiliaryDomains": [
+      { "name": "개인 지출·절약 의사결정", "score": 57, "breakdown": { "problem": 24, "userBuyer": 12, "flow": 10, "revenue": 6, "mobilePc": 5 } },
+      { "name": "Google 계정 자료 기반 유료서비스 후보 탐지", "score": 73, "breakdown": { "problem": 30, "userBuyer": 15, "flow": 16, "revenue": 4, "mobilePc": 8 } }
+    ],
+    "targetUsers": ["여러 정기결제를 한곳에서 보고 싶은 개인", "Google 계정의 Gmail 영수증·Google Play 자료에서 후보를 찾고 싶은 개인"],
+    "coreFlow": ["직접 등록 또는 Google 계정 연결", "허용된 Gmail 영수증과 Play 자료에서 후보 추출", "사용자 검토", "합계·다음 결제일·절약 기회·해지 안내 확인"],
+    "discoveryLimits": ["Google 로그인만으로 카드·Apple·다른 메일 계정의 모든 결제를 찾을 수 없음", "Gmail은 영수증 후보 탐지이며 원문을 보관하지 않도록 설계됨", "Google Play 권한은 Gmail 권한과 별도 동의·별도 저장", "실제 해지·환불·청구 중단은 각 서비스와 결제수단에서 재확인 필요"]
+  },
+  "evidence": [
+    { "source": "app/src/p3_views.js", "claim": "Gmail 영수증과 Google Play 구독·구매를 함께 후보로 찾되 모든 외부 결제를 볼 수 없음을 화면에 고지", "grade": "A", "verification": "source inspected" },
+    { "source": "server/google.test.js", "claim": "Gmail/Play 분리 동의, 암호화 토큰, 원문 미저장, 재시도·중복·ZIP 방어를 자동 검사", "grade": "A", "verification": "source inspected" },
+    { "source": ".project-continuity/STATE.md", "claim": "공개 v0.21.2, 전체 자동 검사 334/334, 실제 Gmail 탐색은 집계만 기록", "grade": "B", "verification": "continuity record" },
+    { "source": "https://hanksleekorea-boop.github.io/subscrap/", "claim": "현재 공개 앱 주소", "grade": "B", "verification": "recorded public verification" }
+  ],
+  "catalogStatus": "500개 도메인 카탈로그 미발견 — 서비스 일반 비교만 수행"
+}

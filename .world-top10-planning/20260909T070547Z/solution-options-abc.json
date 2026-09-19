@@ -1,0 +1,57 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "solution-options-abc",
+  "source_artifact_ids": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007",
+    "SRC-008",
+    "SRC-009",
+    "SRC-010",
+    "SRC-011",
+    "SRC-012",
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "option": "A",
+      "name": "Cloudflare 우선 전환",
+      "benefit": "호스팅·OAuth·D1 동일 경계",
+      "risk": "DNS/권한 외부 차단",
+      "decision": "RECOMMENDED_AFTER_ACCESS_CONFIRMATION"
+    },
+    {
+      "option": "B",
+      "name": "GitHub Pages 유지 + Worker API",
+      "benefit": "단기 공개 연속성",
+      "risk": "Cloudflare-only 미달",
+      "decision": "SAFE_INTERIM"
+    },
+    {
+      "option": "C",
+      "name": "다중 공급자 추상화",
+      "benefit": "지역별 연결 확대",
+      "risk": "복잡성·법률·비용",
+      "decision": "DEFER"
+    }
+  ],
+  "counts": {
+    "options": 3
+  },
+  "unknowns": [],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "research-saturation",
+  "source_artifact_ids": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007",
+    "SRC-008",
+    "SRC-009",
+    "SRC-010",
+    "SRC-011",
+    "SRC-012",
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "axis": "official-candidate-discovery",
+      "target": 800,
+      "actual": 10,
+      "ratio": 0.0125,
+      "status": "PARTIAL",
+      "reason": "시간·범위 내 확인 가능한 고유 후보만 등록"
+    },
+    {
+      "axis": "search-path-repetitions",
+      "target": 20,
+      "actual": 4,
+      "ratio": 0.2,
+      "status": "PARTIAL",
+      "reason": "동일 검색 반복을 피하고 공식 출처 확보에 집중"
+    },
+    {
+      "axis": "source-coverage",
+      "target": 10,
+      "actual": 10,
+      "ratio": 1,
+      "status": "PASS",
+      "reason": "고정군 모두 최소 1개 공식 URL"
+    }
+  ],
+  "counts": {
+    "axes": 3
+  },
+  "unknowns": [
+    "시장 규모 순위",
+    "독립 사용자 연구"
+  ],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ],
+  "x10_status": "X10_PARTIAL_SCOPE"
+}

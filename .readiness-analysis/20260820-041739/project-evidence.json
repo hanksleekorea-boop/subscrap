@@ -1,0 +1,52 @@
+{
+  "schema": "crh-project-evidence/v1",
+  "assessedAt": "2026-08-20",
+  "scope": "all",
+  "project": {
+    "name": "Subscrap",
+    "repository": "hanksleekorea-boop/subscrap (public results repository)",
+    "description": "개인 구독 관리 PWA. 직접 등록과 사용자가 허용한 Gmail·Google Play 후보를 근거와 함께 검토하도록 돕는다.",
+    "urls": {"web": "https://hanksleekorea-boop.github.io/subscrap/", "mobile": "https://hanksleekorea-boop.github.io/subscrap/"},
+    "features": [
+      {"name": "구독 직접 등록·검색·결제일·달력", "platform": "공통", "status": "자동 검증", "evidence": "앱 검사 154건 포함"},
+      {"name": "Google 후보 탐지와 사용자 격리", "platform": "공통", "status": "자동 검증", "evidence": "Google 검사 26건"},
+      {"name": "공개 PWA", "platform": "모바일·PC 웹", "status": "공개 확인", "evidence": "Chrome·Edge 12/12, A56 연결만 확인"}
+    ]
+  },
+  "direction": {"model": "b2c", "market": "global", "pay": "free", "pf": "pwa", "stage": "beta", "sens": "high", "team": "s", "edge": "trust", "when": "m3"},
+  "evidence": {
+    "mobile": {
+      "f01": {"score": 2, "tier": "auto", "observedAt": "2026-08-20", "note": "핵심 화면 자동 검사와 가상 사용자 검사는 있으나 실제 가입·결제·재방문 전 구간은 미확인"},
+      "f05": {"score": 3, "tier": "auto", "observedAt": "2026-08-20", "note": "검색·필터·정렬·점진 표시와 가상 사용자 1,000명 시험"},
+      "f06": {"score": 2, "tier": "auto", "observedAt": "2026-08-20", "note": "오류·빈 상태·재연결 UI 검사 근거"},
+      "f07": {"score": 3, "tier": "auto", "observedAt": "2026-08-20", "note": "한국어·영어와 다통화 처리 검사"},
+      "f08": {"score": 2, "tier": "auto", "observedAt": "2026-08-20", "note": "PWA·오프라인 검사 5건"},
+      "q01": {"score": 2, "tier": "auto", "observedAt": "2026-08-20", "note": "로컬 자동 검사 336/336, CI 배포 차단 미확인"},
+      "q08": {"score": 1, "tier": "self", "observedAt": "2026-08-20", "note": "A56 연결·해상도 확인, 실제 화면 조작은 환경 정책 차단"},
+      "q09": "unknown",
+      "p04": "unknown",
+      "p06": "unknown"
+    },
+    "web": {
+      "f01": {"score": 2, "tier": "auto", "observedAt": "2026-08-20", "note": "E2E 154건, 실제 결제·재방문 전체 흐름 미확인"},
+      "f05": {"score": 3, "tier": "auto", "observedAt": "2026-08-20", "note": "검색·필터·정렬·점진 표시"},
+      "f06": {"score": 2, "tier": "auto", "observedAt": "2026-08-20", "note": "오류·빈 상태 검사"},
+      "f07": {"score": 3, "tier": "auto", "observedAt": "2026-08-20", "note": "한국어·영어·다통화"},
+      "f10": {"score": 1, "tier": "self", "observedAt": "2026-08-20", "note": "Chrome·Edge 공개 검사만 있음; Firefox·Safari 미확인"},
+      "f18": {"score": 2, "tier": "auto", "observedAt": "2026-08-20", "note": "설정·개인정보 안내·언어·표시 설정 근거, 지원·약관 표면 완결 미확인"},
+      "q01": {"score": 2, "tier": "auto", "observedAt": "2026-08-20", "note": "336/336 로컬 자동 검사, CI 실행·차단 미확인"},
+      "q10": {"score": 1, "tier": "self", "observedAt": "2026-08-20", "note": "Playwright Chrome·Edge 공개 검사, CI 연동 미확인"},
+      "q11": {"score": 2, "tier": "auto", "observedAt": "2026-08-20", "note": "Chrome·Edge 공개 검사에서 런타임 오류 0"},
+      "p01": {"score": 1, "tier": "self", "observedAt": "2026-08-20", "note": "일부 화면 성능 시험은 있으나 SLO·상시 대시보드 미확인"},
+      "p07": "unknown"
+    }
+  },
+  "benchmark": {
+    "ours": {"trust": 3, "reach": 1, "price": 1, "local": 3},
+    "comparators": [
+      {"name": "Rocket Money", "scores": {"feat": 4, "ux": 4, "perf": 3, "trust": 4, "reach": 4, "price": 3, "monet": 4, "local": 2}},
+      {"name": "Bobby", "scores": {"feat": 3, "ux": 4, "perf": 3, "trust": 3, "reach": 3, "price": 3, "monet": 3, "local": 2}},
+      {"name": "Subby", "scores": {"feat": 3, "ux": 3, "perf": 3, "trust": 3, "reach": 3, "price": 3, "monet": 3, "local": 2}}
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schema": "subscrap-hfp-stage-evidence/v1",
+  "stage_id": "STAGE-4-QUALITY",
+  "source_plan": "docs/SUBSCRAP_HOUSEHOLD_FINANCE_PIVOT_DEVELOPMENT_PLAN_V2_FIVE_STAGE_20260907.md",
+  "status": "PUBLIC_CANDIDATE_LOCAL",
+  "passed": true,
+  "command": "npm.cmd run test:hfp-stage4",
+  "checks": [
+    "FINANCE_HOUSEHOLDS_PASSED cross_member_exposure=0 invite_reuse=0",
+    "FINANCE_SPLIT_PASSED exact_total=true payer_rounding=true",
+    "FINANCE_SYNC_PASSED field_merge=true conflict_review=true integrated=true tombstone_contract=preserved",
+    "FINANCE_LOCALE_PASSED countries=50 languages=8 digits=0,2,3 dst=true",
+    "FINANCE_OUTLOOK_EVIDENCE_PASSED mock=true externalConnected=false",
+    "FINANCE_ANDROID_NOTIFICATION_PASSED local_only=true rawStored=0 deviceUsed=0",
+    "FINANCE_STAGE4_ACCESSIBILITY_PASSED keyboard=true rows=1000 under3s=true chunk100k=true ocrCancel=true",
+    "FINANCE_HOUSEHOLD_DELETION_PASSED access_revoked=true private_preserved=true",
+    "HFP_STAGE4_GATE_PASSED household=1 countries=50 languages=8 outlook=MOCK_ONLY"
+  ],
+  "external_evidence": false,
+  "user_financial_data_used": false,
+  "phone_used": false,
+  "note": "로컬 코드·자동검사 완료이며 실제 Outlook/Android 연결, 외부 공개, 실기기·사람 검수는 포함하지 않음"
+}

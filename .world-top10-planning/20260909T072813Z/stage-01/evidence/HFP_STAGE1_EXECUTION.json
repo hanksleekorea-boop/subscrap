@@ -1,0 +1,21 @@
+{
+  "schema": "subscrap-hfp-stage-evidence/v1",
+  "stage_id": "STAGE-1-BASELINE",
+  "source_plan": "docs/SUBSCRAP_HOUSEHOLD_FINANCE_PIVOT_DEVELOPMENT_PLAN_V2_FIVE_STAGE_20260907.md",
+  "status": "INTEGRATED_LOCAL",
+  "passed": true,
+  "command": "npm.cmd run test:hfp-stage1",
+  "checks": [
+    "HFP_BASELINE_TESTS_PASSED",
+    "FINANCE_CONTRACT_TESTS_PASSED",
+    "FINANCE_CLIENT_MIGRATION_PASSED",
+    "FINANCE_LEDGER_TESTS_PASSED",
+    "FINANCE_PRIVACY_CONTRACT_PASSED",
+    "FINANCE_FILE_BOUNDARY_PASSED",
+    "HFP_BUILD_CONTRACT_PASSED hidden_stage1=true",
+    "FINANCE_PERSONAS_GENERATOR_PASSED count=1000 countries=50 languages=8",
+    "HFP_STAGE1_GATE_PASSED data_loss=0 raw_user_data=0 feature_exposure=0"
+  ],
+  "external_evidence": false,
+  "note": "로컬 코드·자동검사 완료이며 Cloudflare/실기기/사람 검증은 포함하지 않음"
+}

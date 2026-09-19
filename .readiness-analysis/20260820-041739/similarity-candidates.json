@@ -1,0 +1,19 @@
+{
+  "catalogVersion": "embedded-500-v1",
+  "classification": {
+    "primary": {"catalogNumber": 15, "domain": "개인 자산관리", "fit": 90, "confidence": "high", "reason": "개인의 반복 지출을 모아 이해·절약 행동을 돕는다."},
+    "secondary": [
+      {"catalogNumber": 16, "domain": "예산 관리", "fit": 78, "confidence": "high", "reason": "월 합계·결제일·절약 기회를 제공한다."},
+      {"catalogNumber": 10, "domain": "구독 상거래", "fit": 71, "confidence": "medium", "reason": "구독 자체 판매가 아니라 외부 구독을 추적·관리한다."},
+      {"catalogNumber": 76, "domain": "일정·캘린더", "fit": 55, "confidence": "high", "reason": "다음 결제일과 달력은 보조 핵심 흐름이다."}
+    ]
+  },
+  "comparators": [
+    {"name": "Rocket Money", "type": "direct", "similarity": {"problem": 5, "user": 4, "flow": 4, "revenue": 3, "platform": 4}, "why": "반복 지출을 자동 탐지·목록화하고 해지 도움을 제공하는 개인 금융 서비스.", "officialEvidence": ["https://www.rocketmoney.com/feature/manage-subscriptions", "https://help.rocketmoney.com/en/articles/2185531-managing-your-bills-and-subscriptions"], "verified": true},
+    {"name": "Bobby", "type": "direct", "similarity": {"problem": 5, "user": 5, "flow": 4, "revenue": 3, "platform": 3}, "why": "직접 구독 등록, 고정비 통찰, 결제일 알림을 제공하는 구독 추적 앱.", "officialEvidence": ["https://www.bobbyapp.co/", "https://apps.apple.com/us/app/bobby-track-subscriptions/id1059152023"], "verified": true},
+    {"name": "Subby", "type": "direct", "similarity": {"problem": 5, "user": 5, "flow": 4, "revenue": 3, "platform": 3}, "why": "구독·청구 추적과 해지 전 알림을 제공하며 은행 계정 자격증명을 요구하지 않는다고 공개한다.", "officialEvidence": ["https://play.google.com/store/apps/details?hl=en&id=com.slapp.subby"], "verified": true},
+    {"name": "Google Play 구독 관리", "type": "leading", "similarity": {"problem": 3, "user": 4, "flow": 3, "revenue": 0, "platform": 4}, "why": "계정별 구독 확인·취소·일시중지의 공식 경로 사례.", "officialEvidence": ["https://support.google.com/googleplay/answer/7018481/cancel-pause-or-change-a-subscription-on-google-play-android?co=GENIE.Platform%3DDesktop&hl=en-GB"], "verified": true},
+    {"name": "Apple 구독 취소 안내", "type": "leading", "similarity": {"problem": 3, "user": 4, "flow": 3, "revenue": 0, "platform": 4}, "why": "계정·청구 주체를 구분하고 취소 불가/이미 취소 상태를 설명하는 공식 사례.", "officialEvidence": ["https://support.apple.com/en-us/118428"], "verified": true}
+  ],
+  "marketPosition": "직접 비교군 3개가 공식 자료로 확인됐으나, 시장 규모·현재 가격·평점·성과는 본 분석에서 비교하지 않았다."
+}

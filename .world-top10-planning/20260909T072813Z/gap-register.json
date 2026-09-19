@@ -1,0 +1,198 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "gap-register",
+  "source_artifact_ids": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007",
+    "SRC-008",
+    "SRC-009",
+    "SRC-010",
+    "SRC-011",
+    "SRC-012",
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "gap_id": "GAP-001",
+      "title": "실제 Cloudflare 공개 배포·DNS 연결 미확정",
+      "priority": "P0",
+      "evidence": "subscrap.scanners.cc가 NXDOMAIN이고 Pages 프로젝트 목록이 비어 있음",
+      "next_action": "외부 권한 확인과 DNS/Pages 연결",
+      "status": "BLOCKED_EXTERNAL"
+    },
+    {
+      "gap_id": "GAP-002",
+      "title": "Google OAuth 운영 클라이언트·redirect URI 미등록",
+      "priority": "P0",
+      "evidence": "로컬 계약과 정적 번들은 PASS지만 운영 등록 증거 없음",
+      "next_action": "Google Cloud 프로젝트와 OAuth 콘솔에서 등록",
+      "status": "BLOCKED_EXTERNAL"
+    },
+    {
+      "gap_id": "GAP-003",
+      "title": "D1 운영 데이터베이스·키 등록·마이그레이션 미실행",
+      "priority": "P0",
+      "evidence": "schema는 로컬 존재, production migration/secrets false",
+      "next_action": "Cloudflare 계정에서 D1·키·백업·롤백 실행",
+      "status": "BLOCKED_EXTERNAL"
+    },
+    {
+      "gap_id": "GAP-004",
+      "title": "현재 동적 API의 Cloud Run 의존",
+      "priority": "P0",
+      "evidence": "runtime ledger cloudRunReferences=19",
+      "next_action": "Workers 호환 API로 단계적 이관",
+      "status": "BLOCKED_EXTERNAL"
+    },
+    {
+      "gap_id": "GAP-005",
+      "title": "소유권·공개판 지문 외부 증거 미확정",
+      "priority": "P0",
+      "evidence": "CURRENT_READINESS_REPORT OPS-001/002",
+      "next_action": "실제 계정·URL·지문 확인",
+      "status": "BLOCKED_EXTERNAL"
+    },
+    {
+      "gap_id": "GAP-006",
+      "title": "실제 Android 한 대 증거 없음",
+      "priority": "P1",
+      "evidence": "HUMAN-005; ADB 연결 상실 기록",
+      "next_action": "유휴 단말 한 대로 스모크 시험",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-007",
+      "title": "사람의 해지·법률·번역 검토 없음",
+      "priority": "P1",
+      "evidence": "HUMAN-001/002",
+      "next_action": "지역별 검토자 지정",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-008",
+      "title": "실제 운영 지원 왕복 증거 없음",
+      "priority": "P1",
+      "evidence": "OPS-003",
+      "next_action": "지원 메일/티켓 실수신 시험",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-009",
+      "title": "광고 승인·동의 상태 외부 확인 없음",
+      "priority": "P1",
+      "evidence": "OPS-004",
+      "next_action": "AdSense 승인·CMP·정책 검토",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-010",
+      "title": "자동 계정 연결 범위가 경쟁 선두보다 제한",
+      "priority": "P1",
+      "evidence": "Google/Apple/금융 provider는 외부 계약 필요",
+      "next_action": "읽기 전용 연결과 파일 경로 우선",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-011",
+      "title": "반복 탐지 정확도 실사용 검증 부족",
+      "priority": "P1",
+      "evidence": "합성 테스트는 실제 사용자 대체 불가",
+      "next_action": "비식별 동의 데이터 평가셋",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-012",
+      "title": "절감액은 추정과 실제 확인을 더 명확히 분리해야 함",
+      "priority": "P1",
+      "evidence": "제품계획은 상태 분리, 운영 증거 미실시",
+      "next_action": "근거·계산·행동·확인 UI",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-013",
+      "title": "오프라인·동기화 충돌의 공개 운영 검증 부족",
+      "priority": "P2",
+      "evidence": "로컬 계약은 있으나 외부 운영 미확정",
+      "next_action": "충돌 fixture와 복구 리허설",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-014",
+      "title": "지원·콘텐츠 사람 검수 미완료",
+      "priority": "P2",
+      "evidence": "콘텐츠 자동 기반 17/27",
+      "next_action": "핵심 15개 가이드 편집·검수",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-015",
+      "title": "접근성 실제 보조기술 시험 미실시",
+      "priority": "P2",
+      "evidence": "자동 검사와 수동 계획만 존재",
+      "next_action": "스크린리더·키보드 실제 시험",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-016",
+      "title": "지역·통화·가격 최신성 검증 부담",
+      "priority": "P2",
+      "evidence": "국가별 정책·가격은 변동",
+      "next_action": "확인일·유효기간·출처 필수",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-017",
+      "title": "광고가 금융자료 화면과 분리되는지 공개 검증 필요",
+      "priority": "P2",
+      "evidence": "정책 문서와 로컬 구현만 확인",
+      "next_action": "광고 경계·동의 거부 시험",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-018",
+      "title": "관측성·경보의 실제 운영 연결 미확정",
+      "priority": "P2",
+      "evidence": "운영 코드와 자동검사 존재, 외부 경보 미확인",
+      "next_action": "로그·지표·알람 소유자 연결",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-019",
+      "title": "후보 서비스 800개·지표 1600개 X10 기준 미달",
+      "priority": "P2",
+      "evidence": "이번 실행은 10개 후보·160개 지표",
+      "next_action": "실제 적용 가능 범위 확장 조사",
+      "status": "READY_FOR_PLAN"
+    },
+    {
+      "gap_id": "GAP-020",
+      "title": "실제 시장·사용자 성과 증거 없음",
+      "priority": "P2",
+      "evidence": "가상 1000 사례는 경계시험 용도",
+      "next_action": "동의 사용자 파일럿·리텐션 측정",
+      "status": "READY_FOR_PLAN"
+    }
+  ],
+  "counts": {
+    "gaps": 20
+  },
+  "unknowns": [
+    "실제 사용자 영향 크기"
+  ],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ]
+}

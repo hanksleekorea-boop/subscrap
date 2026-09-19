@@ -1,0 +1,86 @@
+{
+  "schema_version": "world-top10-v3.3",
+  "run_id": "WT10-V33-20260909T072813Z",
+  "generated_at_utc": "2026-09-09T07:28:13Z",
+  "project_fingerprint": "cf5551753b2a0e4ce8f7e49cddcf17592e600d257688a47e1c744c9c57def56e",
+  "artifact_type": "run-manifest",
+  "source_artifact_ids": [
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [],
+  "counts": {
+    "required_v32_artifacts": 51,
+    "additional_v33_artifacts": 10,
+    "stage_directories": 5,
+    "recursive_files": 96
+  },
+  "unknowns": [
+    "Cloudflare DNS/Pages target",
+    "Google OAuth production project/client",
+    "D1/key production migration",
+    "real Android",
+    "human/legal/accessibility/ads evidence"
+  ],
+  "warnings": [
+    "v3.3 X10 목표(800 후보·1,600 지표·10,000 경계사례)는 실제 적용 가능한 범위만 산출하고 미달을 명시했다.",
+    "Cloudflare DNS/Pages·Google OAuth 운영 등록·D1/키·실제 기기·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "이 실행은 계획·분석 전용이며 제품 코드·운영 데이터·Git·공개판을 변경하지 않았다."
+  ],
+  "selected_mode": "END_TO_END",
+  "fixed_stage_ids": [
+    "STAGE-1-BASELINE",
+    "STAGE-2-FOUNDATION",
+    "STAGE-3-CORE",
+    "STAGE-4-QUALITY",
+    "STAGE-5-RELEASE"
+  ],
+  "gates": {
+    "G0": "PASS",
+    "G1": "PASS",
+    "G2": "PARTIAL",
+    "G3": "PARTIAL",
+    "G4": "PARTIAL",
+    "G5": "PARTIAL",
+    "G6": "PARTIAL",
+    "G7": "PARTIAL",
+    "G8": "PARTIAL"
+  },
+  "overall_status": "PARTIAL_EVIDENCE",
+  "stage_execution": {
+    "STAGE-1-BASELINE": {
+      "status": "INTEGRATED_LOCAL",
+      "evidence": "stage-01/evidence/HFP_STAGE1_EXECUTION.json",
+      "scope": "로컬 코드·자동검사"
+    },
+    "STAGE-2-FOUNDATION": {
+      "status": "PUBLIC_CANDIDATE_LOCAL",
+      "evidence": "stage-02/evidence/HFP_STAGE2_EXECUTION.json",
+      "scope": "로컬 코드·자동검사·390/1440 공개 후보"
+    },
+    "STAGE-3-CORE": {
+      "status": "PUBLIC_CANDIDATE_LOCAL",
+      "evidence": "stage-03/evidence/HFP_STAGE3_EXECUTION.json",
+      "scope": "로컬 코드·자동검사·Chrome/Edge 공개 후보"
+    },
+    "STAGE-4-QUALITY": {
+      "status": "PUBLIC_CANDIDATE_LOCAL",
+      "evidence": "stage-04/evidence/HFP_STAGE4_EXECUTION.json",
+      "scope": "로컬 코드·자동검사·다국가/접근성 공개 후보"
+    },
+    "STAGE-5-RELEASE": {
+      "status": "LOCAL_CONTRACT_COMPLETE_EXTERNAL_PENDING",
+      "evidence": "stage-05/evidence/HFP_STAGE5_EXECUTION.json",
+      "scope": "로컬 계약·안전장치·fail-closed 공개 게이트; 외부 증거 대기"
+    }
+  },
+  "x10_one_shot": true,
+  "x10_status": "X10_PARTIAL_SCOPE",
+  "writes": {
+    "product_code": 0,
+    "git": 0,
+    "external_services": 0
+  }
+}

@@ -1,0 +1,21 @@
+gap_id,title,priority,evidence,next_action,status
+GAP-001,"실제 Cloudflare 공개 배포·DNS 연결 미확정",P0,"subscrap.scanners.cc가 NXDOMAIN이고 Pages 프로젝트 목록이 비어 있음","외부 권한 확인과 DNS/Pages 연결",BLOCKED_EXTERNAL
+GAP-002,"Google OAuth 운영 클라이언트·redirect URI 미등록",P0,"로컬 계약과 정적 번들은 PASS지만 운영 등록 증거 없음","Google Cloud 프로젝트와 OAuth 콘솔에서 등록",BLOCKED_EXTERNAL
+GAP-003,"D1 운영 데이터베이스·키 등록·마이그레이션 미실행",P0,"schema는 로컬 존재, production migration/secrets false","Cloudflare 계정에서 D1·키·백업·롤백 실행",BLOCKED_EXTERNAL
+GAP-004,"현재 동적 API의 Cloud Run 의존",P0,"runtime ledger cloudRunReferences=19","Workers 호환 API로 단계적 이관",BLOCKED_EXTERNAL
+GAP-005,"소유권·공개판 지문 외부 증거 미확정",P0,"CURRENT_READINESS_REPORT OPS-001/002","실제 계정·URL·지문 확인",BLOCKED_EXTERNAL
+GAP-006,"실제 Android 한 대 증거 없음",P1,"HUMAN-005; ADB 연결 상실 기록","유휴 단말 한 대로 스모크 시험",READY_FOR_PLAN
+GAP-007,"사람의 해지·법률·번역 검토 없음",P1,"HUMAN-001/002","지역별 검토자 지정",READY_FOR_PLAN
+GAP-008,"실제 운영 지원 왕복 증거 없음",P1,"OPS-003","지원 메일/티켓 실수신 시험",READY_FOR_PLAN
+GAP-009,"광고 승인·동의 상태 외부 확인 없음",P1,"OPS-004","AdSense 승인·CMP·정책 검토",READY_FOR_PLAN
+GAP-010,"자동 계정 연결 범위가 경쟁 선두보다 제한",P1,"Google/Apple/금융 provider는 외부 계약 필요","읽기 전용 연결과 파일 경로 우선",READY_FOR_PLAN
+GAP-011,"반복 탐지 정확도 실사용 검증 부족",P1,"합성 테스트는 실제 사용자 대체 불가","비식별 동의 데이터 평가셋",READY_FOR_PLAN
+GAP-012,"절감액은 추정과 실제 확인을 더 명확히 분리해야 함",P1,"제품계획은 상태 분리, 운영 증거 미실시","근거·계산·행동·확인 UI",READY_FOR_PLAN
+GAP-013,"오프라인·동기화 충돌의 공개 운영 검증 부족",P2,"로컬 계약은 있으나 외부 운영 미확정","충돌 fixture와 복구 리허설",READY_FOR_PLAN
+GAP-014,"지원·콘텐츠 사람 검수 미완료",P2,"콘텐츠 자동 기반 17/27","핵심 15개 가이드 편집·검수",READY_FOR_PLAN
+GAP-015,"접근성 실제 보조기술 시험 미실시",P2,"자동 검사와 수동 계획만 존재","스크린리더·키보드 실제 시험",READY_FOR_PLAN
+GAP-016,"지역·통화·가격 최신성 검증 부담",P2,"국가별 정책·가격은 변동","확인일·유효기간·출처 필수",READY_FOR_PLAN
+GAP-017,"광고가 금융자료 화면과 분리되는지 공개 검증 필요",P2,"정책 문서와 로컬 구현만 확인","광고 경계·동의 거부 시험",READY_FOR_PLAN
+GAP-018,"관측성·경보의 실제 운영 연결 미확정",P2,"운영 코드와 자동검사 존재, 외부 경보 미확인","로그·지표·알람 소유자 연결",READY_FOR_PLAN
+GAP-019,"후보 서비스 800개·지표 1600개 X10 기준 미달",P2,"이번 실행은 10개 후보·160개 지표","실제 적용 가능 범위 확장 조사",READY_FOR_PLAN
+GAP-020,"실제 시장·사용자 성과 증거 없음",P2,"가상 1000 사례는 경계시험 용도","동의 사용자 파일럿·리텐션 측정",READY_FOR_PLAN

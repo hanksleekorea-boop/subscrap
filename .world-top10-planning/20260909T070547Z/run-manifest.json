@@ -1,0 +1,68 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "run-manifest",
+  "source_artifact_ids": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007",
+    "SRC-008",
+    "SRC-009",
+    "SRC-010",
+    "SRC-011",
+    "SRC-012",
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [],
+  "counts": {
+    "required_artifacts": 51,
+    "generated_files_including_generator": 52
+  },
+  "unknowns": [
+    "Cloudflare DNS/Pages write access",
+    "Google OAuth production registration",
+    "D1 production migration and key registration",
+    "real Android evidence",
+    "human/legal/accessibility review"
+  ],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ],
+  "selected_mode": "END_TO_END",
+  "selection_reason": "제품기획·세계 Top10·Readiness를 함께 포함한 첨부 정본",
+  "engines": {
+    "A": "INACTIVE_NOT_REQUESTED",
+    "B": "PARTIAL_EVIDENCE",
+    "C": "PARTIAL_EVIDENCE"
+  },
+  "gates": {
+    "G0": "PASS",
+    "G1": "PASS",
+    "G2": "PARTIAL",
+    "G3": "PARTIAL",
+    "G4": "PARTIAL",
+    "G5": "PARTIAL",
+    "G6": "PARTIAL",
+    "G7": "PARTIAL",
+    "G8": "PARTIAL"
+  },
+  "overall_status": "PARTIAL_EVIDENCE",
+  "x10_one_shot": true,
+  "x10_status": "X10_PARTIAL_SCOPE",
+  "writes": {
+    "product_code": 0,
+    "git": 0,
+    "external_services": 0
+  }
+}

@@ -1,0 +1,457 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "benchmark-taxonomy",
+  "source_artifact_ids": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007",
+    "SRC-008",
+    "SRC-009",
+    "SRC-010",
+    "SRC-011",
+    "SRC-012",
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "field_id": "FIELD-001",
+      "dimension": "발견",
+      "definition": "발견 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "발견-1",
+        "발견-2",
+        "발견-3",
+        "발견-4",
+        "발견-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-002",
+      "dimension": "자료입력",
+      "definition": "자료입력 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "자료입력-1",
+        "자료입력-2",
+        "자료입력-3",
+        "자료입력-4",
+        "자료입력-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-003",
+      "dimension": "반복탐지",
+      "definition": "반복탐지 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "반복탐지-1",
+        "반복탐지-2",
+        "반복탐지-3",
+        "반복탐지-4",
+        "반복탐지-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-004",
+      "dimension": "다중계정",
+      "definition": "다중계정 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "다중계정-1",
+        "다중계정-2",
+        "다중계정-3",
+        "다중계정-4",
+        "다중계정-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-005",
+      "dimension": "이메일·파일",
+      "definition": "이메일·파일 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "이메일·파일-1",
+        "이메일·파일-2",
+        "이메일·파일-3",
+        "이메일·파일-4",
+        "이메일·파일-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-006",
+      "dimension": "모바일",
+      "definition": "모바일 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "모바일-1",
+        "모바일-2",
+        "모바일-3",
+        "모바일-4",
+        "모바일-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-007",
+      "dimension": "PC웹",
+      "definition": "PC웹 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "PC웹-1",
+        "PC웹-2",
+        "PC웹-3",
+        "PC웹-4",
+        "PC웹-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-008",
+      "dimension": "달력",
+      "definition": "달력 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "달력-1",
+        "달력-2",
+        "달력-3",
+        "달력-4",
+        "달력-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-009",
+      "dimension": "예산",
+      "definition": "예산 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "예산-1",
+        "예산-2",
+        "예산-3",
+        "예산-4",
+        "예산-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-010",
+      "dimension": "절감기회",
+      "definition": "절감기회 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "절감기회-1",
+        "절감기회-2",
+        "절감기회-3",
+        "절감기회-4",
+        "절감기회-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-011",
+      "dimension": "해지안내",
+      "definition": "해지안내 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "해지안내-1",
+        "해지안내-2",
+        "해지안내-3",
+        "해지안내-4",
+        "해지안내-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-012",
+      "dimension": "알림",
+      "definition": "알림 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "알림-1",
+        "알림-2",
+        "알림-3",
+        "알림-4",
+        "알림-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-013",
+      "dimension": "설명가능성",
+      "definition": "설명가능성 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "설명가능성-1",
+        "설명가능성-2",
+        "설명가능성-3",
+        "설명가능성-4",
+        "설명가능성-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-014",
+      "dimension": "개인정보",
+      "definition": "개인정보 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "개인정보-1",
+        "개인정보-2",
+        "개인정보-3",
+        "개인정보-4",
+        "개인정보-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-015",
+      "dimension": "보안",
+      "definition": "보안 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "보안-1",
+        "보안-2",
+        "보안-3",
+        "보안-4",
+        "보안-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-016",
+      "dimension": "내보내기·삭제",
+      "definition": "내보내기·삭제 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "내보내기·삭제-1",
+        "내보내기·삭제-2",
+        "내보내기·삭제-3",
+        "내보내기·삭제-4",
+        "내보내기·삭제-5"
+      ],
+      "weight": 4
+    },
+    {
+      "field_id": "FIELD-017",
+      "dimension": "오프라인",
+      "definition": "오프라인 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "오프라인-1",
+        "오프라인-2",
+        "오프라인-3",
+        "오프라인-4",
+        "오프라인-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-018",
+      "dimension": "접근성",
+      "definition": "접근성 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "접근성-1",
+        "접근성-2",
+        "접근성-3",
+        "접근성-4",
+        "접근성-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-019",
+      "dimension": "다국어",
+      "definition": "다국어 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "다국어-1",
+        "다국어-2",
+        "다국어-3",
+        "다국어-4",
+        "다국어-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-020",
+      "dimension": "가구",
+      "definition": "가구 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "가구-1",
+        "가구-2",
+        "가구-3",
+        "가구-4",
+        "가구-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-021",
+      "dimension": "온보딩",
+      "definition": "온보딩 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "온보딩-1",
+        "온보딩-2",
+        "온보딩-3",
+        "온보딩-4",
+        "온보딩-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-022",
+      "dimension": "빈·오류상태",
+      "definition": "빈·오류상태 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "빈·오류상태-1",
+        "빈·오류상태-2",
+        "빈·오류상태-3",
+        "빈·오류상태-4",
+        "빈·오류상태-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-023",
+      "dimension": "동기화",
+      "definition": "동기화 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "동기화-1",
+        "동기화-2",
+        "동기화-3",
+        "동기화-4",
+        "동기화-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-024",
+      "dimension": "외부연결",
+      "definition": "외부연결 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "외부연결-1",
+        "외부연결-2",
+        "외부연결-3",
+        "외부연결-4",
+        "외부연결-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-025",
+      "dimension": "데이터소유권",
+      "definition": "데이터소유권 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "데이터소유권-1",
+        "데이터소유권-2",
+        "데이터소유권-3",
+        "데이터소유권-4",
+        "데이터소유권-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-026",
+      "dimension": "지원",
+      "definition": "지원 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "지원-1",
+        "지원-2",
+        "지원-3",
+        "지원-4",
+        "지원-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-027",
+      "dimension": "광고·신뢰",
+      "definition": "광고·신뢰 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "광고·신뢰-1",
+        "광고·신뢰-2",
+        "광고·신뢰-3",
+        "광고·신뢰-4",
+        "광고·신뢰-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-028",
+      "dimension": "성능",
+      "definition": "성능 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "성능-1",
+        "성능-2",
+        "성능-3",
+        "성능-4",
+        "성능-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-029",
+      "dimension": "안정성",
+      "definition": "안정성 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "안정성-1",
+        "안정성-2",
+        "안정성-3",
+        "안정성-4",
+        "안정성-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-030",
+      "dimension": "관측성",
+      "definition": "관측성 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "관측성-1",
+        "관측성-2",
+        "관측성-3",
+        "관측성-4",
+        "관측성-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-031",
+      "dimension": "무료범위",
+      "definition": "무료범위 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "무료범위-1",
+        "무료범위-2",
+        "무료범위-3",
+        "무료범위-4",
+        "무료범위-5"
+      ],
+      "weight": 2
+    },
+    {
+      "field_id": "FIELD-032",
+      "dimension": "운영",
+      "definition": "운영 과업의 시작·성공·실패·복구를 비교",
+      "indicators": [
+        "운영-1",
+        "운영-2",
+        "운영-3",
+        "운영-4",
+        "운영-5"
+      ],
+      "weight": 2
+    }
+  ],
+  "counts": {
+    "dimensions": 32,
+    "atomic_indicators": 160
+  },
+  "unknowns": [
+    "실사용 장시간 지표",
+    "법률·운영 성과"
+  ],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ],
+  "scoring_scale": "0=미확인, 1=약함, 2=부분, 3=기본, 4=강함"
+}

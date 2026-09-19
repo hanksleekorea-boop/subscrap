@@ -1,0 +1,238 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "traceability-graph",
+  "source_artifact_ids": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007",
+    "SRC-008",
+    "SRC-009",
+    "SRC-010",
+    "SRC-011",
+    "SRC-012",
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "requirement": "REQ-0001",
+      "gap": "GAP-001",
+      "task": "TASK-1-001",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0002",
+      "gap": "GAP-002",
+      "task": "TASK-1-002",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0003",
+      "gap": "GAP-003",
+      "task": "TASK-1-003",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0004",
+      "gap": "GAP-004",
+      "task": "TASK-1-004",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0005",
+      "gap": "GAP-005",
+      "task": "TASK-2-001",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0006",
+      "gap": "GAP-006",
+      "task": "TASK-2-002",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0007",
+      "gap": "GAP-007",
+      "task": "TASK-2-003",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0008",
+      "gap": "GAP-008",
+      "task": "TASK-2-004",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0009",
+      "gap": "GAP-009",
+      "task": "TASK-3-001",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0010",
+      "gap": "GAP-010",
+      "task": "TASK-3-002",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0011",
+      "gap": "GAP-011",
+      "task": "TASK-3-003",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0012",
+      "gap": "GAP-012",
+      "task": "TASK-3-004",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0013",
+      "gap": "GAP-013",
+      "task": "TASK-4-001",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0014",
+      "gap": "GAP-014",
+      "task": "TASK-4-002",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0015",
+      "gap": "GAP-015",
+      "task": "TASK-4-003",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0016",
+      "gap": "GAP-016",
+      "task": "TASK-4-004",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0017",
+      "gap": "GAP-017",
+      "task": "TASK-5-001",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0018",
+      "gap": "GAP-018",
+      "task": "TASK-5-002",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0019",
+      "gap": "GAP-019",
+      "task": "TASK-5-003",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    },
+    {
+      "requirement": "REQ-0020",
+      "gap": "GAP-020",
+      "task": "TASK-5-004",
+      "tests": [
+        "unit",
+        "integration"
+      ],
+      "evidence": null
+    }
+  ],
+  "counts": {
+    "links": 20
+  },
+  "unknowns": [
+    "actual implementation evidence"
+  ],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ]
+}

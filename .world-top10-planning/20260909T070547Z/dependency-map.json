@@ -1,0 +1,221 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "dependency-map",
+  "source_artifact_ids": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007",
+    "SRC-008",
+    "SRC-009",
+    "SRC-010",
+    "SRC-011",
+    "SRC-012",
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "gap_id": "GAP-001",
+      "depends_on": [
+        "EXT-AUTH",
+        "EXT-DNS"
+      ],
+      "blocks": [
+        "PUBLIC_RELEASE"
+      ]
+    },
+    {
+      "gap_id": "GAP-002",
+      "depends_on": [
+        "EXT-AUTH",
+        "EXT-DNS"
+      ],
+      "blocks": [
+        "PUBLIC_RELEASE"
+      ]
+    },
+    {
+      "gap_id": "GAP-003",
+      "depends_on": [
+        "EXT-AUTH",
+        "EXT-DNS"
+      ],
+      "blocks": [
+        "PUBLIC_RELEASE"
+      ]
+    },
+    {
+      "gap_id": "GAP-004",
+      "depends_on": [
+        "EXT-AUTH",
+        "EXT-DNS"
+      ],
+      "blocks": [
+        "PUBLIC_RELEASE"
+      ]
+    },
+    {
+      "gap_id": "GAP-005",
+      "depends_on": [
+        "EXT-AUTH",
+        "EXT-DNS"
+      ],
+      "blocks": [
+        "PUBLIC_RELEASE"
+      ]
+    },
+    {
+      "gap_id": "GAP-006",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-007",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-008",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-009",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-010",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-011",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-012",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-013",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-014",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-015",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-016",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-017",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-018",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-019",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    },
+    {
+      "gap_id": "GAP-020",
+      "depends_on": [
+        "REQ-BASELINE"
+      ],
+      "blocks": [
+        "QUALITY_TARGET"
+      ]
+    }
+  ],
+  "counts": {
+    "nodes": 20
+  },
+  "unknowns": [],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ]
+}

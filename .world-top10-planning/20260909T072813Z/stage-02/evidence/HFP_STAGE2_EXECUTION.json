@@ -1,0 +1,28 @@
+{
+  "schema": "subscrap-hfp-stage-evidence/v1",
+  "stage_id": "STAGE-2-FOUNDATION",
+  "source_plan": "docs/SUBSCRAP_HOUSEHOLD_FINANCE_PIVOT_DEVELOPMENT_PLAN_V2_FIVE_STAGE_20260907.md",
+  "status": "PUBLIC_CANDIDATE_LOCAL",
+  "passed": true,
+  "command": "npm.cmd run test:hfp-stage2",
+  "checks": [
+    "FINANCE_CRUD_PASSED",
+    "FINANCE_SERVER_ROUTES_PASSED isolation=true revision=true",
+    "FINANCE_CSV_IMPORT_PASSED",
+    "FINANCE_STATEMENT_IMPORT_PASSED fixtures=30 currencies=zero+two+three-decimal",
+    "FINANCE_IMPORT_BATCH_PASSED",
+    "FINANCE_REVIEW_PASSED",
+    "MERCHANT_NORMALIZER_PASSED",
+    "FINANCE_CATEGORIES_PASSED",
+    "FINANCE_RECONCILE_PASSED",
+    "FINANCE_RECURRENCE_PASSED",
+    "FINANCE_DASHBOARD_PASSED",
+    "FINANCE_BUDGET_PASSED",
+    "FINANCE_BACKUP_RESTORE_PASSED",
+    "FINANCE_OFFLINE_CONTRACT_PASSED local_input=true csv_review=true",
+    "FINANCE_PUBLIC_CANDIDATE_PASSED viewports=390,1440 ads=0",
+    "HFP_STAGE2_GATE_PASSED status=PUBLIC_CANDIDATE auto_commit=0"
+  ],
+  "external_evidence": false,
+  "note": "390/1440 공개 후보 자동검사이며 실제 공개 배포·실기기·사람 검증은 포함하지 않음"
+}

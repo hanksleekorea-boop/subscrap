@@ -1,0 +1,49 @@
+{
+  "analysisId": "subscrap-20260820-0951",
+  "catalogStatus": "500개 도메인 카탈로그 미발견 — 서비스 일반 비교만 수행",
+  "selectionRule": "문제 40, 사용자·구매자 20, 핵심 흐름 20, 수익 10, 모바일·PC 10; 공식 웹·앱스토어·지원 문서가 있는 경우만 채택",
+  "candidates": [
+    {
+      "name": "Rocket Money",
+      "type": "direct",
+      "score": 86,
+      "signals": ["정기결제 자동 탐지·추적", "해지 지원", "일정·목록 보기", "개인 금융 맥락"],
+      "officialEvidence": ["https://www.rocketmoney.com/feature/manage-subscriptions", "https://help.rocketmoney.com/en/articles/3117398-where-can-i-view-my-subscriptions-and-bills"],
+      "transferablePractice": "발견 결과를 다가오는 청구일·전체·달력으로 나누고, 해지 행동으로 자연스럽게 연결"
+    },
+    {
+      "name": "Bobby",
+      "type": "direct",
+      "score": 76,
+      "signals": ["수동 등록", "고정비 통찰", "다음 청구 알림", "기존 서비스 선택과 사용자 정의 항목"],
+      "officialEvidence": ["https://www.bobbyapp.co/", "https://apps.apple.com/us/app/bobby-track-subscriptions/id1059152023"],
+      "transferablePractice": "빠른 직접 입력과 다음 결제일 중심의 단순한 요약"
+    },
+    {
+      "name": "Subby - Subscription Tracker",
+      "type": "direct",
+      "score": 71,
+      "signals": ["Android 구독·정기청구 관리", "갱신 전 알림", "다통화", "사용자 직접 해지 고지"],
+      "officialEvidence": ["https://play.google.com/store/apps/details?id=com.slapp.subby"],
+      "transferablePractice": "알림이 해지를 대신하지 않는다는 명확한 경계와 다통화·백업 선택지"
+    },
+    {
+      "name": "Google Play 구독 관리",
+      "type": "leader-practice",
+      "score": 69,
+      "signals": ["계정별 구독 목록", "취소·일시중지·재개", "다른 계정일 수 있다는 안내"],
+      "officialEvidence": ["https://support.google.com/googleplay/answer/7018481"],
+      "transferablePractice": "계정 전환 가능성과 해지 후 접근 종료 시점을 행동 직전에 설명"
+    },
+    {
+      "name": "Apple 구독 관리",
+      "type": "leader-practice",
+      "score": 58,
+      "signals": ["구매 이력", "구독 변경·취소·갱신", "가족 공유"],
+      "officialEvidence": ["https://support.apple.com/guide/iphone/see-your-purchases-and-subscriptions-iph4e3e7324f/ios"],
+      "transferablePractice": "플랫폼별 발견 한계를 숨기지 않고 Apple 결제는 Apple 계정에서 확인하도록 연결"
+    }
+  ],
+  "adjacentCandidates": [],
+  "exclusions": ["은행·카드 계정 연결형 서비스는 민감 금융 데이터·지역별 제공 범위가 달라 현재 비교의 직접 구현 기준으로 삼지 않음", "이름만 유사한 반복결제 나눔 서비스는 핵심 문제·흐름이 달라 제외"]
+}

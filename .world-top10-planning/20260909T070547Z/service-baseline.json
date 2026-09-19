@@ -1,0 +1,45 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "service-baseline",
+  "source_artifact_ids": [
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "service": "Subscrap",
+      "public_mobile": "https://hanksleekorea-boop.github.io/subscrap/",
+      "public_pc": "https://hanksleekorea-boop.github.io/subscrap/global/ko/",
+      "cloudflare_target": "https://subscrap.scanners.cc/",
+      "observed": "GitHub Pages HTTP 200; Cloudflare target NXDOMAIN; local Cloudflare bundle PASS; Cloudflare-only false",
+      "implementation": {
+        "openai_runtime_dependency": false,
+        "cloudflare_only_ready": false,
+        "google_oauth": "LOCAL_CONTRACT_STATIC_BUNDLE",
+        "encrypted_account_data": "LOCAL_CONTRACT",
+        "readiness_overall": 0.912,
+        "readiness_blockers": 21
+      },
+      "evidence_level": "A for local/internal, U for external deployment"
+    }
+  ],
+  "counts": {
+    "services": 1
+  },
+  "unknowns": [
+    "actual Cloudflare deployment",
+    "production OAuth",
+    "D1 production",
+    "real device"
+  ],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ]
+}

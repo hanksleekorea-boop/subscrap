@@ -1,0 +1,20 @@
+{
+  "scale": {"0": "없음 또는 실패", "1": "소개·제한적", "2": "기본", "3": "실제 흐름·오류 처리·지원", "4": "개인화·측정·반복 개선", "unknown": "근거 부족"},
+  "criteria": [
+    {"id": "onboarding", "group": "시작·개인화", "ideal": "탐지 범위·직접 등록 대안을 이해시키는 짧은 시작 흐름", "why": "자동 탐지 과신을 줄임", "evidence": "Subscrap 제품 기획서 §6B", "current": 2, "proposal": "빈 결과·연결 전·결과 화면의 문구를 실제 공개판에서 검증", "verify": "모바일·PC E2E와 사용자 관찰"},
+    {"id": "evidence-cards", "group": "핵심 가치·실행", "ideal": "각 후보의 출처·이유·금액·날짜·신뢰도와 확정·무시", "why": "자동 탐지의 신뢰와 오탐 통제", "evidence": "Rocket Money 자동 탐지·수동 추가, Subscrap v0.21.3 검사", "current": 3, "proposal": "공개판과 실제 사용 흐름 검증", "verify": "PR 배포 후 후보 카드 E2E"},
+    {"id": "manual-entry", "group": "핵심 가치·실행", "ideal": "탐지 밖 결제를 세 항목으로 빠르게 추가", "why": "탐지 한계를 보완", "evidence": "Rocket Money 도움말·Bobby App Store", "current": 3, "proposal": "필수 입력 최소화와 오류 문구 검증", "verify": "모바일 720px E2E"},
+    {"id": "cancellation-confirmation", "group": "신뢰·상용화", "ideal": "공식 해지 경로와 다음 청구 확인을 분리", "why": "안내 열람을 해지 완료로 오해하지 않음", "evidence": "Google Play·Apple 공식 취소 안내", "current": 2, "proposal": "4단계 체크리스트와 재청구 확인 상태", "verify": "저장·복원·다음 결제일 검사"},
+    {"id": "account-separation", "group": "신뢰·상용화", "ideal": "계정별 권한·결과·해제 삭제가 섞이지 않음", "why": "민감한 이메일·구매 자료 보호", "evidence": "Subscrap Google 전용 검사 26건", "current": 3, "proposal": "계정별 연결 상태와 마지막 탐색 설명", "verify": "격리·연결해제 서버 검사"},
+    {"id": "scope-transparency", "group": "신뢰·상용화", "ideal": "Google 자료만 보며 카드·Apple·다른 메일은 범위 밖임을 반복 고지", "why": "과도한 기능 기대 방지", "evidence": "제품 기획서 §2·§6B", "current": 2, "proposal": "공개판 세 위치 문구 확인", "verify": "UI 텍스트 검사"},
+    {"id": "privacy-security", "group": "신뢰·상용화", "ideal": "최소 권한·원문 미보관·토큰 보호·사용자 격리와 공개 정책", "why": "재무·이메일 데이터 위험 감소", "evidence": "server/google.js·Google 검사", "current": 3, "proposal": "공개 개인정보·삭제·지원 문서 완결", "verify": "정책 링크와 침투 검토"},
+    {"id": "quality", "group": "품질·성장", "ideal": "핵심 흐름 자동 검사와 공개판 브라우저 확인", "why": "회귀 방지", "evidence": "336/336·Chrome/Edge 12/12", "current": 3, "proposal": "CI 연결과 공개 후 자동 확인", "verify": "배포당 검사 기록"},
+    {"id": "accessibility", "group": "품질·성장", "ideal": "키보드·텍스트 상태·작은 화면 접근 가능", "why": "결제 정보 이해의 포용성", "evidence": "접근성 8화면 심각 위반 0", "current": 3, "proposal": "실기기 보조기술·Safari 확인", "verify": "수동 접근성 점검"},
+    {"id": "cross-device", "group": "품질·성장", "ideal": "Android PWA·iPhone Safari·Firefox·Safari PC의 공개판 증거", "why": "모바일·PC 일관성", "evidence": "Chrome/Edge만 확인, A56 화면 조작 정책 차단", "current": 1, "proposal": "기기·브라우저 매트릭스", "verify": "실기기·브라우저 기록"},
+    {"id": "notifications", "group": "핵심 가치·실행", "ideal": "결제일·무료 체험·재청구 알림에 이유와 설정 제공", "why": "행동 시점 지원", "evidence": "기존 알림 규칙과 제품 계획 P4", "current": 2, "proposal": "유형별 설정·딥링크·발송 실증", "verify": "권한 거부·수신 검사"},
+    {"id": "analytics", "group": "품질·성장", "ideal": "확정·무시·직접 등록·해지 확인의 익명 집계", "why": "탐지 품질 개선", "evidence": "성공 지표 정의", "current": 1, "proposal": "최소 집계와 보존 정책", "verify": "대시보드·개인정보 검토"},
+    {"id": "payment-trust", "group": "신뢰·상용화", "ideal": "가격·자동 갱신·환불·복원과 제공자 샌드박스 기록", "why": "유료화 신뢰", "evidence": "제품 기획서 §11", "current": "unknown", "proposal": "제공자·상품·정책 확정 후 시험", "verify": "승인·거절·환불·복원 기록"},
+    {"id": "support-operations", "group": "운영·확장", "ideal": "지원 경로·장애 대응·복구 훈련", "why": "민감 서비스 운영 지속성", "evidence": "암호화 백업 구현 근거", "current": 1, "proposal": "지원 SLA·복구 훈련·상태 안내", "verify": "훈련 기록"},
+    {"id": "observability", "group": "운영·확장", "ideal": "오류·성능·탐색 실패 모니터링", "why": "실사용 장애 조기 발견", "evidence": "Cloud Run health와 재시도 검사", "current": 1, "proposal": "오류 추적·경보·SLO", "verify": "대시보드와 경보 시험"}
+  ]
+}

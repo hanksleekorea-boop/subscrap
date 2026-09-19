@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "project": "서브스크랩",
+    "timestamp": "2026-09-19T15:04:21.015Z",
+    "version": "v3.3"
+  },
+  "engine_A": {
+    "domain_match": [
+      "SubScrap",
+      "SaaS",
+      "Aggregator"
+    ],
+    "target_audience": "Global Users, Professionals",
+    "key_features": [
+      "구독료 알림",
+      "결제일 캘린더",
+      "원클릭 해지"
+    ],
+    "market_size_estimate": "$10B+",
+    "core_problem_solved": "흩어진 구독 서비스를 한 곳에서 스크랩하고 관리하세요."
+  }
+}

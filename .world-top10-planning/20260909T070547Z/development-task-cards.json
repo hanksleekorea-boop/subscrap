@@ -1,0 +1,2556 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "development-task-cards",
+  "source_artifact_ids": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007",
+    "SRC-008",
+    "SRC-009",
+    "SRC-010",
+    "SRC-011",
+    "SRC-012",
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "task_id": "TASK-1-001",
+      "stage": 1,
+      "task_name": "기준선·위험 제거 원자 작업 1",
+      "user_result": "사용자는 기준선·위험 제거 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0001"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-001"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [],
+      "successors": [
+        "TASK-2-001"
+      ],
+      "parallelizable": false,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [
+        "Cloudflare/GCP external access"
+      ],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-1-001.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "WAITING_EXTERNAL",
+      "handoff_sentence": "다음 AI는 TASK-1-001의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": true,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": false,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-1-002",
+      "stage": 1,
+      "task_name": "기준선·위험 제거 원자 작업 2",
+      "user_result": "사용자는 기준선·위험 제거 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0002"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-002"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [],
+      "successors": [
+        "TASK-2-001"
+      ],
+      "parallelizable": false,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [
+        "Cloudflare/GCP external access"
+      ],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-1-002.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "WAITING_EXTERNAL",
+      "handoff_sentence": "다음 AI는 TASK-1-002의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": true,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": false,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-1-003",
+      "stage": 1,
+      "task_name": "기준선·위험 제거 원자 작업 3",
+      "user_result": "사용자는 기준선·위험 제거 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0003"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-003"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [],
+      "successors": [
+        "TASK-2-001"
+      ],
+      "parallelizable": false,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [
+        "Cloudflare/GCP external access"
+      ],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-1-003.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "WAITING_EXTERNAL",
+      "handoff_sentence": "다음 AI는 TASK-1-003의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": true,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": false,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-1-004",
+      "stage": 1,
+      "task_name": "기준선·위험 제거 원자 작업 4",
+      "user_result": "사용자는 기준선·위험 제거 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0004"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-004"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [],
+      "successors": [
+        "TASK-2-001"
+      ],
+      "parallelizable": false,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [
+        "Cloudflare/GCP external access"
+      ],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-1-004.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "WAITING_EXTERNAL",
+      "handoff_sentence": "다음 AI는 TASK-1-004의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": true,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": false,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-2-001",
+      "stage": 2,
+      "task_name": "핵심 여정·Top10 동등화 원자 작업 1",
+      "user_result": "사용자는 핵심 여정·Top10 동등화 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0005"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-005"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-1-004"
+      ],
+      "successors": [
+        "TASK-3-001"
+      ],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-2-001.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-2-001의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": false,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-2-002",
+      "stage": 2,
+      "task_name": "핵심 여정·Top10 동등화 원자 작업 2",
+      "user_result": "사용자는 핵심 여정·Top10 동등화 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0006"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-006"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-1-004"
+      ],
+      "successors": [
+        "TASK-3-001"
+      ],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-2-002.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-2-002의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": false,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-2-003",
+      "stage": 2,
+      "task_name": "핵심 여정·Top10 동등화 원자 작업 3",
+      "user_result": "사용자는 핵심 여정·Top10 동등화 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0007"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-007"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-1-004"
+      ],
+      "successors": [
+        "TASK-3-001"
+      ],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-2-003.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-2-003의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": false,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-2-004",
+      "stage": 2,
+      "task_name": "핵심 여정·Top10 동등화 원자 작업 4",
+      "user_result": "사용자는 핵심 여정·Top10 동등화 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0008"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-008"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-1-004"
+      ],
+      "successors": [
+        "TASK-3-001"
+      ],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-2-004.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-2-004의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": false,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-3-001",
+      "stage": 3,
+      "task_name": "전 분야·연속성·운영 원자 작업 1",
+      "user_result": "사용자는 전 분야·연속성·운영 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0009"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-009"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-2-004"
+      ],
+      "successors": [
+        "TASK-4-001"
+      ],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-3-001.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-3-001의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": false,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-3-002",
+      "stage": 3,
+      "task_name": "전 분야·연속성·운영 원자 작업 2",
+      "user_result": "사용자는 전 분야·연속성·운영 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0010"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-010"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-2-004"
+      ],
+      "successors": [
+        "TASK-4-001"
+      ],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-3-002.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-3-002의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": false,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-3-003",
+      "stage": 3,
+      "task_name": "전 분야·연속성·운영 원자 작업 3",
+      "user_result": "사용자는 전 분야·연속성·운영 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0011"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-011"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-2-004"
+      ],
+      "successors": [
+        "TASK-4-001"
+      ],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-3-003.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-3-003의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": false,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-3-004",
+      "stage": 3,
+      "task_name": "전 분야·연속성·운영 원자 작업 4",
+      "user_result": "사용자는 전 분야·연속성·운영 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0012"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-012"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-2-004"
+      ],
+      "successors": [
+        "TASK-4-001"
+      ],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-3-004.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-3-004의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": false,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-4-001",
+      "stage": 4,
+      "task_name": "검증 가능한 차별화 원자 작업 1",
+      "user_result": "사용자는 검증 가능한 차별화 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0013"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-013"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-3-004"
+      ],
+      "successors": [
+        "TASK-5-001"
+      ],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-4-001.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-4-001의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": true,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-4-002",
+      "stage": 4,
+      "task_name": "검증 가능한 차별화 원자 작업 2",
+      "user_result": "사용자는 검증 가능한 차별화 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0014"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-014"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-3-004"
+      ],
+      "successors": [
+        "TASK-5-001"
+      ],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-4-002.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-4-002의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": true,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-4-003",
+      "stage": 4,
+      "task_name": "검증 가능한 차별화 원자 작업 3",
+      "user_result": "사용자는 검증 가능한 차별화 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0015"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-015"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-3-004"
+      ],
+      "successors": [
+        "TASK-5-001"
+      ],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-4-003.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-4-003의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": true,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-4-004",
+      "stage": 4,
+      "task_name": "검증 가능한 차별화 원자 작업 4",
+      "user_result": "사용자는 검증 가능한 차별화 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0016"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-016"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-3-004"
+      ],
+      "successors": [
+        "TASK-5-001"
+      ],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-4-004.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-4-004의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": false,
+      "user_required": true,
+      "expert_required": false,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-5-001",
+      "stage": 5,
+      "task_name": "상용 품질·전체 인수 원자 작업 1",
+      "user_result": "사용자는 상용 품질·전체 인수 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0017"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-017"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-4-004"
+      ],
+      "successors": [],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-5-001.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-5-001의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": true,
+      "user_required": true,
+      "expert_required": true,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-5-002",
+      "stage": 5,
+      "task_name": "상용 품질·전체 인수 원자 작업 2",
+      "user_result": "사용자는 상용 품질·전체 인수 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0018"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-018"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-4-004"
+      ],
+      "successors": [],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-5-002.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-5-002의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": true,
+      "user_required": true,
+      "expert_required": true,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-5-003",
+      "stage": 5,
+      "task_name": "상용 품질·전체 인수 원자 작업 3",
+      "user_result": "사용자는 상용 품질·전체 인수 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0019"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-019"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-4-004"
+      ],
+      "successors": [],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-5-003.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-5-003의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": true,
+      "user_required": true,
+      "expert_required": true,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    },
+    {
+      "task_id": "TASK-5-004",
+      "stage": 5,
+      "task_name": "상용 품질·전체 인수 원자 작업 4",
+      "user_result": "사용자는 상용 품질·전체 인수 결과를 한 가지 명확한 행동으로 확인한다.",
+      "requirement_ids": [
+        "REQ-0020"
+      ],
+      "metric_ids": null,
+      "gap_ids": [
+        "GAP-020"
+      ],
+      "best_practice_ids": null,
+      "evidence_ids": [
+        "SRC-013"
+      ],
+      "current_behavior": "문서/로컬 계약 또는 외부 증거 미완료",
+      "target_behavior": "구현·시험·증거가 분리된 상태",
+      "in_scope": [
+        "해당 단계의 한 하위체계"
+      ],
+      "out_of_scope": [
+        "외부 계정 승인·실제 사용자 성과의 자동 대체"
+      ],
+      "predecessors": [
+        "TASK-4-004"
+      ],
+      "successors": [],
+      "parallelizable": true,
+      "preconditions": [
+        "handoff:check PASS",
+        "관련 파일 경로 확인"
+      ],
+      "blockers": [],
+      "files_components": [
+        "문서화된 실제 경로 확인 후 확정"
+      ],
+      "file_change_purpose": null,
+      "new_files": null,
+      "data_contract": "소유자·버전·삭제범위·유효성 명시",
+      "api_contract": "입력·출력·오류·권한·중복방지·재시도 명시",
+      "lifecycle": "draft→review→confirmed→deleted",
+      "ui_sequence": [
+        "시작",
+        "확인",
+        "결과",
+        "복구"
+      ],
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "partial",
+        "error",
+        "offline",
+        "recovery",
+        "denied"
+      ],
+      "platform_accessibility": "mobile 320px+, PC keyboard, screen reader",
+      "privacy_security": "no raw financial logs; rate limit; CSRF/OIDC",
+      "ordered_steps": [
+        "선행조건 검사",
+        "최소 변경",
+        "자동검사",
+        "증거 저장",
+        "상태 갱신"
+      ],
+      "pseudocode": null,
+      "commands": [
+        "npm.cmd run handoff:check",
+        "npm.cmd run test:history"
+      ],
+      "expected_exit": [
+        0
+      ],
+      "tests": [
+        "unit",
+        "integration",
+        "accessibility",
+        "security"
+      ],
+      "negative_tests": [
+        "invalid input",
+        "duplicate",
+        "replay",
+        "version conflict"
+      ],
+      "manual_vs_automated": "자동검사와 사람/기기 검증 분리",
+      "test_data": "합성·비식별 fixture only",
+      "acceptance": [
+        "참/거짓 체크리스트",
+        "미확인 완료 금지"
+      ],
+      "evidence_file": ".project-continuity/validation/TASK-5-004.json",
+      "failure_diagnosis": "오류 원문·종료코드·환경/코드/데이터 분류",
+      "safe_stop": "자료 보존 후 해당 카드만 중단",
+      "rollback": "기존 공개판 보존·변경 전 스냅샷 복원",
+      "size_risk_time_confidence": "S; medium; 0.7",
+      "status": "PLANNED",
+      "handoff_sentence": "다음 AI는 TASK-5-004의 선행조건과 외부 차단을 먼저 확인한다.",
+      "owner": "미지정",
+      "reviewer": "미지정",
+      "release_flag": false,
+      "dependencies_external": false,
+      "cost_required": false,
+      "device_required": true,
+      "user_required": true,
+      "expert_required": true,
+      "monitoring": "error rate, latency, deletion failures",
+      "alert": "threshold breach",
+      "backup": "encrypted export before migration",
+      "migration": "dry run then production",
+      "feature_flag": "off by default",
+      "localization": "ko/en baseline",
+      "analytics_prohibited": "raw financial data",
+      "compatibility": "current project browsers",
+      "performance_budget": "LCP<2.5s target",
+      "rate_limit": "provider contract",
+      "idempotency": "request id/version",
+      "audit_event": "decision and evidence IDs"
+    }
+  ],
+  "counts": {
+    "tasks": 20,
+    "fields": 64,
+    "ready": 0
+  },
+  "unknowns": [],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ],
+  "field_contract": [
+    "task_id",
+    "stage",
+    "task_name",
+    "user_result",
+    "requirement_ids",
+    "metric_ids",
+    "gap_ids",
+    "best_practice_ids",
+    "evidence_ids",
+    "current_behavior",
+    "target_behavior",
+    "in_scope",
+    "out_of_scope",
+    "predecessors",
+    "successors",
+    "parallelizable",
+    "preconditions",
+    "blockers",
+    "files_components",
+    "file_change_purpose",
+    "new_files",
+    "data_contract",
+    "api_contract",
+    "lifecycle",
+    "ui_sequence",
+    "states",
+    "platform_accessibility",
+    "privacy_security",
+    "ordered_steps",
+    "pseudocode",
+    "commands",
+    "expected_exit",
+    "tests",
+    "negative_tests",
+    "manual_vs_automated",
+    "test_data",
+    "acceptance",
+    "evidence_file",
+    "failure_diagnosis",
+    "safe_stop",
+    "rollback",
+    "size_risk_time_confidence",
+    "status",
+    "handoff_sentence",
+    "owner",
+    "reviewer",
+    "release_flag",
+    "dependencies_external",
+    "cost_required",
+    "device_required",
+    "user_required",
+    "expert_required",
+    "monitoring",
+    "alert",
+    "backup",
+    "migration",
+    "feature_flag",
+    "localization",
+    "analytics_prohibited",
+    "compatibility",
+    "performance_budget",
+    "rate_limit",
+    "idempotency",
+    "audit_event"
+  ]
+}

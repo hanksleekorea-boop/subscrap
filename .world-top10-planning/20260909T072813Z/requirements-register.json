@@ -1,0 +1,516 @@
+{
+  "schema_version": "world-top10-v3.2",
+  "run_id": "WT10-20260909T070547Z",
+  "generated_at_utc": "2026-09-09T07:05:47Z",
+  "project_fingerprint": "6c65a0f2fc83f3ca2248b2fb16554c471a059f442979a14a6ea6969d8ea2b81c",
+  "artifact_type": "requirements-register",
+  "source_artifact_ids": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007",
+    "SRC-008",
+    "SRC-009",
+    "SRC-010",
+    "SRC-011",
+    "SRC-012",
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "req_id": "REQ-0001",
+      "user_result": "실제 Cloudflare 공개 배포·DNS 연결 미확정",
+      "gap_id": "GAP-001",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "외부 권한·대상 확인",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-001와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 1,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0002",
+      "user_result": "Google OAuth 운영 클라이언트·redirect URI 미등록",
+      "gap_id": "GAP-002",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "외부 권한·대상 확인",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-002와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 1,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0003",
+      "user_result": "D1 운영 데이터베이스·키 등록·마이그레이션 미실행",
+      "gap_id": "GAP-003",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "외부 권한·대상 확인",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-003와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 1,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0004",
+      "user_result": "현재 동적 API의 Cloud Run 의존",
+      "gap_id": "GAP-004",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "외부 권한·대상 확인",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-004와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 1,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0005",
+      "user_result": "소유권·공개판 지문 외부 증거 미확정",
+      "gap_id": "GAP-005",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "외부 권한·대상 확인",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-005와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 1,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0006",
+      "user_result": "실제 Android 한 대 증거 없음",
+      "gap_id": "GAP-006",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-006와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 2,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0007",
+      "user_result": "사람의 해지·법률·번역 검토 없음",
+      "gap_id": "GAP-007",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-007와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 2,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0008",
+      "user_result": "실제 운영 지원 왕복 증거 없음",
+      "gap_id": "GAP-008",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-008와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 2,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0009",
+      "user_result": "광고 승인·동의 상태 외부 확인 없음",
+      "gap_id": "GAP-009",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-009와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 2,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0010",
+      "user_result": "자동 계정 연결 범위가 경쟁 선두보다 제한",
+      "gap_id": "GAP-010",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-010와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 2,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0011",
+      "user_result": "반복 탐지 정확도 실사용 검증 부족",
+      "gap_id": "GAP-011",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-011와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 2,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0012",
+      "user_result": "절감액은 추정과 실제 확인을 더 명확히 분리해야 함",
+      "gap_id": "GAP-012",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-012와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 2,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0013",
+      "user_result": "오프라인·동기화 충돌의 공개 운영 검증 부족",
+      "gap_id": "GAP-013",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-013와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 3,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0014",
+      "user_result": "지원·콘텐츠 사람 검수 미완료",
+      "gap_id": "GAP-014",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-014와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 3,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0015",
+      "user_result": "접근성 실제 보조기술 시험 미실시",
+      "gap_id": "GAP-015",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-015와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 3,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0016",
+      "user_result": "지역·통화·가격 최신성 검증 부담",
+      "gap_id": "GAP-016",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-016와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 3,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0017",
+      "user_result": "광고가 금융자료 화면과 분리되는지 공개 검증 필요",
+      "gap_id": "GAP-017",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-017와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 3,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0018",
+      "user_result": "관측성·경보의 실제 운영 연결 미확정",
+      "gap_id": "GAP-018",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-018와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 3,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0019",
+      "user_result": "후보 서비스 800개·지표 1600개 X10 기준 미달",
+      "gap_id": "GAP-019",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-019와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 3,
+      "status": "PLANNED"
+    },
+    {
+      "req_id": "REQ-0020",
+      "user_result": "실제 시장·사용자 성과 증거 없음",
+      "gap_id": "GAP-020",
+      "current": "문서 또는 외부 증거 미완료",
+      "target": "증거가 연결된 실행 가능한 계약",
+      "include": true,
+      "exclude": "자동 완료 선언",
+      "preconditions": "기준선 검사",
+      "states": [
+        "normal",
+        "empty",
+        "loading",
+        "error",
+        "recovery",
+        "offline"
+      ],
+      "acceptance": [
+        "근거 ID가 GAP-020와 연결됨",
+        "미확인을 완료로 표현하지 않음"
+      ],
+      "stage": 3,
+      "status": "PLANNED"
+    }
+  ],
+  "counts": {
+    "requirements": 20
+  },
+  "unknowns": [],
+  "warnings": [
+    "X10 목표는 실제 적용 가능 범위와 시간 제약 때문에 이번 실행에서 미달했다. 허위 후보·지표를 만들지 않았다.",
+    "Cloudflare DNS/Pages·Google OAuth·실제 Android·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "문서·코드·공개 URL의 현재 사실을 분리했으며 계획을 구현 완료로 표시하지 않았다."
+  ]
+}

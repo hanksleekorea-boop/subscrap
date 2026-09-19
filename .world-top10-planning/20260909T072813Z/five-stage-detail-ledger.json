@@ -1,0 +1,118 @@
+{
+  "schema_version": "world-top10-v3.3",
+  "run_id": "WT10-V33-20260909T072813Z",
+  "generated_at_utc": "2026-09-09T07:28:13Z",
+  "project_fingerprint": "cf5551753b2a0e4ce8f7e49cddcf17592e600d257688a47e1c744c9c57def56e",
+  "artifact_type": "five-stage-detail-ledger",
+  "source_artifact_ids": [
+    "SRC-013",
+    "SRC-014",
+    "SRC-015",
+    "SRC-016"
+  ],
+  "records": [
+    {
+      "stage_id": "STAGE-1-BASELINE",
+      "stage_number": 1,
+      "required_sections": 24,
+      "sections_written": 24,
+      "task_count": 4,
+      "task_field_target": 96,
+      "task_field_actual": 96,
+      "micro_step_target": 12,
+      "micro_step_actual": 12,
+      "test_target": 12,
+      "test_actual": 12,
+      "status": "INTEGRATED_LOCAL",
+      "execution_evidence": "stage-01/evidence/HFP_STAGE1_EXECUTION.json",
+      "entry_condition": "이전 단계 증거와 handoff:check PASS",
+      "exit_condition": "요구사항·작업·시험·증거 연결 100%"
+    },
+    {
+      "stage_id": "STAGE-2-FOUNDATION",
+      "stage_number": 2,
+      "required_sections": 24,
+      "sections_written": 24,
+      "task_count": 4,
+      "task_field_target": 96,
+      "task_field_actual": 96,
+      "micro_step_target": 12,
+      "micro_step_actual": 12,
+      "test_target": 12,
+      "test_actual": 12,
+      "status": "PUBLIC_CANDIDATE_LOCAL",
+      "execution_evidence": "stage-02/evidence/HFP_STAGE2_EXECUTION.json",
+      "entry_condition": "이전 단계 증거와 handoff:check PASS",
+      "exit_condition": "요구사항·작업·시험·증거 연결 100%"
+    },
+    {
+      "stage_id": "STAGE-3-CORE",
+      "stage_number": 3,
+      "required_sections": 24,
+      "sections_written": 24,
+      "task_count": 4,
+      "task_field_target": 96,
+      "task_field_actual": 96,
+      "micro_step_target": 12,
+      "micro_step_actual": 12,
+      "test_target": 12,
+      "test_actual": 12,
+      "status": "PUBLIC_CANDIDATE_LOCAL",
+      "execution_evidence": "stage-03/evidence/HFP_STAGE3_EXECUTION.json",
+      "entry_condition": "이전 단계 증거와 handoff:check PASS",
+      "exit_condition": "요구사항·작업·시험·증거 연결 100%"
+    },
+    {
+      "stage_id": "STAGE-4-QUALITY",
+      "stage_number": 4,
+      "required_sections": 24,
+      "sections_written": 24,
+      "task_count": 4,
+      "task_field_target": 96,
+      "task_field_actual": 96,
+      "micro_step_target": 12,
+      "micro_step_actual": 12,
+      "test_target": 12,
+      "test_actual": 12,
+      "status": "PUBLIC_CANDIDATE_LOCAL",
+      "execution_evidence": "stage-04/evidence/HFP_STAGE4_EXECUTION.json",
+      "entry_condition": "이전 단계 증거와 handoff:check PASS",
+      "exit_condition": "요구사항·작업·시험·증거 연결 100%"
+    },
+    {
+      "stage_id": "STAGE-5-RELEASE",
+      "stage_number": 5,
+      "required_sections": 24,
+      "sections_written": 24,
+      "task_count": 4,
+      "task_field_target": 96,
+      "task_field_actual": 96,
+      "micro_step_target": 12,
+      "micro_step_actual": 12,
+      "test_target": 12,
+      "test_actual": 12,
+      "status": "LOCAL_CONTRACT_COMPLETE_EXTERNAL_PENDING",
+      "execution_evidence": "stage-05/evidence/HFP_STAGE5_EXECUTION.json",
+      "entry_condition": "이전 단계 증거와 handoff:check PASS",
+      "exit_condition": "요구사항·작업·시험·증거 연결 100%"
+    }
+  ],
+  "counts": {
+    "stages": 5,
+    "required_sections": 120,
+    "actual_sections": 120,
+    "task_cards": 20,
+    "task_fields": 96,
+    "micro_steps": 240,
+    "tests": 240
+  },
+  "unknowns": [
+    "실제 완료 증거"
+  ],
+  "warnings": [
+    "v3.3 X10 목표(800 후보·1,600 지표·10,000 경계사례)는 실제 적용 가능한 범위만 산출하고 미달을 명시했다.",
+    "Cloudflare DNS/Pages·Google OAuth 운영 등록·D1/키·실제 기기·사람 검수는 외부 증거가 없어 완료로 표시하지 않았다.",
+    "이 실행은 계획·분석 전용이며 제품 코드·운영 데이터·Git·공개판을 변경하지 않았다."
+  ],
+  "x10_status": "X10_PARTIAL_SCOPE"
+}

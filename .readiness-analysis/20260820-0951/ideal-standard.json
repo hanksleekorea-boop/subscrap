@@ -1,0 +1,26 @@
+{
+  "analysisId": "subscrap-20260820-0951",
+  "scoring": "0=없음, 1=계획, 2=코드·문서 증거, 3=자동 검사 또는 공개 확인, 4=실사용·운영 증거; 미확인=점수에 넣지 않음",
+  "criteria": [
+    { "bucket": "발견 정확성", "criterion": "허용 범위와 탐지 한계를 처음부터 설명", "score": 4, "evidence": "p3_views.js", "grade": "A" },
+    { "bucket": "발견 정확성", "criterion": "Gmail·Play 자료를 분리하고 중복을 방지", "score": 3, "evidence": "server/google.test.js", "grade": "A" },
+    { "bucket": "발견 정확성", "criterion": "후보별 근거·신뢰도·검토 이유 표시", "score": 2, "evidence": "Google 후보·검토함 구현", "grade": "B" },
+    { "bucket": "발견 정확성", "criterion": "사용자 확인 후에만 활성 구독으로 확정", "score": 2, "evidence": "검토함 흐름", "grade": "B" },
+    { "bucket": "개인정보·보안", "criterion": "권한을 목적별로 분리", "score": 4, "evidence": "GOOGLE_DISCOVERY.md, google.test.js", "grade": "A" },
+    { "bucket": "개인정보·보안", "criterion": "토큰 암호화·사용자 격리·연결 해제 삭제", "score": 4, "evidence": "server/google.test.js", "grade": "A" },
+    { "bucket": "개인정보·보안", "criterion": "원문·비밀값 최소 보관", "score": 4, "evidence": "server/google.test.js, STATE.md", "grade": "A" },
+    { "bucket": "개인정보·보안", "criterion": "외부 보안·개인정보 법률 검토", "score": "미확인", "evidence": "검토 결과 없음", "grade": "D" },
+    { "bucket": "사용자 행동", "criterion": "다가오는 결제·전체·달력의 일관된 보기", "score": 3, "evidence": "앱 검사·Rocket Money 공식 기능", "grade": "B" },
+    { "bucket": "사용자 행동", "criterion": "해지 전 알림과 직접 해지라는 경계", "score": 3, "evidence": "해지 안내·Subby 공식 설명", "grade": "B" },
+    { "bucket": "사용자 행동", "criterion": "일시중지·재개·해지 후 청구 확인 흐름", "score": 2, "evidence": "기능 일부 및 Google Play 공식 안내", "grade": "C" },
+    { "bucket": "사용자 행동", "criterion": "Apple·카드·다른 메일 계정의 누락 경로 안내", "score": 3, "evidence": "p3_views.js", "grade": "A" },
+    { "bucket": "운영 신뢰", "criterion": "네트워크 일시 오류 재시도와 항목별 계속 처리", "score": 4, "evidence": "STATE.md v0.21.2·Google 검사", "grade": "A" },
+    { "bucket": "운영 신뢰", "criterion": "공개 상태·버전·자동 검사 근거 제공", "score": 4, "evidence": "공개 대시보드·STATE.md", "grade": "B" },
+    { "bucket": "운영 신뢰", "criterion": "실제 지원·장애 대응·복구 훈련", "score": "미확인", "evidence": "운영 표본 없음", "grade": "D" },
+    { "bucket": "상용화", "criterion": "가격·자동갱신·세금·환불의 구매 직전 고지", "score": 2, "evidence": "p3_views.js 가격 안내", "grade": "B" },
+    { "bucket": "상용화", "criterion": "결제 제공자 샌드박스의 승인·거절·환불 실증", "score": "미확인", "evidence": "실거래 증거 없음", "grade": "D" },
+    { "bucket": "상용화", "criterion": "Android·iPhone·주요 PC 브라우저 실제 사용 증거", "score": 2, "evidence": "A56 일부·Chrome/Edge 기록; iPhone/Firefox/Safari 미확인", "grade": "C" }
+  ],
+  "evidenceCompletenessPercent": 72,
+  "readinessLabel": "근거 충분(70% 이상), 단 운영·결제·다기기 실증은 예비"
+}
